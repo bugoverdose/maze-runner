@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { MazeBoard } from "./domains/MazeBoard";
 import { MazeBlock } from "./domains/MazeBlock";
 
@@ -70,6 +70,8 @@ const ControlBtn = styled.input.attrs({ type: "button" })`
 `;
 
 const Maze = () => {
+  const theme = useTheme();
+
   const [mazeSize, setMazeSize] = useState(20);
   const [mazeSizeInput, setMazeSizeInput] = useState(20);
   const CELL_SIZE = 25;
@@ -77,7 +79,7 @@ const Maze = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [canvasSize, setCanvasSize] = useState(mazeSize * CELL_SIZE);
-  const [maze] = useState(new MazeBoard(canvasSize, canvasSize, CELL_SIZE));
+  const [maze] = useState(new MazeBoard(mazeSize, CELL_SIZE));
 
   const [moveCount, setMoveCount] = useState(0);
 
@@ -94,9 +96,9 @@ const Maze = () => {
     canvas.style.width = canvasSize.toString();
 
     // 미로를 구성하는 각 네모칸들의 이중 배열 생성
-    for (let col = 0; col < maze.cols; col++) {
+    for (let col = 0; col < maze.size; col++) {
       maze.blocks[col] = [];
-      for (let row = 0; row < maze.rows; row++) {
+      for (let row = 0; row < maze.size; row++) {
         maze.blocks[col][row] = new MazeBlock(col, row);
       } // 디폴트로 상하좌우 벽이 있는 네모칸들 생성
     }
@@ -120,7 +122,7 @@ const Maze = () => {
           let dir: number = Math.floor(Math.random() * 4);
           if (
             dir === 0 &&
-            cur.col < maze.cols - 1 &&
+            cur.col < maze.size - 1 &&
             !maze.blocks[cur.col + 1][cur.row].visited
           ) {
             cur.eastWall = false;
@@ -138,7 +140,7 @@ const Maze = () => {
             foundNeighbor = true;
           } else if (
             dir === 2 &&
-            cur.row < maze.rows - 1 &&
+            cur.row < maze.size - 1 &&
             !maze.blocks[cur.col][cur.row + 1].visited
           ) {
             cur.southWall = false;
@@ -175,22 +177,22 @@ const Maze = () => {
     const canvas: HTMLCanvasElement = canvasRef.current;
     const context = canvas.getContext("2d") as CanvasRenderingContext2D;
 
-    context.fillStyle = maze.backgroundColor;
+    context.fillStyle = theme.backgroundColor;
     context.fillRect(0, 0, canvasSize, canvasSize);
 
-    context.fillStyle = maze.endColor;
+    context.fillStyle = theme.endColor;
     context.fillRect(
-      (maze.cols - 1) * CELL_SIZE,
-      (maze.rows - 1) * CELL_SIZE,
+      (maze.size - 1) * CELL_SIZE,
+      (maze.size - 1) * CELL_SIZE,
       CELL_SIZE,
       CELL_SIZE
     );
 
-    context.strokeStyle = maze.mazeColor;
+    context.strokeStyle = theme.mazeColor;
     context.strokeRect(0, 0, canvasSize, canvasSize);
 
-    for (let col = 0; col < maze.cols; col++) {
-      for (let row = 0; row < maze.rows; row++) {
+    for (let col = 0; col < maze.size; col++) {
+      for (let row = 0; row < maze.size; row++) {
         if (maze.blocks[col][row].eastWall) {
           context.beginPath();
           context.moveTo((col + 1) * CELL_SIZE, row * CELL_SIZE);
@@ -218,7 +220,7 @@ const Maze = () => {
       }
     }
 
-    context.fillStyle = maze.playerColor;
+    context.fillStyle = theme.playerColor;
     context.fillRect(
       maze.player.col * CELL_SIZE + 2,
       maze.player.row * CELL_SIZE + 2,
@@ -260,10 +262,10 @@ const Maze = () => {
     }
 
     event.preventDefault();
-    setMazeSize(mazeSizeInput);
     maze.player.reset();
-    maze.cols = mazeSizeInput;
-    maze.rows = mazeSizeInput;
+    maze.size = mazeSizeInput;
+    maze.size = mazeSizeInput;
+    setMazeSize(mazeSizeInput);
     setCanvasSize(mazeSizeInput * CELL_SIZE);
     generateMaze();
     setMoveCount(0);
