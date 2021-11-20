@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { useTheme } from "styled-components";
-import { MazeBoard } from "./domains/MazeBoard";
 import { MazeBlock } from "./domains/MazeBlock";
+import { MazeBoard } from "./domains/MazeBoard";
+import { generateMazeStructure } from "./logic/generate-maze-structure";
+import { isMovable } from "./logic/is-movable";
+import { endPosition, startPosition } from "./logic/paint-wall-info";
+import { CELL_SIZE } from "./styles/constants";
 
 const Container = styled.div`
   text-align: center;
@@ -74,18 +78,17 @@ const Maze = () => {
 
   const [mazeSize, setMazeSize] = useState(20);
   const [mazeSizeInput, setMazeSizeInput] = useState(20);
-  const CELL_SIZE = 25;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [canvasSize, setCanvasSize] = useState(mazeSize * CELL_SIZE);
-  const [maze] = useState(new MazeBoard(mazeSize, CELL_SIZE));
+  const [maze, setMaze] = useState(new MazeBoard(mazeSize, CELL_SIZE));
 
   const [moveCount, setMoveCount] = useState(0);
 
   // 미로 구조 정의 후 화면에 색칠
   const generateMaze = () => {
-    if (!canvasRef.current || !maze) {
+    if (!canvasRef.current) {
       return;
     }
     const canvas: HTMLCanvasElement = canvasRef.current;
@@ -95,75 +98,7 @@ const Maze = () => {
     canvas.style.height = canvasSize.toString();
     canvas.style.width = canvasSize.toString();
 
-    // 미로를 구성하는 각 네모칸들의 이중 배열 생성
-    for (let col = 0; col < maze.size; col++) {
-      maze.blocks[col] = [];
-      for (let row = 0; row < maze.size; row++) {
-        maze.blocks[col][row] = new MazeBlock(col, row);
-      } // 디폴트로 상하좌우 벽이 있는 네모칸들 생성
-    }
-
-    let stack: MazeBlock[] = [maze.blocks[0][0]];
-
-    // 특정 네모칸을 기준으로 임의로 탐색하며 벽의 일부분 제거 (드릴 뚫기)
-    // 핵심: 두 가지 이상의 방식으로 같은 칸에 도달가능하면 안됨
-    while (maze.hasUnvisited(maze.blocks)) {
-      if (!stack) {
-        break;
-      }
-      let cur: MazeBlock = stack[stack.length - 1];
-      cur.visited = true;
-      if (!maze.hasUnvisitedNeighbor(cur)) {
-        stack.pop(); // 상하좌우의 인접한 칸들 전부 탐색된 경우 스택에서 제거
-      } else {
-        let next: MazeBlock | null = null;
-        let foundNeighbor: boolean = false;
-        while (!foundNeighbor) {
-          let dir: number = Math.floor(Math.random() * 4);
-          if (
-            dir === 0 &&
-            cur.col < maze.size - 1 &&
-            !maze.blocks[cur.col + 1][cur.row].visited
-          ) {
-            cur.eastWall = false;
-            next = maze.blocks[cur.col + 1][cur.row];
-            next.westWall = false;
-            foundNeighbor = true;
-          } else if (
-            dir === 1 &&
-            cur.row > 0 &&
-            !maze.blocks[cur.col][cur.row - 1].visited
-          ) {
-            cur.northWall = false;
-            next = maze.blocks[cur.col][cur.row - 1];
-            next.southWall = false;
-            foundNeighbor = true;
-          } else if (
-            dir === 2 &&
-            cur.row < maze.size - 1 &&
-            !maze.blocks[cur.col][cur.row + 1].visited
-          ) {
-            cur.southWall = false;
-            next = maze.blocks[cur.col][cur.row + 1];
-            next.northWall = false;
-            foundNeighbor = true;
-          } else if (
-            dir === 3 &&
-            cur.col > 0 &&
-            !maze.blocks[cur.col - 1][cur.row].visited
-          ) {
-            cur.westWall = false;
-            next = maze.blocks[cur.col - 1][cur.row];
-            next.eastWall = false;
-            foundNeighbor = true;
-          }
-
-          if (foundNeighbor && next) {
-            stack.push(next);
-          }
-        }
-      }
-    }
+    setMaze(generateMazeStructure(maze));
 
     paintMaze();
   };
@@ -175,78 +110,62 @@ const Maze = () => {
     }
 
     const canvas: HTMLCanvasElement = canvasRef.current;
-    const context = canvas.getContext("2d") as CanvasRenderingContext2D;
+    let context = canvas.getContext("2d") as CanvasRenderingContext2D;
 
+    // 캔버스 배경
     context.fillStyle = theme.backgroundColor;
     context.fillRect(0, 0, canvasSize, canvasSize);
 
-    context.fillStyle = theme.endColor;
+    // 미로 내의 벽들 색칠
+    context.strokeStyle = theme.wallColor;
+    context.strokeRect(0, 0, canvasSize, canvasSize);
+
+    for (let col = 0; col < maze.size; col++) {
+      for (let row = 0; row < maze.size; row++) {
+        const { northWall, westWall, southWall, eastWall }: MazeBlock =
+          maze.blocks[col][row];
+
+        [northWall, westWall, southWall, eastWall].forEach(
+          (wallExists, idx) => {
+            if (wallExists) {
+              const [fromCol, fromRow] = startPosition(idx, col, row);
+              const [toCol, toRow] = endPosition(idx, col, row);
+              context.beginPath();
+              context.moveTo(fromCol * CELL_SIZE, fromRow * CELL_SIZE);
+              context.lineTo(toCol * CELL_SIZE, toRow * CELL_SIZE);
+              context.stroke();
+            }
+          }
+        );
+      }
+    }
+
+    // 플레이어 색칠: 원형
+    context.fillStyle = theme.playerColor;
+    context.strokeStyle = theme.playerColor;
+    context.beginPath();
+    context.arc(
+      maze.player.col * CELL_SIZE + CELL_SIZE / 2,
+      maze.player.row * CELL_SIZE + CELL_SIZE / 2,
+      Math.floor(CELL_SIZE / 2) - 2,
+      0,
+      2 * Math.PI
+    );
+    context.stroke();
+    context.fill();
+
+    // 목적지
+    context.fillStyle = theme.finishColor;
     context.fillRect(
       (maze.size - 1) * CELL_SIZE,
       (maze.size - 1) * CELL_SIZE,
       CELL_SIZE,
       CELL_SIZE
     );
-
-    context.strokeStyle = theme.mazeColor;
-    context.strokeRect(0, 0, canvasSize, canvasSize);
-
-    for (let col = 0; col < maze.size; col++) {
-      for (let row = 0; row < maze.size; row++) {
-        if (maze.blocks[col][row].eastWall) {
-          context.beginPath();
-          context.moveTo((col + 1) * CELL_SIZE, row * CELL_SIZE);
-          context.lineTo((col + 1) * CELL_SIZE, (row + 1) * CELL_SIZE);
-          context.stroke();
-        }
-        if (maze.blocks[col][row].northWall) {
-          context.beginPath();
-          context.moveTo(col * CELL_SIZE, row * CELL_SIZE);
-          context.lineTo((col + 1) * CELL_SIZE, row * CELL_SIZE);
-          context.stroke();
-        }
-        if (maze.blocks[col][row].southWall) {
-          context.beginPath();
-          context.moveTo(col * CELL_SIZE, (row + 1) * CELL_SIZE);
-          context.lineTo((col + 1) * CELL_SIZE, (row + 1) * CELL_SIZE);
-          context.stroke();
-        }
-        if (maze.blocks[col][row].westWall) {
-          context.beginPath();
-          context.moveTo(col * CELL_SIZE, row * CELL_SIZE);
-          context.lineTo(col * CELL_SIZE, (row + 1) * CELL_SIZE);
-          context.stroke();
-        }
-      }
-    }
-
-    context.fillStyle = theme.playerColor;
-    context.fillRect(
-      maze.player.col * CELL_SIZE + 2,
-      maze.player.row * CELL_SIZE + 2,
-      CELL_SIZE - 4,
-      CELL_SIZE - 4
-    );
   };
 
-  const onMovePlayer = (direction: string) => {
-    if (!maze || !maze?.player) {
-      return;
-    }
-    const playerPosition = maze.blocks[maze.player.col][maze.player.row];
-    let moved = true;
-    if (direction === "Left" && !playerPosition.westWall) {
-      maze.player.col -= 1;
-    } else if (direction === "Right" && !playerPosition.eastWall) {
-      maze.player.col += 1;
-    } else if (direction === "Up" && !playerPosition.northWall) {
-      maze.player.row -= 1;
-    } else if (direction === "Down" && !playerPosition.southWall) {
-      maze.player.row += 1;
-    } else {
-      moved = false;
-    }
-    if (moved) {
+  const onControlPlayer = (direction: string) => {
+    if (isMovable(direction, maze)) {
       setMoveCount(moveCount + 1);
     }
     paintMaze();
@@ -263,7 +182,6 @@ const Maze = () => {
 
     event.preventDefault();
     maze.player.reset();
-    maze.size = mazeSizeInput;
     maze.size = mazeSizeInput;
     setMazeSize(mazeSizeInput);
     setCanvasSize(mazeSizeInput * CELL_SIZE);
@@ -300,11 +218,20 @@ const Maze = () => {
           </div>
           <ControlPanel>
             <div></div>
-            <ControlBtn value="&uarr;" onClick={() => onMovePlayer("Up")} />
+            <ControlBtn value="&uarr;" onClick={() => onControlPlayer("Up")} />
             <div></div>
-            <ControlBtn value="&larr;" onClick={() => onMovePlayer("Left")} />
-            <ControlBtn value="&darr;" onClick={() => onMovePlayer("Down")} />
-            <ControlBtn value="&rarr;" onClick={() => onMovePlayer("Right")} />
+            <ControlBtn
+              value="&larr;"
+              onClick={() => onControlPlayer("Left")}
+            />
+            <ControlBtn
+              value="&darr;"
+              onClick={() => onControlPlayer("Down")}
+            />
+            <ControlBtn
+              value="&rarr;"
+              onClick={() => onControlPlayer("Right")}
+            />
           </ControlPanel>
         </MoveBox>
       </PlayContainer>

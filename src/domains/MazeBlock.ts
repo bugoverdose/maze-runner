@@ -11,4 +11,16 @@ export class MazeBlock {
     this.col = col;
     this.row = row;
   }
+
+  hasThreeWalls() {
+    let counter = 0;
+    [this.northWall, this.westWall, this.southWall, this.eastWall].forEach(
+      (wallExists, idx) => {
+        if (wallExists) {
+          counter++;
+        }
+      }
+    );
+    return counter === 3;
+  }
 }
