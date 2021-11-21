@@ -10,7 +10,8 @@ export const generateMazeStructure = (maze: MazeBoard) => {
     } // 디폴트로 상하좌우 벽이 있는 네모칸들 생성
   }
 
-  let stack: MazeBlock[] = [maze.blocks[0][0]];
+  // 도착지점의 3칸이 벽이 되도록 도착지점부터 순회 시작
+  let stack: MazeBlock[] = [maze.blocks[maze.size - 1][maze.size - 1]];
 
   // 특정 네모칸을 기준으로 임의로 탐색하며 벽의 일부분 제거 (드릴 뚫기)
   // 핵심: 두 가지 이상의 방식으로 같은 칸에 도달가능하면 안됨
