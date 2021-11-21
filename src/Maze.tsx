@@ -73,6 +73,7 @@ const PlayContainer = styled.div<{ canvasSize: number }>`
 const ScoreBox = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   font-size: 25px;
   font-weight: 600;
 `;
@@ -80,8 +81,8 @@ const ScoreBox = styled.div`
 const MovementCountBox = styled.div`
   border-radius: 15px;
   border: 3px ${(props) => props.theme.backgroundColor} solid;
-  padding: 45px 0px;
-  margin-top: 15px;
+  padding: 20px 30px;
+  margin: 15px 0;
   font-size: 30px;
 `;
 
@@ -111,6 +112,8 @@ const Maze = () => {
   const [maze, setMaze] = useState(new MazeBoard(mazeSize, CELL_SIZE));
 
   const [moveCount, setMoveCount] = useState(0);
+  const [time, setTime] = useState(0);
+  const [isFinished, setIsFinished] = useState(false);
 
   // 미로 구조 정의 후 화면에 색칠
   const generateMaze = () => {
@@ -192,9 +195,15 @@ const Maze = () => {
 
   const onControlPlayer = (direction: string) => {
     if (isMovable(direction, maze)) {
-      setMoveCount(moveCount + 1);
+      if (!isFinished) {
+        setMoveCount(moveCount + 1);
+      }
     }
     paintMaze();
+
+    if (maze.player.row === mazeSize - 1 && maze.player.col === mazeSize - 1) {
+      setIsFinished(true);
+    }
   };
 
   const onSizeChange = (event: React.FormEvent<HTMLInputElement>) => {
@@ -213,6 +222,8 @@ const Maze = () => {
     setCanvasSize(maze.size * CELL_SIZE);
     generateMaze();
     setMoveCount(0);
+    setTime(0);
+    setIsFinished(false);
   };
 
   useEffect(() => {
@@ -220,48 +231,89 @@ const Maze = () => {
     // eslint-disable-next-line
   }, [mazeSize]);
 
-  return (
-    <Container>
-      <Wrapper>
-        <MazeContainer>
-          <Canvas ref={canvasRef} />
-          <Generatorbox>
-            <Form onSubmit={onGenerate}>
-              <Label>
-                Size:
-                {"  "}
-                <TextInput value={mazeSizeInput} onChange={onSizeChange} />
-              </Label>
+  // 시간 경과 표시
+  useEffect(() => {
+    if (!isFinished) {
+      const updateTime = setTimeout(() => {
+        setTime(time + 1);
+      }, 1000);
+      return () => clearTimeout(updateTime);
+    }
+  }, [time, isFinished]);
 
-              <SubmitBtn>Generate New Maze</SubmitBtn>
-            </Form>
-          </Generatorbox>
-        </MazeContainer>
-        <PlayContainer canvasSize={Math.max(300, canvasSize)}>
-          <ScoreBox>
-            <span>Movement </span>
-            <MovementCountBox>{moveCount}</MovementCountBox>
-          </ScoreBox>
-          <ControlPanel>
-            <div></div>
-            <ControlBtn value="&uarr;" onClick={() => onControlPlayer("Up")} />
-            <div></div>
-            <ControlBtn
-              value="&larr;"
-              onClick={() => onControlPlayer("Left")}
-            />
-            <ControlBtn
-              value="&darr;"
-              onClick={() => onControlPlayer("Down")}
-            />
-            <ControlBtn
-              value="&rarr;"
-              onClick={() => onControlPlayer("Right")}
-            />
-          </ControlPanel>
-        </PlayContainer>
-      </Wrapper>
-    </Container>
+  const [isPopupMode, setIsPopupMode] = useState(false);
+
+  // 목적지 도달시 팝업 토글해주는 기능
+  useEffect(() => {
+    if (isFinished && !isPopupMode) {
+      setIsPopupMode(true);
+      const closePopUp = setTimeout(() => {
+        setIsPopupMode(false);
+      }, 3000);
+      return () => clearTimeout(closePopUp);
+    }
+  }, [isFinished]);
+
+  return (
+    <>
+      <Container>
+        <Wrapper>
+          <MazeContainer>
+            <Canvas ref={canvasRef} />
+            <Generatorbox>
+              <Form onSubmit={onGenerate}>
+                <Label>
+                  Size:
+                  {"  "}
+                  <TextInput value={mazeSizeInput} onChange={onSizeChange} />
+                </Label>
+
+                <SubmitBtn>Generate New Maze</SubmitBtn>
+              </Form>
+            </Generatorbox>
+          </MazeContainer>
+          <PlayContainer canvasSize={Math.max(300, canvasSize)}>
+            <ScoreBox>
+              <span>Movement </span>
+              <MovementCountBox>{moveCount}</MovementCountBox>
+              <span>{time} sec passed</span>
+            </ScoreBox>
+            <ControlPanel>
+              <div></div>
+              <ControlBtn
+                value="&uarr;"
+                onClick={() => onControlPlayer("Up")}
+              />
+              <div></div>
+              <ControlBtn
+                value="&larr;"
+                onClick={() => onControlPlayer("Left")}
+              />
+              <ControlBtn
+                value="&darr;"
+                onClick={() => onControlPlayer("Down")}
+              />
+              <ControlBtn
+                value="&rarr;"
+                onClick={() => onControlPlayer("Right")}
+              />
+            </ControlPanel>
+          </PlayContainer>
+        </Wrapper>
+      </Container>
+
+      {isPopupMode ? (
+        <div>
+          <div>Congratulations! </div>
+          <div>Maze Size: {mazeSize}</div>
+          <div>
+            Finished In {moveCount} moves and {time} seconds
+          </div>
+        </div>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 

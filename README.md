@@ -10,6 +10,8 @@
 
 - 목적지 도달한 경우에 대한 처리
 
+- 경과시간 보여주기
+
 - Header, Footer 및 디자인
 - 미로 크기별 최고순위
 - Deployment: ghpage &/or chrome extention
