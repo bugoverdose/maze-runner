@@ -1,7 +1,7 @@
 import React from "react";
 import { createGlobalStyle } from "styled-components";
-import { Footer } from "./Footer";
-import Maze from "./Maze";
+import { Footer } from "./components/Footer";
+import Maze from "./components/Maze";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,

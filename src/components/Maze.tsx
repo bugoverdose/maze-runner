@@ -1,20 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { useTheme } from "styled-components";
-import { MazeBlock } from "./domains/MazeBlock";
-import { MazeBoard } from "./domains/MazeBoard";
-import { generateMazeStructure } from "./logic/generate-maze-structure";
-import { isMovable } from "./logic/is-movable";
-import { endPosition, startPosition } from "./logic/paint-wall-info";
-import { CELL_SIZE } from "./styles/constants";
+import { MazeBlock } from "../domains/MazeBlock";
+import { MazeBoard } from "../domains/MazeBoard";
+import { generateMazeStructure } from "../logic/generate-maze-structure";
+import { isMovable } from "../logic/is-movable";
+import { endPosition, startPosition } from "../logic/paint-wall-info";
+import { CELL_SIZE } from "../styles/constants";
 
 const Container = styled.div`
   text-align: center;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
   width: 100vw;
+`;
+
+const Header = styled.header`
+  font-size: 50px;
+  font-weight: 800;
+  margin-bottom: 15px;
 `;
 
 const Wrapper = styled.div`
@@ -288,6 +294,7 @@ const Maze = () => {
   return (
     <>
       <Container>
+        <Header>Maze Runner</Header>
         <Wrapper>
           <MazeContainer>
             <Canvas ref={canvasRef} />
@@ -339,7 +346,7 @@ const Maze = () => {
               Maze Size: {mazeSize} x {mazeSize}
             </div>
             <div>
-              You have finished In {moveCount} moves and {time} seconds!
+              You have finished in {moveCount} moves and {time} seconds!
             </div>
           </div>
         </Popup>
