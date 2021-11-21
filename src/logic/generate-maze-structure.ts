@@ -22,11 +22,12 @@ export const generateMazeStructure = (maze: MazeBoard) => {
     let cur: MazeBlock = stack[stack.length - 1];
     cur.visited = true;
     if (!maze.hasUnvisitedNeighbor(cur)) {
-      stack.pop(); // 상하좌우의 인접한 칸들 전부 탐색된 경우 스택에서 제거
+      stack.pop(); // 상하좌우의 인접한 칸들 전부 이미 탐색된 네모칸은 스택에서 제거
     } else {
       let next: MazeBlock | null = null;
       let foundNeighbor: boolean = false;
       while (!foundNeighbor) {
+        // 현재 위치에서 랜덤으로 아직 이동하지 않은 방향으로 이동
         let dir: number = Math.floor(Math.random() * 4);
         if (
           dir === 0 &&

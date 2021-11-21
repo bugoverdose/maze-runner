@@ -15,13 +15,21 @@ const Container = styled.div`
   align-items: center;
   height: 100vh;
   width: 100vw;
-  padding: 20px;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: auto;
 `;
 
 const MazeContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-right: 20px;
+  padding: 20px;
 `;
 
 const Canvas = styled.canvas`
@@ -53,11 +61,28 @@ const SubmitBtn = styled.button`
   font-size: 20px;
 `;
 
-const PlayContainer = styled.div``;
-const ScoreBox = styled.div``;
-
-const MoveBox = styled.div`
+const PlayContainer = styled.div<{ canvasSize: number }>`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   font-size: 20px;
+  height: ${(props) => props.canvasSize + "px"};
+`;
+
+const ScoreBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 25px;
+  font-weight: 600;
+`;
+
+const MovementCountBox = styled.div`
+  border-radius: 15px;
+  border: 3px ${(props) => props.theme.backgroundColor} solid;
+  padding: 45px 0px;
+  margin-top: 15px;
+  font-size: 30px;
 `;
 
 const ControlPanel = styled.div`
@@ -71,6 +96,7 @@ const ControlBtn = styled.input.attrs({ type: "button" })`
   height: 100%;
   width: 100%;
   font-size: 30px;
+  font-weight: 800;
 `;
 
 const Maze = () => {
@@ -112,9 +138,18 @@ const Maze = () => {
     const canvas: HTMLCanvasElement = canvasRef.current;
     let context = canvas.getContext("2d") as CanvasRenderingContext2D;
 
-    // 캔버스 배경
+    // 캔버스 배경: 맨밑에 와야하므로 가장 먼저
     context.fillStyle = theme.backgroundColor;
     context.fillRect(0, 0, canvasSize, canvasSize);
+
+    // 목적지: 특수한 배경. 벽들에 의해 덮어져야하므로 먼저
+    context.fillStyle = theme.finishColor;
+    context.fillRect(
+      (maze.size - 1) * CELL_SIZE,
+      (maze.size - 1) * CELL_SIZE,
+      CELL_SIZE,
+      CELL_SIZE
+    );
 
     // 미로 내의 벽들 색칠
     context.strokeStyle = theme.wallColor;
@@ -140,7 +175,7 @@ const Maze = () => {
       }
     }
 
-    // 플레이어 색칠: 원형
+    // 플레이어 색칠: 원형. 목적지 위에 덮어져야 하므로 마지막에 색칠.
     context.fillStyle = theme.playerColor;
     context.strokeStyle = theme.playerColor;
     context.beginPath();
@@ -153,15 +188,6 @@ const Maze = () => {
     );
     context.stroke();
     context.fill();
-
-    // 목적지
-    context.fillStyle = theme.finishColor;
-    context.fillRect(
-      (maze.size - 1) * CELL_SIZE,
-      (maze.size - 1) * CELL_SIZE,
-      CELL_SIZE,
-      CELL_SIZE
-    );
   };
 
   const onControlPlayer = (direction: string) => {
@@ -183,8 +209,8 @@ const Maze = () => {
     event.preventDefault();
     maze.player.reset();
     maze.size = mazeSizeInput;
-    setMazeSize(mazeSizeInput);
-    setCanvasSize(mazeSizeInput * CELL_SIZE);
+    setMazeSize(maze.size);
+    setCanvasSize(maze.size * CELL_SIZE);
     generateMaze();
     setMoveCount(0);
   };
@@ -196,26 +222,26 @@ const Maze = () => {
 
   return (
     <Container>
-      <MazeContainer>
-        <Canvas ref={canvasRef} />
-        <Generatorbox>
-          <Form onSubmit={onGenerate}>
-            <Label>
-              Size:
-              {"  "}
-              <TextInput value={mazeSizeInput} onChange={onSizeChange} />
-            </Label>
+      <Wrapper>
+        <MazeContainer>
+          <Canvas ref={canvasRef} />
+          <Generatorbox>
+            <Form onSubmit={onGenerate}>
+              <Label>
+                Size:
+                {"  "}
+                <TextInput value={mazeSizeInput} onChange={onSizeChange} />
+              </Label>
 
-            <SubmitBtn>Generate</SubmitBtn>
-          </Form>
-        </Generatorbox>
-      </MazeContainer>
-      <PlayContainer>
-        <ScoreBox></ScoreBox>
-        <MoveBox>
-          <div>
-            <span>You have moved {moveCount} times!</span>
-          </div>
+              <SubmitBtn>Generate New Maze</SubmitBtn>
+            </Form>
+          </Generatorbox>
+        </MazeContainer>
+        <PlayContainer canvasSize={Math.max(300, canvasSize)}>
+          <ScoreBox>
+            <span>Movement </span>
+            <MovementCountBox>{moveCount}</MovementCountBox>
+          </ScoreBox>
           <ControlPanel>
             <div></div>
             <ControlBtn value="&uarr;" onClick={() => onControlPlayer("Up")} />
@@ -233,8 +259,8 @@ const Maze = () => {
               onClick={() => onControlPlayer("Right")}
             />
           </ControlPanel>
-        </MoveBox>
-      </PlayContainer>
+        </PlayContainer>
+      </Wrapper>
     </Container>
   );
 };
