@@ -6,6 +6,7 @@ import { generateMazeStructure } from "../logic/generate-maze-structure";
 import { isMovable } from "../logic/is-movable";
 import { endPosition, startPosition } from "../logic/paint-wall-info";
 import { CELL_SIZE } from "../styles/constants";
+import { QuestionMarkLogo } from "./QuestionMarkLogo";
 
 const Container = styled.div`
   text-align: center;
@@ -15,6 +16,7 @@ const Container = styled.div`
   align-items: center;
   height: 100vh;
   width: 100vw;
+  color: ${(props) => props.theme.textColor};
 `;
 
 const Header = styled.header`
@@ -46,6 +48,7 @@ const GeneratorForm = styled.form`
   label {
     margin-right: 10px;
     font-size: 20px;
+    font-weight: 600;
   }
 `;
 
@@ -80,7 +83,7 @@ const MovementCountBox = styled.div`
   align-items: center;
   font-size: 25px;
   font-weight: 600;
-  div {
+  & > div {
     border-radius: 15px;
     border: 3px ${(props) => props.theme.backgroundColor} solid;
     padding: 20px 30px;
@@ -103,6 +106,27 @@ const ControlBtn = styled.input.attrs({ type: "button" })`
   font-weight: 800;
 `;
 
+const HelpBtn = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  & > svg:hover + span {
+    display: block; // The adjacent sibling selector (+) selects all elements that are the adjacent siblings of a specified element
+  } // svg:hover 상태면 형제인 span 태그도 드러남
+`;
+
+const HelpText = styled.span`
+  display: none;
+  position: absolute; // align itself to the closest relative father
+  top: -100px;
+  left: -300px;
+  border-radius: 15px;
+  border: 3px black solid;
+  background-color: white;
+  padding: 15px;
+`;
+
 const Popup = styled.div`
   /* 대안: position: absolute; // align itself according to the closest relative father (=body) */
   position: fixed; // 스크롤 내리더라도 브라우저 화면 자체를 기준으로 최초로 렌더링된 위치에 고정
@@ -113,6 +137,7 @@ const Popup = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 99;
   // pseudo selector 재활 훈련
   & > div {
     border-radius: 30px;
@@ -140,19 +165,20 @@ const Maze = () => {
   const theme = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const [mazeSize, setMazeSize] = useState(20);
+  const [mazeSize, _setMazeSize] = useState(20);
   const [mazeSizeInput, setMazeSizeInput] = useState(20);
 
   const [canvasSize, setCanvasSize] = useState(mazeSize * CELL_SIZE);
-  const [maze, setMaze] = useState(new MazeBoard(mazeSize, CELL_SIZE));
+  const [maze] = useState(new MazeBoard(mazeSize, CELL_SIZE));
 
-  const [moveCount, _setMoveCount] = useState(0);
   const [time, setTime] = useState(0);
+  const [moveCount, _setMoveCount] = useState(0);
   const [isFinished, _setIsFinished] = useState(false);
 
   // 이벤트리스너에서는 업데이트된 state 값 접근 불가 => useRef를 업데이트하여 접근
   const moveCountRef = React.useRef(moveCount);
   const isFinishedRef = React.useRef(isFinished);
+  const mazeSizeRef = React.useRef(mazeSize);
 
   const setMoveCount = (data: number) => {
     moveCountRef.current = data; // useRef와 useState를 일치시키기
@@ -162,6 +188,11 @@ const Maze = () => {
     isFinishedRef.current = data;
     _setIsFinished(data);
   };
+  const setMazeSize = (data: number) => {
+    mazeSizeRef.current = data;
+    _setMazeSize(data);
+  };
+
   const [isPopupMode, setIsPopupMode] = useState(false);
 
   // 미로 구조 정의 후 화면에 색칠
@@ -176,7 +207,7 @@ const Maze = () => {
     canvas.style.height = canvasSize.toString();
     canvas.style.width = canvasSize.toString();
 
-    setMaze(generateMazeStructure(maze));
+    generateMazeStructure(maze);
 
     paintMaze();
   };
@@ -250,7 +281,10 @@ const Maze = () => {
     }
     paintMaze();
 
-    if (maze.player.row === mazeSize - 1 && maze.player.col === mazeSize - 1) {
+    if (
+      maze.player.row === mazeSizeRef.current - 1 &&
+      maze.player.col === mazeSizeRef.current - 1
+    ) {
       setIsFinished(true);
     }
   };
@@ -276,8 +310,7 @@ const Maze = () => {
   };
 
   useEffect(() => {
-    generateMaze();
-    // eslint-disable-next-line
+    generateMaze(); // eslint-disable-next-line
   }, [mazeSize]);
 
   // 시간 경과 표시
@@ -298,13 +331,12 @@ const Maze = () => {
         setIsPopupMode(false);
       }, 3000);
       return () => clearTimeout(closePopUp); // return a function in the useEffect callback and that function will run when the component unmounts
-    }
-    // eslint-disable-next-line
+    } // eslint-disable-next-line
   }, [isFinished]);
 
   // 주의: React.KeyboardEvent 타입이 아님
   const handleKeyDown = (event: KeyboardEvent) => {
-    onControlPlayer(event.key.slice(5)); // "ArrowDown", "ArrowLeft", etc => "Down", "Left", etc
+    onControlPlayer(event.key); // "ArrowDown", "ArrowLeft", etc
   };
 
   // 핵심: 이벤트리스너에서는 useRef에 업데이트된 현재 state값을 저장하여 접근해야 함. state 값 직접 접근 불가.
@@ -314,8 +346,7 @@ const Maze = () => {
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown); // 컴포넌트 unmount 시점에 실행되는 함수
-    };
-    // eslint-disable-next-line
+    }; // eslint-disable-next-line
   }, []);
 
   return (
@@ -345,20 +376,26 @@ const Maze = () => {
               <div></div>
               <ControlBtn
                 value="&uarr;"
-                onClick={() => onControlPlayer("Up")}
+                onClick={() => onControlPlayer("ArrowUp")}
               />
-              <div></div>
+              <HelpBtn>
+                <QuestionMarkLogo />
+                <HelpText>
+                  Click the buttons or use your keyboard to move the red dot and
+                  reach the blue area!
+                </HelpText>
+              </HelpBtn>
               <ControlBtn
                 value="&larr;"
-                onClick={() => onControlPlayer("Left")}
+                onClick={() => onControlPlayer("ArrowLeft")}
               />
               <ControlBtn
                 value="&darr;"
-                onClick={() => onControlPlayer("Down")}
+                onClick={() => onControlPlayer("ArrowDown")}
               />
               <ControlBtn
                 value="&rarr;"
-                onClick={() => onControlPlayer("Right")}
+                onClick={() => onControlPlayer("ArrowRight")}
               />
             </ControlPanel>
           </PlayContainer>

@@ -2,13 +2,13 @@ import { MazeBoard } from "../domains/MazeBoard";
 
 export const isMovable = (direction: string, maze: MazeBoard) => {
   const playerPosition = maze.blocks[maze.player.col][maze.player.row];
-  if (direction === "Left" && !playerPosition.westWall) {
+  if (direction === "ArrowLeft" && !playerPosition.westWall) {
     maze.player.col -= 1;
-  } else if (direction === "Right" && !playerPosition.eastWall) {
+  } else if (direction === "ArrowRight" && !playerPosition.eastWall) {
     maze.player.col += 1;
-  } else if (direction === "Up" && !playerPosition.northWall) {
+  } else if (direction === "ArrowUp" && !playerPosition.northWall) {
     maze.player.row -= 1;
-  } else if (direction === "Down" && !playerPosition.southWall) {
+  } else if (direction === "ArrowDown" && !playerPosition.southWall) {
     maze.player.row += 1;
   } else {
     return false;
