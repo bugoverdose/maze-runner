@@ -138,18 +138,31 @@ const Popup = styled.div`
 
 const Maze = () => {
   const theme = useTheme();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [mazeSize, setMazeSize] = useState(20);
   const [mazeSizeInput, setMazeSizeInput] = useState(20);
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
   const [canvasSize, setCanvasSize] = useState(mazeSize * CELL_SIZE);
   const [maze, setMaze] = useState(new MazeBoard(mazeSize, CELL_SIZE));
 
-  const [moveCount, setMoveCount] = useState(0);
+  const [moveCount, _setMoveCount] = useState(0);
   const [time, setTime] = useState(0);
-  const [isFinished, setIsFinished] = useState(false);
+  const [isFinished, _setIsFinished] = useState(false);
+
+  // 이벤트리스너에서는 업데이트된 state 값 접근 불가 => useRef를 업데이트하여 접근
+  const moveCountRef = React.useRef(moveCount);
+  const isFinishedRef = React.useRef(isFinished);
+
+  const setMoveCount = (data: number) => {
+    moveCountRef.current = data; // useRef와 useState를 일치시키기
+    _setMoveCount(data); // 실제 state 값 수정
+  };
+  const setIsFinished = (data: boolean) => {
+    isFinishedRef.current = data;
+    _setIsFinished(data);
+  };
+  const [isPopupMode, setIsPopupMode] = useState(false);
 
   // 미로 구조 정의 후 화면에 색칠
   const generateMaze = () => {
@@ -231,8 +244,8 @@ const Maze = () => {
 
   const onControlPlayer = (direction: string) => {
     if (isMovable(direction, maze)) {
-      if (!isFinished) {
-        setMoveCount(moveCount + 1);
+      if (!isFinishedRef.current) {
+        setMoveCount(moveCountRef.current + 1);
       }
     }
     paintMaze();
@@ -277,8 +290,6 @@ const Maze = () => {
     }
   }, [time, isFinished]);
 
-  const [isPopupMode, setIsPopupMode] = useState(false);
-
   // 목적지 도달시 잠시 동안만 팝업 토글해주기 위함
   useEffect(() => {
     if (isFinished && !isPopupMode) {
@@ -286,10 +297,26 @@ const Maze = () => {
       const closePopUp = setTimeout(() => {
         setIsPopupMode(false);
       }, 3000);
-      return () => clearTimeout(closePopUp);
+      return () => clearTimeout(closePopUp); // return a function in the useEffect callback and that function will run when the component unmounts
     }
     // eslint-disable-next-line
   }, [isFinished]);
+
+  // 주의: React.KeyboardEvent 타입이 아님
+  const handleKeyDown = (event: KeyboardEvent) => {
+    onControlPlayer(event.key.slice(5)); // "ArrowDown", "ArrowLeft", etc => "Down", "Left", etc
+  };
+
+  // 핵심: 이벤트리스너에서는 useRef에 업데이트된 현재 state값을 저장하여 접근해야 함. state 값 직접 접근 불가.
+  // 주의: listener belongs to the initial render and is not updated on subsequent rerenders.
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown); // 컴포넌트 unmount 시점에 실행되는 함수
+    };
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <>
