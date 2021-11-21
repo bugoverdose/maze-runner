@@ -36,13 +36,11 @@ const Canvas = styled.canvas`
   margin-bottom: 20px;
 `;
 
-const Generatorbox = styled.div``;
-
-const Form = styled.form``;
-
-const Label = styled.label`
-  margin-right: 10px;
-  font-size: 20px;
+const GeneratorForm = styled.form`
+  label {
+    margin-right: 10px;
+    font-size: 20px;
+  }
 `;
 
 const TextInput = styled.input.attrs({
@@ -70,20 +68,19 @@ const PlayContainer = styled.div<{ canvasSize: number }>`
   height: ${(props) => props.canvasSize + "px"};
 `;
 
-const ScoreBox = styled.div`
+const MovementCountBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   font-size: 25px;
   font-weight: 600;
-`;
-
-const MovementCountBox = styled.div`
-  border-radius: 15px;
-  border: 3px ${(props) => props.theme.backgroundColor} solid;
-  padding: 20px 30px;
-  margin: 15px 0;
-  font-size: 30px;
+  div {
+    border-radius: 15px;
+    border: 3px ${(props) => props.theme.backgroundColor} solid;
+    padding: 20px 30px;
+    margin: 15px 0;
+    font-size: 30px;
+  }
 `;
 
 const ControlPanel = styled.div`
@@ -98,6 +95,39 @@ const ControlBtn = styled.input.attrs({ type: "button" })`
   width: 100%;
   font-size: 30px;
   font-weight: 800;
+`;
+
+const Popup = styled.div`
+  /* 대안: position: absolute; // align itself according to the closest relative father (=body) */
+  position: fixed; // 스크롤 내리더라도 브라우저 화면 자체를 기준으로 최초로 렌더링된 위치에 고정
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // pseudo selector 재활 훈련
+  & > div {
+    border-radius: 30px;
+    border: 3px black solid;
+    background-color: white;
+    height: 200px;
+    width: 550px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    & > div:first-child {
+      font-size: 30px;
+      margin-bottom: 25px;
+    }
+    & > div:not(:first-child) {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+  }
 `;
 
 const Maze = () => {
@@ -243,7 +273,7 @@ const Maze = () => {
 
   const [isPopupMode, setIsPopupMode] = useState(false);
 
-  // 목적지 도달시 팝업 토글해주는 기능
+  // 목적지 도달시 잠시 동안만 팝업 토글해주기 위함
   useEffect(() => {
     if (isFinished && !isPopupMode) {
       setIsPopupMode(true);
@@ -252,6 +282,7 @@ const Maze = () => {
       }, 3000);
       return () => clearTimeout(closePopUp);
     }
+    // eslint-disable-next-line
   }, [isFinished]);
 
   return (
@@ -260,24 +291,22 @@ const Maze = () => {
         <Wrapper>
           <MazeContainer>
             <Canvas ref={canvasRef} />
-            <Generatorbox>
-              <Form onSubmit={onGenerate}>
-                <Label>
-                  Size:
-                  {"  "}
-                  <TextInput value={mazeSizeInput} onChange={onSizeChange} />
-                </Label>
+            <GeneratorForm onSubmit={onGenerate}>
+              <label>
+                Size:
+                {"  "}
+                <TextInput value={mazeSizeInput} onChange={onSizeChange} />
+              </label>
 
-                <SubmitBtn>Generate New Maze</SubmitBtn>
-              </Form>
-            </Generatorbox>
+              <SubmitBtn>Generate New Maze</SubmitBtn>
+            </GeneratorForm>
           </MazeContainer>
           <PlayContainer canvasSize={Math.max(300, canvasSize)}>
-            <ScoreBox>
+            <MovementCountBox>
               <span>Movement </span>
-              <MovementCountBox>{moveCount}</MovementCountBox>
+              <div>{moveCount}</div>
               <span>{time} sec passed</span>
-            </ScoreBox>
+            </MovementCountBox>
             <ControlPanel>
               <div></div>
               <ControlBtn
@@ -303,13 +332,17 @@ const Maze = () => {
       </Container>
 
       {isPopupMode ? (
-        <div>
-          <div>Congratulations! </div>
-          <div>Maze Size: {mazeSize}</div>
+        <Popup>
           <div>
-            Finished In {moveCount} moves and {time} seconds
+            <div>Congratulations! </div>
+            <div>
+              Maze Size: {mazeSize} x {mazeSize}
+            </div>
+            <div>
+              You have finished In {moveCount} moves and {time} seconds!
+            </div>
           </div>
-        </div>
+        </Popup>
       ) : (
         <></>
       )}

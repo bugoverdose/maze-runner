@@ -1,5 +1,6 @@
 import React from "react";
 import { createGlobalStyle } from "styled-components";
+import { Footer } from "./Footer";
 import Maze from "./Maze";
 
 const GlobalStyle = createGlobalStyle`
@@ -52,6 +53,7 @@ const App = () => {
     <>
       <GlobalStyle />
       <Maze />
+      <Footer />
     </>
   );
 };
