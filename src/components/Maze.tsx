@@ -295,13 +295,7 @@ const Maze = () => {
     if (isNaN(inputValue)) {
       return;
     }
-    if (inputValue > 25) {
-      setMazeSizeInput(25);
-    } else if (inputValue < 5) {
-      setMazeSizeInput(5);
-    } else {
-      setMazeSizeInput(inputValue);
-    }
+    setMazeSizeInput(inputValue);
   };
 
   const onGenerate = (event: React.FormEvent<HTMLFormElement>) => {
@@ -309,11 +303,21 @@ const Maze = () => {
       return;
     }
     event.preventDefault();
-    maze.player.reset();
-    maze.size = Math.max(mazeSizeInput, 5);
+
+    // input 태그의 min, max 값 강제로 수정시, 5~25 범위 밖의 값 입력에 대한 방어로직
+    let validMazeSize = Math.max(mazeSizeInput, 5);
+    validMazeSize = Math.min(validMazeSize, 25);
+    if (validMazeSize !== mazeSizeInput) {
+      setMazeSizeInput(validMazeSize);
+    }
+
+    maze.size = validMazeSize;
     setMazeSize(maze.size);
     setCanvasSize(maze.size * CELL_SIZE);
+
+    maze.player.reset();
     generateMaze();
+
     setMoveCount(0);
     setTime(0);
     setIsFinished(false);

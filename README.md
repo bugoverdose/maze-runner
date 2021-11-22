@@ -27,7 +27,11 @@
 
   - mazeSize state 값도 useRef로 접근해줘야 함.
 
+- [x] 개발자도구로 input 태그의 type: number 속성을 제거한 경우 문자열 값을 받으면 parseInt 결과가 NaN로 사이트 전체 다운되는 현상.
+
+  - 새로운 input value가 NaN이 될 경우, 현재 mazeSizeInput state 값을 변화시키지 않음. 입력값 무시.
+
 - [x] 개발자도구로 input 태그의 min/max를 강제로 수정하면 미로 크기의 값이 5~25 범위의 값을 벗어날 수 있는 현상.
 
-- [x] 개발자도구로 input 태그의 type: number 속성을 제거한 경우 문자열 값을 받으면 parseInt 결과가 NaN로 사이트 전체 다운되는 현상.
-  - 새로운 input value가 NaN이 될 경우, 현재 mazeSizeInput state 값을 변화시키지 않음. 입력값 무시.
+  - input 값 자체를 5~25로 제한할 경우 키보드로 직접 입력시 문제: 십의 자리 수로 1 혹은 2를 누르는 순간 바로 5가 되어버리는 문제
+  - input 값은 NaN만 아니면 지속적으로 변하되, 실제로 input 값을 토대로 미로를 생성할 때 5~25 범위에 들어오도록 state 수정하여 미로 생성
