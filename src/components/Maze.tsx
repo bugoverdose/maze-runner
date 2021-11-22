@@ -52,7 +52,7 @@ const GeneratorForm = styled.form`
   }
 `;
 
-const TextInput = styled.input.attrs({
+const ValueInput = styled.input.attrs({
   required: true,
   type: "number",
   min: "5",
@@ -291,17 +291,23 @@ const Maze = () => {
   };
 
   const onSizeChange = (event: React.FormEvent<HTMLInputElement>) => {
-    setMazeSizeInput(parseInt(event.currentTarget.value));
+    const inputValue = parseInt(event.currentTarget.value);
+    if (inputValue > 25) {
+      setMazeSizeInput(25);
+    } else if (inputValue < 5) {
+      setMazeSizeInput(5);
+    } else {
+      setMazeSizeInput(inputValue);
+    }
   };
 
   const onGenerate = (event: React.FormEvent<HTMLFormElement>) => {
     if (!maze || !maze.player) {
       return;
     }
-
     event.preventDefault();
     maze.player.reset();
-    maze.size = mazeSizeInput;
+    maze.size = Math.max(mazeSizeInput, 5);
     setMazeSize(maze.size);
     setCanvasSize(maze.size * CELL_SIZE);
     generateMaze();
@@ -361,7 +367,7 @@ const Maze = () => {
               <label>
                 Size:
                 {"  "}
-                <TextInput value={mazeSizeInput} onChange={onSizeChange} />
+                <ValueInput value={mazeSizeInput} onChange={onSizeChange} />
               </label>
 
               <SubmitBtn>Generate New Maze</SubmitBtn>
