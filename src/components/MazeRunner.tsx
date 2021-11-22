@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { useTheme } from "styled-components";
 import { MazeBlock } from "../domains/MazeBlock";
-import { MazeBoard } from "../domains/MazeBoard";
+import { Maze } from "../domains/Maze";
 import { generateMazeStructure } from "../logic/generate-maze-structure";
 import { movePlayer } from "../logic/is-movable";
 import { endPosition, startPosition } from "../logic/paint-wall-info";
@@ -161,16 +161,17 @@ const Popup = styled.div`
   }
 `;
 
-const Maze = () => {
+const MazeRunner = () => {
   const theme = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [mazeSize, _setMazeSize] = useState(20);
   const [mazeSizeInput, setMazeSizeInput] = useState(20);
+  const [canvasSize, _setCanvasSize] = useState(mazeSize * CELL_SIZE);
 
-  const [canvasSize, setCanvasSize] = useState(mazeSize * CELL_SIZE);
-  const [maze] = useState(new MazeBoard(mazeSize, CELL_SIZE));
-
+  const [maze, _setMaze] = useState(
+    generateMazeStructure(new Maze(), mazeSize)
+  );
   const [time, setTime] = useState(0);
   const [moveCount, _setMoveCount] = useState(0);
   const [isFinished, _setIsFinished] = useState(false);
@@ -179,6 +180,8 @@ const Maze = () => {
   const moveCountRef = React.useRef(moveCount);
   const isFinishedRef = React.useRef(isFinished);
   const mazeSizeRef = React.useRef(mazeSize);
+  const mazeRef = React.useRef(maze);
+  const canvasSizeRef = React.useRef(canvasSize);
 
   const setMoveCount = (data: number) => {
     moveCountRef.current = data; // useRef와 useState를 일치시키기
@@ -192,7 +195,13 @@ const Maze = () => {
     mazeSizeRef.current = data;
     _setMazeSize(data);
   };
-
+  const setMaze = (data: Maze) => {
+    _setMaze(data);
+  };
+  const setCanvasSize = (data: number) => {
+    canvasSizeRef.current = data;
+    _setCanvasSize(data);
+  };
   const [isPopupMode, setIsPopupMode] = useState(false);
 
   // 미로 구조 정의 후 화면에 색칠
@@ -207,41 +216,50 @@ const Maze = () => {
     canvas.style.height = canvasSize.toString();
     canvas.style.width = canvasSize.toString();
 
-    generateMazeStructure(maze);
+    setMaze(generateMazeStructure(maze, mazeSizeRef.current));
 
     paintMaze();
   };
 
   // 정의된 미로 구조를 화면에 색칠
   const paintMaze = () => {
-    if (!canvasRef.current?.getContext("2d") || !maze || !maze.player) {
+    if (
+      !canvasRef.current?.getContext("2d") ||
+      !mazeRef.current ||
+      !maze.player
+    ) {
       return;
     }
+    const curMaze = mazeRef.current;
+    const curMazeSize = mazeSizeRef.current; // 키보드 입력을 위한 이벤트 리스너는 state 직접 접근 불가
+    const curCanvasSize = canvasSizeRef.current;
+    // console.log(maze, mazeSize, canvasSize);
+    // console.log(curMaze, curMazeSize, canvasSizeRef, "paintMaze");
 
     const canvas: HTMLCanvasElement = canvasRef.current;
     let context = canvas.getContext("2d") as CanvasRenderingContext2D;
 
     // 캔버스 배경: 맨밑에 와야하므로 가장 먼저
     context.fillStyle = theme.backgroundColor;
-    context.fillRect(0, 0, canvasSize, canvasSize);
+    context.fillRect(0, 0, curCanvasSize, curCanvasSize);
 
     // 목적지: 특수한 배경. 벽들에 의해 덮어져야하므로 먼저
     context.fillStyle = theme.finishColor;
     context.fillRect(
-      (maze.size - 1) * CELL_SIZE,
-      (maze.size - 1) * CELL_SIZE,
+      (curMazeSize - 1) * CELL_SIZE,
+      (curMazeSize - 1) * CELL_SIZE,
       CELL_SIZE,
       CELL_SIZE
     );
 
     // 미로 내의 벽들 색칠
     context.strokeStyle = theme.wallColor;
-    context.strokeRect(0, 0, canvasSize, canvasSize);
+    context.strokeRect(0, 0, curCanvasSize, curCanvasSize);
 
-    for (let col = 0; col < maze.size; col++) {
-      for (let row = 0; row < maze.size; row++) {
+    for (let col = 0; col < curMazeSize; col++) {
+      for (let row = 0; row < curMazeSize; row++) {
         const { northWall, westWall, southWall, eastWall }: MazeBlock =
-          maze.blocks[col][row];
+          curMaze.blocks[col][row];
 
         [northWall, westWall, southWall, eastWall].forEach(
           (wallExists, idx) => {
@@ -263,8 +281,8 @@ const Maze = () => {
     context.strokeStyle = theme.playerColor;
     context.beginPath();
     context.arc(
-      maze.player.col * CELL_SIZE + CELL_SIZE / 2,
-      maze.player.row * CELL_SIZE + CELL_SIZE / 2,
+      curMaze.player.col * CELL_SIZE + CELL_SIZE / 2,
+      curMaze.player.row * CELL_SIZE + CELL_SIZE / 2,
       Math.floor(CELL_SIZE / 2) - 2,
       0,
       2 * Math.PI
@@ -274,17 +292,20 @@ const Maze = () => {
   };
 
   const onControlPlayer = (direction: string) => {
-    const hasMoved = movePlayer(direction, maze);
+    const curMaze = mazeRef.current;
+    const hasMoved = movePlayer(direction, mazeRef.current); // 키보드 입력을 위한 이벤트 리스너는 state 직접 접근 불가
+
     if (hasMoved) {
       if (!isFinishedRef.current) {
         setMoveCount(moveCountRef.current + 1);
       }
     }
+
     paintMaze();
 
     if (
-      maze.player.row === mazeSizeRef.current - 1 &&
-      maze.player.col === mazeSizeRef.current - 1
+      curMaze.player.row === mazeSizeRef.current - 1 &&
+      curMaze.player.col === mazeSizeRef.current - 1
     ) {
       setIsFinished(true);
     }
@@ -311,9 +332,8 @@ const Maze = () => {
       setMazeSizeInput(validMazeSize);
     }
 
-    maze.size = validMazeSize;
-    setMazeSize(maze.size);
-    setCanvasSize(maze.size * CELL_SIZE);
+    setMazeSize(validMazeSize);
+    setCanvasSize(validMazeSize * CELL_SIZE);
 
     maze.player.reset();
     generateMaze();
@@ -435,4 +455,4 @@ const Maze = () => {
   );
 };
 
-export default Maze;
+export default MazeRunner;

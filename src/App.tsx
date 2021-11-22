@@ -1,7 +1,7 @@
 import React from "react";
 import { createGlobalStyle } from "styled-components";
 import { Footer } from "./components/Footer";
-import Maze from "./components/Maze";
+import MazeRunner from "./components/MazeRunner";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -52,7 +52,7 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
-      <Maze />
+      <MazeRunner />
       <Footer />
     </>
   );

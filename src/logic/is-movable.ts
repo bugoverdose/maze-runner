@@ -1,6 +1,6 @@
-import { MazeBoard } from "../domains/MazeBoard";
+import { Maze } from "../domains/Maze";
 
-export const movePlayer = (direction: string, maze: MazeBoard): boolean => {
+export const movePlayer = (direction: string, maze: Maze): boolean => {
   const playerPosition = maze.blocks[maze.player.col][maze.player.row];
   if (direction === "ArrowLeft" && !playerPosition.westWall) {
     maze.player.col -= 1;
