@@ -3,7 +3,7 @@ import styled, { useTheme } from "styled-components";
 import { MazeBlock } from "../domains/MazeBlock";
 import { MazeBoard } from "../domains/MazeBoard";
 import { generateMazeStructure } from "../logic/generate-maze-structure";
-import { isMovable } from "../logic/is-movable";
+import { movePlayer } from "../logic/is-movable";
 import { endPosition, startPosition } from "../logic/paint-wall-info";
 import { CELL_SIZE } from "../styles/constants";
 import { QuestionMarkLogo } from "./QuestionMarkLogo";
@@ -274,7 +274,8 @@ const Maze = () => {
   };
 
   const onControlPlayer = (direction: string) => {
-    if (isMovable(direction, maze)) {
+    const hasMoved = movePlayer(direction, maze);
+    if (hasMoved) {
       if (!isFinishedRef.current) {
         setMoveCount(moveCountRef.current + 1);
       }
