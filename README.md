@@ -10,7 +10,7 @@
 - reset position 기능 추가 여부 고려 : 미로 전체를 다시 만들지 말고, 사용자 위치, 시간, 이동거리만 리셋
 - 플레이어 이동할 때마다 매번 canvas 전체를 다시 그리지 말고, 플레이어와 그 이동경로만 색칠
 - 미로 크기별 최고점수 기록
-- Deployment: ghpage &/or chrome extention
+- Deployment: chrome extention
 
 ## Debugging
 
