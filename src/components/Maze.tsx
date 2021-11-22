@@ -291,7 +291,10 @@ const Maze = () => {
   };
 
   const onSizeChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const inputValue = parseInt(event.currentTarget.value);
+    const inputValue = parseInt(event.currentTarget.value, 10);
+    if (isNaN(inputValue)) {
+      return;
+    }
     if (inputValue > 25) {
       setMazeSizeInput(25);
     } else if (inputValue < 5) {

@@ -27,4 +27,7 @@
 
   - mazeSize state 값도 useRef로 접근해줘야 함.
 
-- [x] 개발자도구로 input 태그를 강제로 수정하더라도 미로 크기는 5~25의 값으로 고정
+- [x] 개발자도구로 input 태그의 min/max를 강제로 수정하면 미로 크기의 값이 5~25 범위의 값을 벗어날 수 있는 현상.
+
+- [x] 개발자도구로 input 태그의 type: number 속성을 제거한 경우 문자열 값을 받으면 parseInt 결과가 NaN로 사이트 전체 다운되는 현상.
+  - 새로운 input value가 NaN이 될 경우, 현재 mazeSizeInput state 값을 변화시키지 않음. 입력값 무시.
