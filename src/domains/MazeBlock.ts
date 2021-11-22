@@ -15,7 +15,7 @@ export class MazeBlock {
   hasThreeWalls() {
     let counter = 0;
     [this.northWall, this.westWall, this.southWall, this.eastWall].forEach(
-      (wallExists, idx) => {
+      (wallExists) => {
         if (wallExists) {
           counter++;
         }
