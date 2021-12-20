@@ -13,6 +13,34 @@ import {
 } from "../styles/constants";
 import { QuestionMarkLogo } from "./QuestionMarkLogo";
 
+const BlackScreen = styled.div`
+  @media ${device.showNone} {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: ${(props) => props.theme.textColor};
+  }
+
+  @media ${device.mobileL} {
+    display: none;
+  }
+`;
+
+const BlackScreenText = styled.span`
+  font-weight: 800;
+  font-size: 20px;
+  color: white;
+`;
+
 const Container = styled.div`
   text-align: center;
   display: flex;
@@ -26,16 +54,8 @@ const Container = styled.div`
 
 const Header = styled.header`
   font-weight: 800;
-
-  @media ${device.mobileS} {
-    font-size: 30px;
-    margin-bottom: 0px;
-  }
-
-  @media ${device.mobileL} {
-    font-size: 40px;
-    margin-bottom: 5px;
-  }
+  font-size: 40px;
+  margin-bottom: 5px;
 
   @media ${device.bigScreen} {
     font-size: 50px;
@@ -50,11 +70,11 @@ const Wrapper = styled.div`
   width: auto;
   height: auto;
 
-  @media ${device.mobileS} {
+  @media ${device.mobileL} {
     flex-direction: column;
   }
 
-  @media ${device.mobileL} {
+  @media ${device.bigScreen} {
     flex-direction: row;
   }
 `;
@@ -62,10 +82,7 @@ const Wrapper = styled.div`
 const MazeContainer = styled.div`
   display: flex;
   flex-direction: column;
-
-  @media ${device.mobileS} {
-    padding: 10px;
-  }
+  padding: 5px;
 
   @media ${device.bigScreen} {
     padding: 20px;
@@ -106,15 +123,15 @@ const PlayContainer = styled.div<{ canvasSize: number }>`
   justify-content: space-between;
   align-items: center;
   font-size: 20px;
-  height: ${(props) => props.canvasSize + "px"};
+  @media ${device.bigScreen} {
+    height: ${(props) => props.canvasSize + "px"};
+  }
 `;
 
 const MovementCountBox = styled.div`
-  @media ${device.mobileS} {
-    display: none;
-  }
+  display: none;
 
-  @media ${device.mobileL} {
+  @media ${device.bigScreen} {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -131,15 +148,13 @@ const MovementCountBox = styled.div`
 `;
 
 const ControlPanel = styled.div`
-  display: grid;
-  gap: 5px;
-
-  @media ${device.mobileS} {
-    grid-template-columns: repeat(3, 30px);
-    grid-template-rows: repeat(2, 30px);
+  @media ${device.showNone} {
+    display: none;
   }
 
   @media ${device.mobileL} {
+    display: grid;
+    gap: 5px;
     grid-template-columns: repeat(3, 40px);
     grid-template-rows: repeat(2, 40px);
   }
@@ -154,13 +169,7 @@ const ControlBtn = styled.input.attrs({ type: "button" })`
   height: 100%;
   width: 100%;
   font-weight: 800;
-  @media ${device.mobileS} {
-    font-size: 15px;
-  }
-
-  @media ${device.mobileL} {
-    font-size: 25px;
-  }
+  font-size: 25px;
 
   @media ${device.bigScreen} {
     font-size: 30px;
@@ -186,12 +195,12 @@ const HelpText = styled.span`
   background-color: white;
   padding: 15px;
 
-  @media ${device.mobileS} {
+  @media ${device.mobileL} {
     top: -160px;
-    left: -180px;
+    left: -150px;
   }
 
-  @media ${device.mobileL} {
+  @media ${device.bigScreen} {
     top: -100px;
     left: -300px;
   }
@@ -463,6 +472,10 @@ const MazeRunner = () => {
 
   return (
     <>
+      <BlackScreen>
+        <BlackScreenText>Your Screen</BlackScreenText>
+        <BlackScreenText>Is Too Small!</BlackScreenText>
+      </BlackScreen>
       <Container>
         <Header>Maze Runner</Header>
         <Wrapper>
