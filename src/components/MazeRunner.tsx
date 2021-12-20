@@ -10,6 +10,7 @@ import {
   device,
   GENERATE_NEW_MAZE,
   MOVEMENT,
+  INITIAL_MAZE_LEVEL,
 } from "../styles/constants";
 import { QuestionMarkLogo } from "./QuestionMarkLogo";
 
@@ -30,7 +31,7 @@ const BlackScreen = styled.div`
     background-color: ${(props) => props.theme.textColor};
   }
 
-  @media ${device.mobileL} {
+  @media ${device.mobile} {
     display: none;
   }
 `;
@@ -54,8 +55,8 @@ const Container = styled.div`
 
 const Header = styled.header`
   font-weight: 800;
-  font-size: 40px;
-  margin-bottom: 5px;
+  font-size: 35px;
+  margin-bottom: 10px;
 
   @media ${device.bigScreen} {
     font-size: 50px;
@@ -70,7 +71,7 @@ const Wrapper = styled.div`
   width: auto;
   height: auto;
 
-  @media ${device.mobileL} {
+  @media ${device.mobile} {
     flex-direction: column;
   }
 
@@ -152,16 +153,18 @@ const ControlPanel = styled.div`
     display: none;
   }
 
-  @media ${device.mobileL} {
+  @media ${device.mobile} {
     display: grid;
     gap: 5px;
     grid-template-columns: repeat(3, 40px);
     grid-template-rows: repeat(2, 40px);
+    margin-top: 20px;
   }
 
   @media ${device.bigScreen} {
     grid-template-columns: repeat(3, 50px);
     grid-template-rows: repeat(2, 50px);
+    margin-top: 0px;
   }
 `;
 
@@ -195,7 +198,7 @@ const HelpText = styled.span`
   background-color: white;
   padding: 15px;
 
-  @media ${device.mobileL} {
+  @media ${device.mobile} {
     top: -160px;
     left: -150px;
   }
@@ -244,8 +247,8 @@ const MazeRunner = () => {
   const theme = useTheme();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const [mazeSize, _setMazeSize] = useState(20);
-  const [mazeSizeInput, setMazeSizeInput] = useState(20);
+  const [mazeSize, _setMazeSize] = useState(INITIAL_MAZE_LEVEL);
+  const [mazeSizeInput, setMazeSizeInput] = useState(INITIAL_MAZE_LEVEL);
   const [canvasSize, _setCanvasSize] = useState(
     mazeSize * RESPONSIVE_CELL_SIZE()
   );
