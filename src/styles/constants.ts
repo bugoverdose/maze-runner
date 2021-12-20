@@ -1,15 +1,15 @@
-const MOBILE_L = 425;
-const BIG_SCREEN = 1024;
+const MOBILE = 320;
+const BIG_SCREEN = 768;
 
 export const size = {
   showNone: `0px`,
-  mobileL: `${MOBILE_L}px`,
+  mobile: `${MOBILE}px`,
   bigScreen: `${BIG_SCREEN}px`,
 };
 
 export const device = {
   showNone: `(min-width: ${size.showNone})`,
-  mobileL: `(min-width: ${size.mobileL})`,
+  mobile: `(min-width: ${size.mobile})`,
   bigScreen: `(min-width: ${size.bigScreen})`,
 };
 
@@ -18,11 +18,13 @@ export const RESPONSIVE_CELL_SIZE = () => {
   if (window.screen.width >= BIG_SCREEN) {
     return 20;
   }
-  if (window.screen.width >= MOBILE_L) {
-    return 15;
+  if (window.screen.width >= MOBILE) {
+    return 12;
   }
   return 5;
 };
+
+export const INITIAL_MAZE_LEVEL = 25;
 
 export const GENERATE_NEW_MAZE = "Generate";
 export const MOVEMENT = "Moves";
