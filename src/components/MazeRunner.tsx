@@ -5,7 +5,12 @@ import { Maze } from "../domains/Maze";
 import { generateMazeStructure } from "../logic/generate-maze-structure";
 import { movePlayer } from "../logic/is-movable";
 import { endPosition, startPosition } from "../logic/paint-wall-info";
-import { CELL_SIZE } from "../styles/constants";
+import {
+  RESPONSIVE_CELL_SIZE,
+  device,
+  GENERATE_NEW_MAZE,
+  MOVEMENT,
+} from "../styles/constants";
 import { QuestionMarkLogo } from "./QuestionMarkLogo";
 
 const Container = styled.div`
@@ -20,24 +25,51 @@ const Container = styled.div`
 `;
 
 const Header = styled.header`
-  font-size: 50px;
   font-weight: 800;
-  margin-bottom: 15px;
+
+  @media ${device.mobileS} {
+    font-size: 30px;
+    margin-bottom: 0px;
+  }
+
+  @media ${device.mobileL} {
+    font-size: 40px;
+    margin-bottom: 5px;
+  }
+
+  @media ${device.bigScreen} {
+    font-size: 50px;
+    margin-bottom: 15px;
+  }
 `;
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: row;
   justify-content: center;
   align-items: center;
   width: auto;
   height: auto;
+
+  @media ${device.mobileS} {
+    flex-direction: column;
+  }
+
+  @media ${device.mobileL} {
+    flex-direction: row;
+  }
 `;
 
 const MazeContainer = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 20px;
+
+  @media ${device.mobileS} {
+    padding: 10px;
+  }
+
+  @media ${device.bigScreen} {
+    padding: 20px;
+  }
 `;
 
 const Canvas = styled.canvas`
@@ -78,32 +110,61 @@ const PlayContainer = styled.div<{ canvasSize: number }>`
 `;
 
 const MovementCountBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 25px;
-  font-weight: 600;
-  & > div {
-    border-radius: 15px;
-    border: 3px ${(props) => props.theme.backgroundColor} solid;
-    padding: 20px 30px;
-    margin: 15px 0;
-    font-size: 30px;
+  @media ${device.mobileS} {
+    display: none;
+  }
+
+  @media ${device.mobileL} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 25px;
+    font-weight: 600;
+    & > div {
+      border-radius: 15px;
+      border: 3px ${(props) => props.theme.backgroundColor} solid;
+      padding: 20px 30px;
+      margin: 15px 0;
+      font-size: 30px;
+    }
   }
 `;
 
 const ControlPanel = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 50px);
-  grid-template-rows: repeat(2, 50px);
   gap: 5px;
+
+  @media ${device.mobileS} {
+    grid-template-columns: repeat(3, 30px);
+    grid-template-rows: repeat(2, 30px);
+  }
+
+  @media ${device.mobileL} {
+    grid-template-columns: repeat(3, 40px);
+    grid-template-rows: repeat(2, 40px);
+  }
+
+  @media ${device.bigScreen} {
+    grid-template-columns: repeat(3, 50px);
+    grid-template-rows: repeat(2, 50px);
+  }
 `;
 
 const ControlBtn = styled.input.attrs({ type: "button" })`
   height: 100%;
   width: 100%;
-  font-size: 30px;
   font-weight: 800;
+  @media ${device.mobileS} {
+    font-size: 15px;
+  }
+
+  @media ${device.mobileL} {
+    font-size: 25px;
+  }
+
+  @media ${device.bigScreen} {
+    font-size: 30px;
+  }
 `;
 
 const HelpBtn = styled.div`
@@ -119,12 +180,21 @@ const HelpBtn = styled.div`
 const HelpText = styled.span`
   display: none;
   position: absolute; // align itself to the closest relative father
-  top: -100px;
-  left: -300px;
+
   border-radius: 15px;
   border: 3px black solid;
   background-color: white;
   padding: 15px;
+
+  @media ${device.mobileS} {
+    top: -160px;
+    left: -180px;
+  }
+
+  @media ${device.mobileL} {
+    top: -100px;
+    left: -300px;
+  }
 `;
 
 const Popup = styled.div`
@@ -167,7 +237,9 @@ const MazeRunner = () => {
 
   const [mazeSize, _setMazeSize] = useState(20);
   const [mazeSizeInput, setMazeSizeInput] = useState(20);
-  const [canvasSize, _setCanvasSize] = useState(mazeSize * CELL_SIZE);
+  const [canvasSize, _setCanvasSize] = useState(
+    mazeSize * RESPONSIVE_CELL_SIZE()
+  );
 
   const [maze, _setMaze] = useState(
     generateMazeStructure(new Maze(), mazeSize)
@@ -246,10 +318,10 @@ const MazeRunner = () => {
     // 목적지: 특수한 배경. 벽들에 의해 덮어져야하므로 먼저
     context.fillStyle = theme.finishColor;
     context.fillRect(
-      (curMazeSize - 1) * CELL_SIZE,
-      (curMazeSize - 1) * CELL_SIZE,
-      CELL_SIZE,
-      CELL_SIZE
+      (curMazeSize - 1) * RESPONSIVE_CELL_SIZE(),
+      (curMazeSize - 1) * RESPONSIVE_CELL_SIZE(),
+      RESPONSIVE_CELL_SIZE(),
+      RESPONSIVE_CELL_SIZE()
     );
 
     // 미로 내의 벽들 색칠
@@ -267,8 +339,14 @@ const MazeRunner = () => {
               const [fromCol, fromRow] = startPosition(idx, col, row);
               const [toCol, toRow] = endPosition(idx, col, row);
               context.beginPath();
-              context.moveTo(fromCol * CELL_SIZE, fromRow * CELL_SIZE);
-              context.lineTo(toCol * CELL_SIZE, toRow * CELL_SIZE);
+              context.moveTo(
+                fromCol * RESPONSIVE_CELL_SIZE(),
+                fromRow * RESPONSIVE_CELL_SIZE()
+              );
+              context.lineTo(
+                toCol * RESPONSIVE_CELL_SIZE(),
+                toRow * RESPONSIVE_CELL_SIZE()
+              );
               context.stroke();
             }
           }
@@ -281,9 +359,9 @@ const MazeRunner = () => {
     context.strokeStyle = theme.playerColor;
     context.beginPath();
     context.arc(
-      curMaze.player.col * CELL_SIZE + CELL_SIZE / 2,
-      curMaze.player.row * CELL_SIZE + CELL_SIZE / 2,
-      Math.floor(CELL_SIZE / 2) - 2,
+      curMaze.player.col * RESPONSIVE_CELL_SIZE() + RESPONSIVE_CELL_SIZE() / 2,
+      curMaze.player.row * RESPONSIVE_CELL_SIZE() + RESPONSIVE_CELL_SIZE() / 2,
+      Math.floor(RESPONSIVE_CELL_SIZE() / 2) - 2,
       0,
       2 * Math.PI
     );
@@ -333,7 +411,7 @@ const MazeRunner = () => {
     }
 
     setMazeSize(validMazeSize);
-    setCanvasSize(validMazeSize * CELL_SIZE);
+    setCanvasSize(validMazeSize * RESPONSIVE_CELL_SIZE());
 
     maze.player.reset();
     generateMaze();
@@ -397,14 +475,14 @@ const MazeRunner = () => {
                 <ValueInput value={mazeSizeInput} onChange={onSizeChange} />
               </label>
 
-              <SubmitBtn>Generate New Maze</SubmitBtn>
+              <SubmitBtn>{GENERATE_NEW_MAZE}</SubmitBtn>
             </GeneratorForm>
           </MazeContainer>
           <PlayContainer canvasSize={Math.max(300, canvasSize)}>
             <MovementCountBox>
-              <span>Movement </span>
+              <span>{MOVEMENT}</span>
               <div>{moveCount}</div>
-              <span>{time} sec passed</span>
+              <span>{time} sec</span>
             </MovementCountBox>
             <ControlPanel>
               <div></div>
