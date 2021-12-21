@@ -31,7 +31,7 @@ const BlackScreen = styled.div`
     background-color: ${(props) => props.theme.textColor};
   }
 
-  @media ${device.mobile} {
+  @media ${device.mobile} and ${device.mobileHeight} {
     display: none;
   }
 `;

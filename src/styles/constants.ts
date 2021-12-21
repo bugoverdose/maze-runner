@@ -1,4 +1,5 @@
 const MOBILE = 320;
+const MOBILE_HEIGHT = 520;
 const BIG_SCREEN = 768;
 
 export const size = {
@@ -7,9 +8,14 @@ export const size = {
   bigScreen: `${BIG_SCREEN}px`,
 };
 
+export const height = {
+  mobile: `${MOBILE_HEIGHT}px`,
+};
+
 export const device = {
   showNone: `(min-width: ${size.showNone})`,
   mobile: `(min-width: ${size.mobile})`,
+  mobileHeight: `(min-height: ${height.mobile})`,
   bigScreen: `(min-width: ${size.bigScreen})`,
 };
 
