@@ -8,7 +8,7 @@ import { ValueInput } from "./ValueInput";
 // TODO: fix types
 interface iMaze {
   canvasRef: any;
-  onGenerate: any;
+  onGenerate(event: React.FormEvent<HTMLFormElement>): void;
   mazeSizeInput: any;
   onSizeChange: any;
 }

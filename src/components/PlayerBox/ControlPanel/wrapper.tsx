@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { device } from "../../constants";
+import { device } from "../../../constants";
 
 export const ControlPanelWrapper = styled.div`
   @media ${device.showNone} {

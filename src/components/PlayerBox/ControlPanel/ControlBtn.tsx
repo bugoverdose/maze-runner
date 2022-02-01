@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { device } from "../../constants";
+import { device } from "../../../constants";
 
 export const ControlBtn = styled.input.attrs({ type: "button" })`
   height: 100%;

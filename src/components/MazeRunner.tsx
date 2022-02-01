@@ -1,54 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
-import styled, { useTheme } from "styled-components";
+import { useTheme } from "styled-components";
 import { MazeBlock } from "../domains/MazeBlock";
 import { generateMazeStructure } from "../logic/generate-maze-structure";
 import { movePlayer } from "../logic/is-movable";
 import { endPosition, startPosition } from "../logic/paint-wall-info";
-import {
-  RESPONSIVE_CELL_SIZE,
-  device,
-  MOVEMENT,
-  INITIAL_MAZE_LEVEL,
-} from "../constants";
+import { RESPONSIVE_CELL_SIZE, INITIAL_MAZE_LEVEL } from "../constants";
 import { Maze } from "../domains/Maze";
 import { Footer } from "./Footer";
 import { Popup } from "./Popup";
-import { ControlPanel } from "./ControlPanel";
 import { MazeCanvas } from "./Maze";
 import { BlackScreen } from "./BlackScreen";
 import { Wrapper } from "./Wrapper";
 import { Header } from "./Header";
 import { Container } from "./BlackScreen/Container";
-
-const PlayContainer = styled.div<{ canvasSize: number }>`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 20px;
-  @media ${device.bigScreen} {
-    height: ${(props) => props.canvasSize + "px"};
-  }
-`;
-
-const MovementCountBox = styled.div`
-  display: none;
-
-  @media ${device.bigScreen} {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 25px;
-    font-weight: 600;
-    & > div {
-      border-radius: 15px;
-      border: 3px ${(props) => props.theme.backgroundColor} solid;
-      padding: 20px 30px;
-      margin: 15px 0;
-      font-size: 30px;
-    }
-  }
-`;
+import { PlayerBox } from "./PlayerBox";
 
 const MazeRunner = () => {
   const theme = useTheme();
@@ -292,17 +257,14 @@ const MazeRunner = () => {
             mazeSizeInput={mazeSizeInput}
             onSizeChange={onSizeChange}
           />
-          <PlayContainer canvasSize={Math.max(300, canvasSize)}>
-            <MovementCountBox>
-              <span>{MOVEMENT}</span>
-              <div>{moveCount}</div>
-              <span>{time} sec</span>
-            </MovementCountBox>
-            <ControlPanel onControlPlayer={onControlPlayer} />
-          </PlayContainer>
+          <PlayerBox
+            canvasSize={canvasSize}
+            moveCount={moveCount}
+            time={time}
+            onControlPlayer={onControlPlayer}
+          />
         </Container>
       </Wrapper>
-
       {isPopupMode && (
         <Popup mazeSize={mazeSize} moveCount={moveCount} time={time} />
       )}
