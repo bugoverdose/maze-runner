@@ -15,34 +15,7 @@ import {
 import { QuestionMarkLogo } from "./components/QuestionMarkLogo";
 import { Footer } from "./components/Footer";
 import Popup from "./components/Popup";
-
-const BlackScreen = styled.div`
-  @media ${device.showNone} {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 99;
-
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
-    background-color: ${(props) => props.theme.textColor};
-  }
-
-  @media ${device.mobile} and ${device.mobileHeight} {
-    display: none;
-  }
-`;
-
-const BlackScreenText = styled.span`
-  font-weight: 800;
-  font-size: 20px;
-  color: white;
-`;
+import BlackScreen from "./components/BlackScreen";
 
 const Container = styled.div`
   text-align: center;
@@ -443,10 +416,7 @@ const MazeRunner = () => {
 
   return (
     <>
-      <BlackScreen>
-        <BlackScreenText>Your Screen</BlackScreenText>
-        <BlackScreenText>Is Too Small!</BlackScreenText>
-      </BlackScreen>
+      <BlackScreen />
       <Container>
         <Header>Maze Runner</Header>
         <Wrapper>
@@ -498,10 +468,8 @@ const MazeRunner = () => {
         </Wrapper>
       </Container>
 
-      {isPopupMode ? (
+      {isPopupMode && (
         <Popup mazeSize={mazeSize} moveCount={moveCount} time={time} />
-      ) : (
-        <></>
       )}
       <Footer />
     </>
