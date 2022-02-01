@@ -1,23 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { useTheme } from "styled-components";
-import { MazeBlock } from "./domains/MazeBlock";
-import { generateMazeStructure } from "./logic/generate-maze-structure";
-import { movePlayer } from "./logic/is-movable";
-import { endPosition, startPosition } from "./logic/paint-wall-info";
+import { MazeBlock } from "../domains/MazeBlock";
+import { generateMazeStructure } from "../logic/generate-maze-structure";
+import { movePlayer } from "../logic/is-movable";
+import { endPosition, startPosition } from "../logic/paint-wall-info";
 import {
   RESPONSIVE_CELL_SIZE,
   device,
   MOVEMENT,
   INITIAL_MAZE_LEVEL,
-} from "./constants";
-import {
-  Popup,
-  BlackScreen,
-  Footer,
-  ControlPanel,
-  MazeCanvas,
-} from "./components";
-import { Maze } from "./domains/Maze";
+} from "../constants";
+import { Maze } from "../domains/Maze";
+import { Footer } from "./Footer";
+import { Popup } from "./Popup";
+import { ControlPanel } from "./ControlPanel";
+import { MazeCanvas } from "./Maze";
+import { BlackScreen } from "./BlackScreen";
 
 const Container = styled.div`
   text-align: center;

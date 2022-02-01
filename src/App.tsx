@@ -1,6 +1,6 @@
 import React from "react";
 import { GlobalStyle } from "./styles/global";
-import MazeRunner from "./MazeRunner";
+import MazeRunner from "./components/MazeRunner";
 
 const App = () => {
   return (
