@@ -34,7 +34,6 @@ const MazeRunner = () => {
   const moveCountRef = useRef(moveCount);
   const isFinishedRef = useRef(isFinished);
   const mazeSizeRef = useRef<number>(mazeSize);
-  const mazeRef = useRef(maze);
   const canvasSizeRef = useRef(canvasSize);
 
   const setMoveCount = (data: number) => {
@@ -56,8 +55,7 @@ const MazeRunner = () => {
   const [isPopupMode, setIsPopupMode] = useState(false);
 
   const onControlPlayer = (direction: string) => {
-    const curMaze = mazeRef.current;
-    const hasMoved = movePlayer(direction, curMaze); // 키보드 입력을 위한 이벤트 리스너는 state 직접 접근 불가
+    const hasMoved = movePlayer(direction, maze); // 키보드 입력을 위한 이벤트 리스너는 state 직접 접근 불가
 
     if (!hasMoved) return;
 
@@ -65,11 +63,11 @@ const MazeRunner = () => {
       setMoveCount(moveCountRef.current + 1);
     }
 
-    paintMaze({ canvasRef, mazeRef, maze, mazeSizeRef, canvasSizeRef });
+    paintMaze({ canvasRef, maze, mazeSizeRef, canvasSizeRef });
 
     if (
-      curMaze.player.row === mazeSizeRef.current - 1 &&
-      curMaze.player.col === mazeSizeRef.current - 1
+      maze.player.row === mazeSizeRef.current - 1 &&
+      maze.player.col === mazeSizeRef.current - 1
     ) {
       setIsFinished(true);
     }
@@ -89,7 +87,6 @@ const MazeRunner = () => {
     <MazeRunnerContext.Provider
       value={{
         maze,
-        mazeRef,
 
         mazeSize,
         setMazeSize,
@@ -112,7 +109,6 @@ const MazeRunner = () => {
         <MazeRunnerContainer>
           <MazeCanvas
             setMaze={setMaze}
-            mazeRef={mazeRef}
             canvasRef={canvasRef}
             mazeSizeRef={mazeSizeRef}
             canvasSizeRef={canvasSizeRef}

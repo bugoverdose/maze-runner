@@ -5,29 +5,22 @@ import { endPosition, startPosition } from "./wallPaintInfo";
 import { theme } from "../styles/theme";
 
 interface iPaintMaze {
-  canvasRef: React.RefObject<HTMLCanvasElement>;
-  mazeRef: React.MutableRefObject<Maze>;
   maze: Maze;
+  canvasRef: React.RefObject<HTMLCanvasElement>;
   mazeSizeRef: React.MutableRefObject<number>;
   canvasSizeRef: React.MutableRefObject<number>;
 }
 
-// 정의된 미로 구조를 화면에 색칠
 export const paintMaze = ({
-  canvasRef,
-  mazeRef,
   maze,
+  canvasRef,
   mazeSizeRef,
   canvasSizeRef,
 }: iPaintMaze) => {
-  if (
-    !canvasRef.current?.getContext("2d") ||
-    !mazeRef.current ||
-    !maze.player
-  ) {
+  if (!canvasRef.current?.getContext("2d") || !maze.player) {
     return;
   }
-  const curMaze = mazeRef.current;
+
   const curMazeSize = mazeSizeRef.current; // 키보드 입력을 위한 이벤트 리스너는 state 직접 접근 불가
   const curCanvasSize = canvasSizeRef.current;
 
@@ -54,7 +47,7 @@ export const paintMaze = ({
   for (let col = 0; col < curMazeSize; col++) {
     for (let row = 0; row < curMazeSize; row++) {
       const { northWall, westWall, southWall, eastWall }: MazeBlock =
-        curMaze.blocks[col][row];
+        maze.blocks[col][row];
 
       [northWall, westWall, southWall, eastWall].forEach((wallExists, idx) => {
         if (wallExists) {
@@ -80,8 +73,8 @@ export const paintMaze = ({
   context.strokeStyle = theme.playerColor;
   context.beginPath();
   context.arc(
-    curMaze.player.col * RESPONSIVE_CELL_SIZE() + RESPONSIVE_CELL_SIZE() / 2,
-    curMaze.player.row * RESPONSIVE_CELL_SIZE() + RESPONSIVE_CELL_SIZE() / 2,
+    maze.player.col * RESPONSIVE_CELL_SIZE() + RESPONSIVE_CELL_SIZE() / 2,
+    maze.player.row * RESPONSIVE_CELL_SIZE() + RESPONSIVE_CELL_SIZE() / 2,
     Math.floor(RESPONSIVE_CELL_SIZE() / 2) - 2,
     0,
     2 * Math.PI
