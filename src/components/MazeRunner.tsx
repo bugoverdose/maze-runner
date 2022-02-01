@@ -12,12 +12,14 @@ import { Header } from "./Header";
 import { PlayerBox } from "./PlayerBox";
 import { MazeRunnerContainer } from "./Container";
 import { paintMaze } from "../utils/paintMaze";
+import { MazeRunnerContext } from "../context";
 
 const MazeRunner = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [mazeSize, _setMazeSize] = useState(INITIAL_MAZE_LEVEL);
-  const [mazeSizeInput, setMazeSizeInput] = useState(INITIAL_MAZE_LEVEL);
+  const [mazeSizeInput, _setMazeSizeInput] = useState(INITIAL_MAZE_LEVEL);
+
   const [canvasSize, _setCanvasSize] = useState(
     mazeSize * RESPONSIVE_CELL_SIZE()
   );
@@ -76,12 +78,12 @@ const MazeRunner = () => {
 
   const onControlPlayer = (direction: string) => {
     const curMaze = mazeRef.current;
-    const hasMoved = movePlayer(direction, mazeRef.current); // 키보드 입력을 위한 이벤트 리스너는 state 직접 접근 불가
+    const hasMoved = movePlayer(direction, curMaze); // 키보드 입력을 위한 이벤트 리스너는 state 직접 접근 불가
 
-    if (hasMoved) {
-      if (!isFinishedRef.current) {
-        setMoveCount(moveCountRef.current + 1);
-      }
+    if (!hasMoved) return;
+
+    if (!isFinishedRef.current) {
+      setMoveCount(moveCountRef.current + 1);
     }
 
     paintMaze({ canvasRef, mazeRef, maze, mazeSizeRef, canvasSizeRef });
@@ -94,14 +96,6 @@ const MazeRunner = () => {
     }
   };
 
-  const onSizeChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const inputValue = parseInt(event.currentTarget.value, 10);
-    if (isNaN(inputValue)) {
-      return;
-    }
-    setMazeSizeInput(inputValue);
-  };
-
   const onGenerate = (event: React.FormEvent<HTMLFormElement>) => {
     if (!maze || !maze.player) {
       return;
@@ -112,7 +106,7 @@ const MazeRunner = () => {
     let validMazeSize = Math.max(mazeSizeInput, 5);
     validMazeSize = Math.min(validMazeSize, 25);
     if (validMazeSize !== mazeSizeInput) {
-      setMazeSizeInput(validMazeSize);
+      _setMazeSizeInput(validMazeSize);
     }
 
     setMazeSize(validMazeSize);
@@ -167,7 +161,11 @@ const MazeRunner = () => {
   }, []);
 
   return (
-    <>
+    <MazeRunnerContext.Provider
+      value={{
+        setMazeSizeInput: (num: number) => _setMazeSizeInput(num),
+      }}
+    >
       <BlackScreen />
       <MazeRunnerWrapper>
         <Header>Maze Runner</Header>
@@ -176,7 +174,6 @@ const MazeRunner = () => {
             canvasRef={canvasRef}
             onGenerate={onGenerate}
             mazeSizeInput={mazeSizeInput}
-            onSizeChange={onSizeChange}
           />
           <PlayerBox
             canvasSize={canvasSize}
@@ -190,7 +187,7 @@ const MazeRunner = () => {
         <Popup mazeSize={mazeSize} moveCount={moveCount} time={time} />
       )}
       <Footer />
-    </>
+    </MazeRunnerContext.Provider>
   );
 };
 
