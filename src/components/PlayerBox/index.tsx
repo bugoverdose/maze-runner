@@ -1,21 +1,18 @@
+import { useContext } from "react";
 import { MOVEMENT } from "../../constants";
+import { MazeRunnerContext } from "../../context";
 import { ControlPanel } from "./ControlPanel";
 import { MovementCountBox } from "./MovementCountBox";
 import { PlayContainer } from "./PlayContainer";
 
 interface iPlayerBox {
   canvasSize: number;
-  moveCount: number;
-  time: number;
   onControlPlayer(direction: string): void;
 }
 
-export const PlayerBox = ({
-  canvasSize,
-  moveCount,
-  time,
-  onControlPlayer,
-}: iPlayerBox) => {
+export const PlayerBox = ({ canvasSize, onControlPlayer }: iPlayerBox) => {
+  const { moveCount, time } = useContext(MazeRunnerContext);
+
   return (
     <PlayContainer canvasSize={Math.max(300, canvasSize)}>
       <MovementCountBox>

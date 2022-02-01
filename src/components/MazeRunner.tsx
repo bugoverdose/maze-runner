@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { generateMazeStructure } from "../utils/generateMazeStructure";
 import { movePlayer } from "../utils/movePlayer";
 import { RESPONSIVE_CELL_SIZE, INITIAL_MAZE_LEVEL } from "../constants";
@@ -21,25 +21,21 @@ const MazeRunner = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [mazeSize, _setMazeSize] = useState(INITIAL_MAZE_LEVEL);
-  const [mazeSizeInput, setMazeSizeInput] = useState(INITIAL_MAZE_LEVEL);
 
   const [canvasSize, _setCanvasSize] = useState(
     mazeSize * RESPONSIVE_CELL_SIZE()
   );
 
-  const [maze, _setMaze] = useState(
-    generateMazeStructure(new Maze(), mazeSize)
-  );
+  const [maze, setMaze] = useState(generateMazeStructure(new Maze(), mazeSize));
   const [time, setTime] = useState(0);
   const [moveCount, _setMoveCount] = useState(0);
   const [isFinished, _setIsFinished] = useState(false);
 
-  // 이벤트리스너에서는 업데이트된 state 값 접근 불가 => useRef를 업데이트하여 접근
-  const moveCountRef = React.useRef(moveCount);
-  const isFinishedRef = React.useRef(isFinished);
-  const mazeSizeRef = React.useRef(mazeSize);
-  const mazeRef = React.useRef(maze);
-  const canvasSizeRef = React.useRef(canvasSize);
+  const moveCountRef = useRef(moveCount);
+  const isFinishedRef = useRef(isFinished);
+  const mazeSizeRef = useRef<number>(mazeSize);
+  const mazeRef = useRef(maze);
+  const canvasSizeRef = useRef(canvasSize);
 
   const setMoveCount = (data: number) => {
     moveCountRef.current = data; // useRef와 useState를 일치시키기
@@ -53,31 +49,11 @@ const MazeRunner = () => {
     mazeSizeRef.current = data;
     _setMazeSize(data);
   };
-  const setMaze = (data: Maze) => {
-    _setMaze(data);
-  };
   const setCanvasSize = (data: number) => {
     canvasSizeRef.current = data;
     _setCanvasSize(data);
   };
   const [isPopupMode, setIsPopupMode] = useState(false);
-
-  // 미로 구조 정의 후 화면에 색칠
-  const generateMaze = () => {
-    if (!canvasRef.current) {
-      return;
-    }
-    const canvas: HTMLCanvasElement = canvasRef.current;
-
-    canvas.height = canvasSize;
-    canvas.width = canvasSize;
-    canvas.style.height = canvasSize.toString();
-    canvas.style.width = canvasSize.toString();
-
-    setMaze(generateMazeStructure(maze, mazeSizeRef.current));
-
-    paintMaze({ canvasRef, mazeRef, maze, mazeSizeRef, canvasSizeRef });
-  };
 
   const onControlPlayer = (direction: string) => {
     const curMaze = mazeRef.current;
@@ -99,10 +75,6 @@ const MazeRunner = () => {
     }
   };
 
-  useEffect(() => {
-    generateMaze(); // eslint-disable-next-line
-  }, [mazeSize]);
-
   useTimerSetup({
     isFinished,
     incrementTime: (num: number) => setTime(num + 1),
@@ -116,12 +88,21 @@ const MazeRunner = () => {
   return (
     <MazeRunnerContext.Provider
       value={{
-        setMazeSizeInput: (num: number) => setMazeSizeInput(num),
-        setMazeSize,
-        setCanvasSize,
         maze,
+        mazeRef,
+
+        mazeSize,
+        setMazeSize,
+
+        canvasSize,
+        setCanvasSize,
+
+        moveCount,
         setMoveCount,
+
+        time,
         setTime: (num: number) => setTime(num),
+
         setIsFinished,
       }}
     >
@@ -130,21 +111,19 @@ const MazeRunner = () => {
         <Header>Maze Runner</Header>
         <MazeRunnerContainer>
           <MazeCanvas
+            setMaze={setMaze}
+            mazeRef={mazeRef}
             canvasRef={canvasRef}
-            generateMaze={generateMaze}
-            mazeSizeInput={mazeSizeInput}
+            mazeSizeRef={mazeSizeRef}
+            canvasSizeRef={canvasSizeRef}
           />
           <PlayerBox
             canvasSize={canvasSize}
-            moveCount={moveCount}
-            time={time}
             onControlPlayer={onControlPlayer}
           />
         </MazeRunnerContainer>
       </MazeRunnerWrapper>
-      {isPopupMode && (
-        <Popup mazeSize={mazeSize} moveCount={moveCount} time={time} />
-      )}
+      {isPopupMode && <Popup mazeSize={mazeSize} />}
       <Footer />
     </MazeRunnerContext.Provider>
   );

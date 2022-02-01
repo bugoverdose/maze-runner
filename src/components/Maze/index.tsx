@@ -1,6 +1,13 @@
-import { useContext } from "react";
-import { GENERATE_NEW_MAZE, RESPONSIVE_CELL_SIZE } from "../../constants";
+import { useContext, useEffect, useState } from "react";
+import {
+  GENERATE_NEW_MAZE,
+  INITIAL_MAZE_LEVEL,
+  RESPONSIVE_CELL_SIZE,
+} from "../../constants";
 import { MazeRunnerContext } from "../../context";
+import { Maze } from "../../domains/Maze";
+import { generateMazeStructure } from "../../utils/generateMazeStructure";
+import { paintMaze } from "../../utils/paintMaze";
 import { Canvas } from "./Canvas";
 import { MazeContainer } from "./container";
 import { GeneratorForm } from "./GeneratorForm";
@@ -8,26 +15,50 @@ import { SubmitBtn } from "./SubmitBtn";
 import { ValueInput } from "./ValueInput";
 
 // TODO: fix types
-interface iMaze {
-  canvasRef: any;
-  generateMaze: () => void;
-  mazeSizeInput: any;
+interface iMazeCanvas {
+  setMaze: any;
+  mazeRef: React.MutableRefObject<Maze>;
+  canvasRef: React.RefObject<HTMLCanvasElement>;
+  mazeSizeRef: React.MutableRefObject<number>;
+  canvasSizeRef: React.MutableRefObject<number>;
 }
 
 export const MazeCanvas = ({
+  setMaze,
+  mazeRef,
   canvasRef,
-  generateMaze,
-  mazeSizeInput,
-}: iMaze) => {
+  mazeSizeRef,
+  canvasSizeRef,
+}: iMazeCanvas) => {
   const {
-    setMazeSizeInput,
-    setMazeSize,
-    setCanvasSize,
     maze,
+    mazeSize,
+    setMazeSize,
+
+    canvasSize,
+    setCanvasSize,
     setMoveCount,
     setTime,
     setIsFinished,
   } = useContext(MazeRunnerContext);
+
+  const [mazeSizeInput, setMazeSizeInput] = useState(INITIAL_MAZE_LEVEL);
+
+  const generateMaze = () => {
+    if (!canvasRef.current) {
+      return;
+    }
+    const canvas: HTMLCanvasElement = canvasRef.current;
+
+    canvas.height = canvasSize;
+    canvas.width = canvasSize;
+    canvas.style.height = canvasSize.toString();
+    canvas.style.width = canvasSize.toString();
+
+    setMaze(generateMazeStructure(maze, mazeSizeRef.current));
+
+    paintMaze({ canvasRef, mazeRef, maze, mazeSizeRef, canvasSizeRef });
+  };
 
   const onSizeChange = (event: React.FormEvent<HTMLInputElement>) => {
     const inputValue = parseInt(event.currentTarget.value, 10);
@@ -59,6 +90,10 @@ export const MazeCanvas = ({
     setTime(0);
     setIsFinished(false);
   };
+
+  useEffect(() => {
+    generateMaze(); // eslint-disable-next-line
+  }, [mazeSize]);
 
   return (
     <MazeContainer>

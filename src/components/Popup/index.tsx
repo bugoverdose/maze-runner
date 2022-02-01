@@ -1,12 +1,14 @@
+import { useContext } from "react";
+import { MazeRunnerContext } from "../../context";
 import { PopupWrapper } from "./wrapper";
 
 interface iPopup {
   mazeSize: number;
-  moveCount: number;
-  time: number;
 }
 
-export const Popup = ({ mazeSize, moveCount, time }: iPopup) => {
+export const Popup = ({ mazeSize }: iPopup) => {
+  const { moveCount, time } = useContext(MazeRunnerContext);
+
   return (
     <PopupWrapper>
       <div>

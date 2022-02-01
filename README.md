@@ -15,4 +15,4 @@
 
 - listener belongs to the initial render and is not updated on subsequent rerenders.
   - useRef : 이벤트리스너 내부에서는 useRef에 업데이트된 현재 state값을 저장하여 접근
-  - 데이터를 호출하는 custom getter 함수 사용
+  - 데이터를 호출하는 custom getter 함수를 사용하는 경우 구현방식에 따라 lagging 문제 존재.

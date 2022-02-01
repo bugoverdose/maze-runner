@@ -1,12 +1,21 @@
-import React from "react";
+import React, { createRef } from "react";
 import { Maze } from "./domains/Maze";
 
 export const MazeRunnerContext = React.createContext({
-  setMazeSizeInput: (_: number) => {},
-  setMazeSize: (_: number) => {},
-  setCanvasSize: (_: number) => {},
   maze: new Maze(),
+  mazeRef: createRef<Maze>(),
+
+  mazeSize: 0,
+  setMazeSize: (_: number) => {},
+
+  canvasSize: 0,
+  setCanvasSize: (_: number) => {},
+
+  moveCount: 0,
   setMoveCount: (_: number) => {},
+
+  time: 0,
   setTime: (_: number) => {},
+
   setIsFinished: (_: boolean) => {},
 });
