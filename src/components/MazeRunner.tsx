@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { generateMazeStructure } from "../logic/generate-maze-structure";
-import { movePlayer } from "../logic/is-movable";
+import { generateMazeStructure } from "../utils/generateMazeStructure";
+import { movePlayer } from "../utils/movePlayer";
 import { RESPONSIVE_CELL_SIZE, INITIAL_MAZE_LEVEL } from "../constants";
 import { Maze } from "../domains/Maze";
 import { Footer } from "./Footer";

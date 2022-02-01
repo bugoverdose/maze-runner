@@ -1,7 +1,7 @@
 import { RESPONSIVE_CELL_SIZE } from "../constants";
 import { Maze } from "../domains/Maze";
 import { MazeBlock } from "../domains/MazeBlock";
-import { endPosition, startPosition } from "../logic/paint-wall-info";
+import { endPosition, startPosition } from "./wallPaintInfo";
 import { theme } from "../styles/theme";
 
 interface iPaintMaze {
