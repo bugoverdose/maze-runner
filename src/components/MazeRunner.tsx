@@ -16,44 +16,9 @@ import { Popup } from "./Popup";
 import { ControlPanel } from "./ControlPanel";
 import { MazeCanvas } from "./Maze";
 import { BlackScreen } from "./BlackScreen";
-
-const Container = styled.div`
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-  color: ${(props) => props.theme.textColor};
-`;
-
-const Header = styled.header`
-  font-weight: 800;
-  font-size: 35px;
-  margin-bottom: 10px;
-
-  @media ${device.bigScreen} {
-    font-size: 50px;
-    margin-bottom: 15px;
-  }
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: auto;
-  height: auto;
-
-  @media ${device.mobile} {
-    flex-direction: column;
-  }
-
-  @media ${device.bigScreen} {
-    flex-direction: row;
-  }
-`;
+import { Wrapper } from "./Wrapper";
+import { Header } from "./Header";
+import { Container } from "./BlackScreen/Container";
 
 const PlayContainer = styled.div<{ canvasSize: number }>`
   display: flex;
@@ -318,9 +283,9 @@ const MazeRunner = () => {
   return (
     <>
       <BlackScreen />
-      <Container>
+      <Wrapper>
         <Header>Maze Runner</Header>
-        <Wrapper>
+        <Container>
           <MazeCanvas
             canvasRef={canvasRef}
             onGenerate={onGenerate}
@@ -335,8 +300,8 @@ const MazeRunner = () => {
             </MovementCountBox>
             <ControlPanel onControlPlayer={onControlPlayer} />
           </PlayContainer>
-        </Wrapper>
-      </Container>
+        </Container>
+      </Wrapper>
 
       {isPopupMode && (
         <Popup mazeSize={mazeSize} moveCount={moveCount} time={time} />
