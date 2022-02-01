@@ -7,5 +7,12 @@ declare module "styled-components" {
     playerColor: string;
     finishColor: string;
     textColor: string;
+
+    device: {
+      showNone: string;
+      mobile: string;
+      mobileHeight: string;
+      bigScreen: string;
+    };
   }
 }

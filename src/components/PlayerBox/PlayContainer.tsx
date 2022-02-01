@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { device } from "../../constants";
 
 export const PlayContainer = styled.div<{ canvasSize: number }>`
   display: flex;
@@ -7,7 +6,8 @@ export const PlayContainer = styled.div<{ canvasSize: number }>`
   justify-content: space-between;
   align-items: center;
   font-size: 20px;
-  @media ${device.bigScreen} {
+
+  @media ${(props) => props.theme.device.bigScreen} {
     height: ${(props) => props.canvasSize + "px"};
   }
 `;

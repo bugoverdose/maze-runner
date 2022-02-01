@@ -1,12 +1,11 @@
 import styled from "styled-components";
-import { device } from "../../../constants";
 
 export const ControlPanelWrapper = styled.div`
-  @media ${device.showNone} {
+  @media ${(props) => props.theme.device.showNone} {
     display: none;
   }
 
-  @media ${device.mobile} {
+  @media ${(props) => props.theme.device.mobile} {
     display: grid;
     gap: 5px;
     grid-template-columns: repeat(3, 40px);
@@ -14,7 +13,7 @@ export const ControlPanelWrapper = styled.div`
     margin-top: 20px;
   }
 
-  @media ${device.bigScreen} {
+  @media ${(props) => props.theme.device.bigScreen} {
     grid-template-columns: repeat(3, 50px);
     grid-template-rows: repeat(2, 50px);
     margin-top: 0px;

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { device } from "../../../constants";
 
 export const ControlBtn = styled.input.attrs({ type: "button" })`
   height: 100%;
@@ -7,7 +6,7 @@ export const ControlBtn = styled.input.attrs({ type: "button" })`
   font-weight: 800;
   font-size: 25px;
 
-  @media ${device.bigScreen} {
+  @media ${(props) => props.theme.device.bigScreen} {
     font-size: 30px;
   }
 `;

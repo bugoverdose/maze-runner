@@ -1,13 +1,12 @@
 import styled from "styled-components";
-import { device } from "../../constants";
 
 export const CreatedByText = styled.span`
   margin-right: 5px;
 
-  @media ${device.mobile} {
+  @media ${(props) => props.theme.device.mobile} {
     display: none;
   }
-  @media ${device.bigScreen} {
+  @media ${(props) => props.theme.device.bigScreen} {
     display: block;
   }
 `;

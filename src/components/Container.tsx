@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { device } from "../constants";
 
 export const MazeRunnerContainer = styled.div`
   display: flex;
@@ -8,11 +7,11 @@ export const MazeRunnerContainer = styled.div`
   width: auto;
   height: auto;
 
-  @media ${device.mobile} {
+  @media ${(props) => props.theme.device.mobile} {
     flex-direction: column;
   }
 
-  @media ${device.bigScreen} {
+  @media ${(props) => props.theme.device.bigScreen} {
     flex-direction: row;
   }
 `;
