@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { device } from "../styles/constants";
+import { device } from "../constants";
 
 const FooterContainer = styled.footer`
   // absolute은 화면이 줄어들어서 스크롤다운이 가능해졌을 때 element에 남아있음. 스크롤해도 따라오지 않음.

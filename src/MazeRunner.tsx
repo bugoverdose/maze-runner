@@ -1,18 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { useTheme } from "styled-components";
-import { MazeBlock } from "../domains/MazeBlock";
-import { Maze } from "../domains/Maze";
-import { generateMazeStructure } from "../logic/generate-maze-structure";
-import { movePlayer } from "../logic/is-movable";
-import { endPosition, startPosition } from "../logic/paint-wall-info";
+import { MazeBlock } from "./domains/MazeBlock";
+import { Maze } from "./domains/Maze";
+import { generateMazeStructure } from "./logic/generate-maze-structure";
+import { movePlayer } from "./logic/is-movable";
+import { endPosition, startPosition } from "./logic/paint-wall-info";
 import {
   RESPONSIVE_CELL_SIZE,
   device,
   GENERATE_NEW_MAZE,
   MOVEMENT,
   INITIAL_MAZE_LEVEL,
-} from "../styles/constants";
-import { QuestionMarkLogo } from "./QuestionMarkLogo";
+} from "./constants";
+import { QuestionMarkLogo } from "./components/QuestionMarkLogo";
+import { Footer } from "./components/Footer";
+import Popup from "./components/Popup";
 
 const BlackScreen = styled.div`
   @media ${device.showNone} {
@@ -206,40 +208,6 @@ const HelpText = styled.span`
   @media ${device.bigScreen} {
     top: -100px;
     left: -300px;
-  }
-`;
-
-const Popup = styled.div`
-  /* 대안: position: absolute; // align itself according to the closest relative father (=body) */
-  position: fixed; // 스크롤 내리더라도 브라우저 화면 자체를 기준으로 최초로 렌더링된 위치에 고정
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 99;
-  // pseudo selector 재활 훈련
-  & > div {
-    border-radius: 30px;
-    border: 3px black solid;
-    background-color: white;
-    height: 200px;
-    width: 550px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-weight: 600;
-    & > div:first-child {
-      font-size: 30px;
-      margin-bottom: 25px;
-    }
-    & > div:not(:first-child) {
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
   }
 `;
 
@@ -531,20 +499,11 @@ const MazeRunner = () => {
       </Container>
 
       {isPopupMode ? (
-        <Popup>
-          <div>
-            <div>Congratulations! </div>
-            <div>
-              Maze Size: {mazeSize} x {mazeSize}
-            </div>
-            <div>
-              You have finished in {moveCount} moves and {time} seconds!
-            </div>
-          </div>
-        </Popup>
+        <Popup mazeSize={mazeSize} moveCount={moveCount} time={time} />
       ) : (
         <></>
       )}
+      <Footer />
     </>
   );
 };
