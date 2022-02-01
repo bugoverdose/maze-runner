@@ -15,6 +15,7 @@ import { paintMaze } from "../utils/paintMaze";
 import { MazeRunnerContext } from "../context";
 import { useTimerSetup } from "../hooks/useTimerSetup";
 import { useKeydownControls } from "../hooks/useKeydownControls";
+import { usePopup } from "../hooks/usePopup";
 
 const MazeRunner = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -108,16 +109,7 @@ const MazeRunner = () => {
     time,
   });
 
-  // 목적지 도달시 잠시 동안만 팝업 토글해주기 위함
-  useEffect(() => {
-    if (isFinished && !isPopupMode) {
-      setIsPopupMode(true);
-      const closePopUp = setTimeout(() => {
-        setIsPopupMode(false);
-      }, 3000);
-      return () => clearTimeout(closePopUp); // return a function in the useEffect callback and that function will run when the component unmounts
-    }
-  }, [isFinished, isPopupMode]);
+  usePopup({ isFinished, isPopupMode, setIsPopupMode });
 
   useKeydownControls(onControlPlayer);
 
