@@ -13,6 +13,7 @@ import { PlayerBox } from "./PlayerBox";
 import { MazeRunnerContainer } from "./Container";
 import { paintMaze } from "../utils/paintMaze";
 import { MazeRunnerContext } from "../context";
+import { useTimerSetup } from "../hooks/useTimerSetup";
 
 const MazeRunner = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -100,15 +101,11 @@ const MazeRunner = () => {
     generateMaze(); // eslint-disable-next-line
   }, [mazeSize]);
 
-  // 시간 경과 표시
-  useEffect(() => {
-    if (!isFinished) {
-      const updateTime = setTimeout(() => {
-        setTime(time + 1);
-      }, 1000);
-      return () => clearTimeout(updateTime);
-    }
-  }, [time, isFinished]);
+  useTimerSetup({
+    isFinished,
+    incrementTime: (num: number) => setTime(num + 1),
+    time,
+  });
 
   // 목적지 도달시 잠시 동안만 팝업 토글해주기 위함
   useEffect(() => {
