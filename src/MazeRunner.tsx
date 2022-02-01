@@ -12,7 +12,7 @@ import {
   MOVEMENT,
   INITIAL_MAZE_LEVEL,
 } from "./constants";
-import { Popup, BlackScreen, Footer, QuestionMarkLogo } from "./components";
+import { Popup, BlackScreen, Footer, ControlPanel } from "./components";
 
 const Container = styled.div`
   text-align: center;
@@ -117,67 +117,6 @@ const MovementCountBox = styled.div`
       margin: 15px 0;
       font-size: 30px;
     }
-  }
-`;
-
-const ControlPanel = styled.div`
-  @media ${device.showNone} {
-    display: none;
-  }
-
-  @media ${device.mobile} {
-    display: grid;
-    gap: 5px;
-    grid-template-columns: repeat(3, 40px);
-    grid-template-rows: repeat(2, 40px);
-    margin-top: 20px;
-  }
-
-  @media ${device.bigScreen} {
-    grid-template-columns: repeat(3, 50px);
-    grid-template-rows: repeat(2, 50px);
-    margin-top: 0px;
-  }
-`;
-
-const ControlBtn = styled.input.attrs({ type: "button" })`
-  height: 100%;
-  width: 100%;
-  font-weight: 800;
-  font-size: 25px;
-
-  @media ${device.bigScreen} {
-    font-size: 30px;
-  }
-`;
-
-const HelpBtn = styled.div`
-  position: relative;
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-  & > svg:hover + span {
-    display: block; // The adjacent sibling selector (+) selects all elements that are the adjacent siblings of a specified element
-  } // svg:hover 상태면 형제인 span 태그도 드러남
-`;
-
-const HelpText = styled.span`
-  display: none;
-  position: absolute; // align itself to the closest relative father
-
-  border-radius: 15px;
-  border: 3px black solid;
-  background-color: white;
-  padding: 15px;
-
-  @media ${device.mobile} {
-    top: -160px;
-    left: -150px;
-  }
-
-  @media ${device.bigScreen} {
-    top: -100px;
-    left: -300px;
   }
 `;
 
@@ -425,7 +364,6 @@ const MazeRunner = () => {
                 {"  "}
                 <ValueInput value={mazeSizeInput} onChange={onSizeChange} />
               </label>
-
               <SubmitBtn>{GENERATE_NEW_MAZE}</SubmitBtn>
             </GeneratorForm>
           </MazeContainer>
@@ -435,32 +373,7 @@ const MazeRunner = () => {
               <div>{moveCount}</div>
               <span>{time} sec</span>
             </MovementCountBox>
-            <ControlPanel>
-              <div></div>
-              <ControlBtn
-                value="&uarr;"
-                onClick={() => onControlPlayer("ArrowUp")}
-              />
-              <HelpBtn>
-                <QuestionMarkLogo />
-                <HelpText>
-                  Click the buttons or use your keyboard to move the red dot and
-                  reach the blue area!
-                </HelpText>
-              </HelpBtn>
-              <ControlBtn
-                value="&larr;"
-                onClick={() => onControlPlayer("ArrowLeft")}
-              />
-              <ControlBtn
-                value="&darr;"
-                onClick={() => onControlPlayer("ArrowDown")}
-              />
-              <ControlBtn
-                value="&rarr;"
-                onClick={() => onControlPlayer("ArrowRight")}
-              />
-            </ControlPanel>
+            <ControlPanel onControlPlayer={onControlPlayer} />
           </PlayContainer>
         </Wrapper>
       </Container>
