@@ -6,7 +6,7 @@ interface iPopup {
   time: number;
 }
 
-const Popup = ({ mazeSize, moveCount, time }: iPopup) => {
+export const Popup = ({ mazeSize, moveCount, time }: iPopup) => {
   return (
     <PopupWrapper>
       <div>
@@ -21,4 +21,3 @@ const Popup = ({ mazeSize, moveCount, time }: iPopup) => {
     </PopupWrapper>
   );
 };
-export default Popup;

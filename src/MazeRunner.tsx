@@ -12,10 +12,7 @@ import {
   MOVEMENT,
   INITIAL_MAZE_LEVEL,
 } from "./constants";
-import { QuestionMarkLogo } from "./components/QuestionMarkLogo";
-import { Footer } from "./components/Footer";
-import Popup from "./components/Popup";
-import BlackScreen from "./components/BlackScreen";
+import { Popup, BlackScreen, Footer, QuestionMarkLogo } from "./components";
 
 const Container = styled.div`
   text-align: center;

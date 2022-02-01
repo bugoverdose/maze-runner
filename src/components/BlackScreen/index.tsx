@@ -1,7 +1,7 @@
 import { Container } from "./Container";
 import { TextWrapper } from "./TextWrapper";
 
-const BlackScreen = () => {
+export const BlackScreen = () => {
   return (
     <Container>
       <TextWrapper>Your Screen</TextWrapper>
@@ -9,4 +9,3 @@ const BlackScreen = () => {
     </Container>
   );
 };
-export default BlackScreen;
