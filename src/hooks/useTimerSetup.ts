@@ -19,5 +19,5 @@ export const useTimerSetup = ({
       }, 1000);
       return () => clearTimeout(updateTime);
     }
-  }, [time, isFinished]);
+  }, [time, isFinished, incrementTime]);
 };

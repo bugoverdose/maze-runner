@@ -14,6 +14,7 @@ import { MazeRunnerContainer } from "./Container";
 import { paintMaze } from "../utils/paintMaze";
 import { MazeRunnerContext } from "../context";
 import { useTimerSetup } from "../hooks/useTimerSetup";
+import { useKeydownControls } from "../hooks/useKeydownControls";
 
 const MazeRunner = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -115,23 +116,10 @@ const MazeRunner = () => {
         setIsPopupMode(false);
       }, 3000);
       return () => clearTimeout(closePopUp); // return a function in the useEffect callback and that function will run when the component unmounts
-    } // eslint-disable-next-line
-  }, [isFinished]);
+    }
+  }, [isFinished, isPopupMode]);
 
-  // 주의: React.KeyboardEvent 타입이 아님
-  const handleKeyDown = (event: KeyboardEvent) => {
-    onControlPlayer(event.key); // "ArrowDown", "ArrowLeft", etc
-  };
-
-  // 핵심: 이벤트리스너에서는 useRef에 업데이트된 현재 state값을 저장하여 접근해야 함. state 값 직접 접근 불가.
-  // 주의: listener belongs to the initial render and is not updated on subsequent rerenders.
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown); // 컴포넌트 unmount 시점에 실행되는 함수
-    }; // eslint-disable-next-line
-  }, []);
+  useKeydownControls(onControlPlayer);
 
   return (
     <MazeRunnerContext.Provider
