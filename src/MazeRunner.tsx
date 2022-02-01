@@ -1,18 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled, { useTheme } from "styled-components";
 import { MazeBlock } from "./domains/MazeBlock";
-import { Maze } from "./domains/Maze";
 import { generateMazeStructure } from "./logic/generate-maze-structure";
 import { movePlayer } from "./logic/is-movable";
 import { endPosition, startPosition } from "./logic/paint-wall-info";
 import {
   RESPONSIVE_CELL_SIZE,
   device,
-  GENERATE_NEW_MAZE,
   MOVEMENT,
   INITIAL_MAZE_LEVEL,
 } from "./constants";
-import { Popup, BlackScreen, Footer, ControlPanel } from "./components";
+import {
+  Popup,
+  BlackScreen,
+  Footer,
+  ControlPanel,
+  MazeCanvas,
+} from "./components";
+import { Maze } from "./domains/Maze";
 
 const Container = styled.div`
   text-align: center;
@@ -50,44 +55,6 @@ const Wrapper = styled.div`
   @media ${device.bigScreen} {
     flex-direction: row;
   }
-`;
-
-const MazeContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 5px;
-
-  @media ${device.bigScreen} {
-    padding: 20px;
-  }
-`;
-
-const Canvas = styled.canvas`
-  margin-bottom: 20px;
-`;
-
-const GeneratorForm = styled.form`
-  label {
-    margin-right: 10px;
-    font-size: 20px;
-    font-weight: 600;
-  }
-`;
-
-const ValueInput = styled.input.attrs({
-  required: true,
-  type: "number",
-  min: "5",
-  max: "25",
-})`
-  text-align: center;
-  width: 40px;
-  font-size: 20px;
-`;
-
-const SubmitBtn = styled.button`
-  padding: 5px;
-  font-size: 20px;
 `;
 
 const PlayContainer = styled.div<{ canvasSize: number }>`
@@ -356,17 +323,12 @@ const MazeRunner = () => {
       <Container>
         <Header>Maze Runner</Header>
         <Wrapper>
-          <MazeContainer>
-            <Canvas ref={canvasRef} />
-            <GeneratorForm onSubmit={onGenerate}>
-              <label>
-                Size:
-                {"  "}
-                <ValueInput value={mazeSizeInput} onChange={onSizeChange} />
-              </label>
-              <SubmitBtn>{GENERATE_NEW_MAZE}</SubmitBtn>
-            </GeneratorForm>
-          </MazeContainer>
+          <MazeCanvas
+            canvasRef={canvasRef}
+            onGenerate={onGenerate}
+            mazeSizeInput={mazeSizeInput}
+            onSizeChange={onSizeChange}
+          />
           <PlayContainer canvasSize={Math.max(300, canvasSize)}>
             <MovementCountBox>
               <span>{MOVEMENT}</span>
