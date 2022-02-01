@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
-import { generateMazeStructure } from "../utils/generateMazeStructure";
-import { movePlayer } from "../utils/movePlayer";
+import { generateMazeStructure, movePlayer, paintMaze } from "../utils";
 import { RESPONSIVE_CELL_SIZE, INITIAL_MAZE_LEVEL } from "../constants";
 import { Maze } from "../domains/Maze";
 import { Footer } from "./Footer";
@@ -11,11 +10,8 @@ import { MazeRunnerWrapper } from "./Wrapper";
 import { Header } from "./Header";
 import { PlayerBox } from "./PlayerBox";
 import { MazeRunnerContainer } from "./Container";
-import { paintMaze } from "../utils/paintMaze";
 import { MazeRunnerContext } from "../context";
-import { useTimerSetup } from "../hooks/useTimerSetup";
-import { useKeydownControls } from "../hooks/useKeydownControls";
-import { usePopup } from "../hooks/usePopup";
+import { useTimerSetup, useKeydownControls, usePopup } from "../hooks";
 
 const MazeRunner = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);

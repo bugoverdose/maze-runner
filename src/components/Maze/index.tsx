@@ -5,8 +5,7 @@ import {
   RESPONSIVE_CELL_SIZE,
 } from "../../constants";
 import { MazeRunnerContext } from "../../context";
-import { generateMazeStructure } from "../../utils/generateMazeStructure";
-import { paintMaze } from "../../utils/paintMaze";
+import { paintMaze, generateMazeStructure } from "../../utils";
 import { Canvas } from "./Canvas";
 import { MazeContainer } from "./container";
 import { GeneratorForm } from "./GeneratorForm";
@@ -31,7 +30,6 @@ export const MazeCanvas = ({
     maze,
     mazeSize,
     setMazeSize,
-
     canvasSize,
     setCanvasSize,
     setMoveCount,
