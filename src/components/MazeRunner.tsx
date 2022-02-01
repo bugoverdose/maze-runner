@@ -10,10 +10,10 @@ import { Footer } from "./Footer";
 import { Popup } from "./Popup";
 import { MazeCanvas } from "./Maze";
 import { BlackScreen } from "./BlackScreen";
-import { Wrapper } from "./Wrapper";
+import { MazeRunnerWrapper } from "./Wrapper";
 import { Header } from "./Header";
-import { Container } from "./BlackScreen/Container";
 import { PlayerBox } from "./PlayerBox";
+import { MazeRunnerContainer } from "./Container";
 
 const MazeRunner = () => {
   const theme = useTheme();
@@ -248,9 +248,9 @@ const MazeRunner = () => {
   return (
     <>
       <BlackScreen />
-      <Wrapper>
+      <MazeRunnerWrapper>
         <Header>Maze Runner</Header>
-        <Container>
+        <MazeRunnerContainer>
           <MazeCanvas
             canvasRef={canvasRef}
             onGenerate={onGenerate}
@@ -263,8 +263,8 @@ const MazeRunner = () => {
             time={time}
             onControlPlayer={onControlPlayer}
           />
-        </Container>
-      </Wrapper>
+        </MazeRunnerContainer>
+      </MazeRunnerWrapper>
       {isPopupMode && (
         <Popup mazeSize={mazeSize} moveCount={moveCount} time={time} />
       )}

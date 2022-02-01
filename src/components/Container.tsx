@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { device } from "../constants";
 
-export const Container = styled.div`
+export const MazeRunnerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;

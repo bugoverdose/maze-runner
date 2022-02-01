@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.div`
+export const MazeRunnerWrapper = styled.div`
   text-align: center;
   display: flex;
   flex-direction: column;
