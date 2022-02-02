@@ -28,8 +28,8 @@ export const MazeCanvas = ({
   canvasSizeRef,
 }: iMazeCanvas) => {
   const {
-    mazeSize,
-    setMazeSize,
+    level,
+    setLevel,
     canvasSize,
     setCanvasSize,
     setMoveCount,
@@ -75,7 +75,7 @@ export const MazeCanvas = ({
       setMazeSizeInput(validMazeSize);
     }
 
-    setMazeSize(validMazeSize);
+    setLevel(validMazeSize);
     setCanvasSize(validMazeSize * RESPONSIVE_CELL_SIZE());
 
     maze.player.reset();
@@ -88,7 +88,7 @@ export const MazeCanvas = ({
 
   useEffect(() => {
     generateMaze(); // eslint-disable-next-line
-  }, [mazeSize]);
+  }, [level]);
 
   return (
     <MazeContainer>

@@ -16,14 +16,12 @@ import { useTimerSetup, useKeydownControls, usePopup } from "../hooks";
 const MazeRunner = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const [mazeSize, _setMazeSize] = useState(INITIAL_MAZE_LEVEL);
+  const [level, _setLevel] = useState(INITIAL_MAZE_LEVEL);
   const [maze, setMaze] = useState(
-    generateMazeStructure(new Maze(canvasRef), mazeSize)
+    generateMazeStructure(new Maze(canvasRef), level)
   );
 
-  const [canvasSize, _setCanvasSize] = useState(
-    mazeSize * RESPONSIVE_CELL_SIZE()
-  );
+  const [canvasSize, _setCanvasSize] = useState(level * RESPONSIVE_CELL_SIZE());
 
   const [time, setTime] = useState(0);
   const [moveCount, _setMoveCount] = useState(0);
@@ -31,7 +29,7 @@ const MazeRunner = () => {
 
   const moveCountRef = useRef(moveCount);
   const isFinishedRef = useRef(isFinished);
-  const mazeSizeRef = useRef<number>(mazeSize);
+  const mazeSizeRef = useRef<number>(level);
   const canvasSizeRef = useRef(canvasSize);
 
   const setMoveCount = (data: number) => {
@@ -42,9 +40,9 @@ const MazeRunner = () => {
     isFinishedRef.current = data;
     _setIsFinished(data);
   };
-  const setMazeSize = (data: number) => {
+  const setLevel = (data: number) => {
     mazeSizeRef.current = data;
-    _setMazeSize(data);
+    _setLevel(data);
   };
   const setCanvasSize = (data: number) => {
     canvasSizeRef.current = data;
@@ -84,8 +82,8 @@ const MazeRunner = () => {
   return (
     <MazeRunnerContext.Provider
       value={{
-        mazeSize,
-        setMazeSize,
+        level,
+        setLevel,
 
         canvasSize,
         setCanvasSize,
@@ -115,7 +113,7 @@ const MazeRunner = () => {
           />
         </MazeRunnerContainer>
       </MazeRunnerWrapper>
-      {isPopupMode && <Popup mazeSize={mazeSize} />}
+      {isPopupMode && <Popup />}
       <Footer />
     </MazeRunnerContext.Provider>
   );
