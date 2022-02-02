@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { MOVEMENT } from "../../constants";
 import { MazeRunnerContext } from "../../context";
 import { Maze } from "../../domains/Maze";
 import { ControlPanel } from "./ControlPanel";
@@ -17,7 +16,7 @@ export const PlayerBox = ({ maze, onControlPlayer }: iPlayerBox) => {
   return (
     <PlayContainer canvasSize={Math.max(300, maze.getCanvasSize())}>
       <MovementCountBox>
-        <span>{MOVEMENT}</span>
+        <span>Moves</span>
         <div>{moveCount}</div>
         <span>{time} sec</span>
       </MovementCountBox>

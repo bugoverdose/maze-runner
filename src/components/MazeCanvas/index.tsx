@@ -1,9 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import {
-  GENERATE_NEW_MAZE,
-  INITIAL_MAZE_LEVEL,
-  RESPONSIVE_CELL_SIZE,
-} from "../../constants";
+import { INITIAL_MAZE_LEVEL } from "../../constants";
 import { MazeRunnerContext } from "../../context";
 import { Maze } from "../../domains/Maze";
 import { Canvas } from "./Canvas";
@@ -85,7 +81,7 @@ export const MazeCanvas = ({ maze, setMaze }: iMazeCanvas) => {
           {"  "}
           <ValueInput value={mazeSizeInput} onChange={onSizeChange} />
         </label>
-        <SubmitBtn>{GENERATE_NEW_MAZE}</SubmitBtn>
+        <SubmitBtn>Generate</SubmitBtn>
       </GeneratorForm>
     </MazeContainer>
   );
