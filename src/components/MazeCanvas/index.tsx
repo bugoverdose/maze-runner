@@ -6,7 +6,6 @@ import {
 } from "../../constants";
 import { MazeRunnerContext } from "../../context";
 import { Maze } from "../../domains/Maze";
-import { paintMaze } from "../../utils";
 import { Canvas } from "./Canvas";
 import { MazeContainer } from "./container";
 import { GeneratorForm } from "./GeneratorForm";
@@ -42,7 +41,7 @@ export const MazeCanvas = ({ maze, setMaze }: iMazeCanvas) => {
     maze.generateMazeStructure();
     setMaze(maze);
 
-    paintMaze({ maze });
+    maze.paintCanvas();
   };
 
   const onSizeChange = (event: React.FormEvent<HTMLInputElement>) => {

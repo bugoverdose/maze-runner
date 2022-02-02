@@ -1,18 +1,19 @@
 import { INITIAL_MAZE_LEVEL, RESPONSIVE_CELL_SIZE } from "../constants";
 import { MazeBlock } from "./MazeBlock";
+import { MazeCanvas } from "./MazeCanvas";
 import { Player } from "./Player";
 
 export class Maze {
   private blocks: MazeBlock[][];
   private player: Player;
-  canvasRef: React.RefObject<HTMLCanvasElement>;
+  private mazeCanvas: MazeCanvas;
   level: number;
   canvasSize: number;
 
   constructor(canvasRef: React.RefObject<HTMLCanvasElement>) {
     this.blocks = [];
     this.player = new Player();
-    this.canvasRef = canvasRef;
+    this.mazeCanvas = new MazeCanvas(canvasRef);
     this.level = INITIAL_MAZE_LEVEL;
     this.canvasSize = this.level * RESPONSIVE_CELL_SIZE();
 
@@ -39,7 +40,11 @@ export class Maze {
   }
 
   getCanvasRef() {
-    return this.canvasRef;
+    return this.mazeCanvas.getCanvasRef();
+  }
+
+  public paintCanvas() {
+    this.mazeCanvas.render(this);
   }
 
   getLevel() {

@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import { paintMaze } from "../utils";
 import { Maze } from "../domains/Maze";
 import { Footer } from "./Footer";
 import { Popup } from "./Popup";
@@ -44,7 +43,7 @@ const MazeRunner = () => {
       setMoveCount(moveCountRef.current + 1);
     }
 
-    paintMaze({ maze });
+    maze.paintCanvas();
 
     if (maze.playerAtFinishBlock()) {
       setIsFinished(true);
