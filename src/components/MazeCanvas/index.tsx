@@ -15,7 +15,8 @@ interface iMazeCanvas {
 }
 
 export const MazeCanvas = ({ maze }: iMazeCanvas) => {
-  const { resetTime, setIsFinished } = useContext(MazeRunnerContext);
+  const { setMoveCount, resetTime, setIsFinished } =
+    useContext(MazeRunnerContext);
 
   const canvasRef: React.RefObject<HTMLCanvasElement> = maze.getCanvasRef();
 
@@ -60,6 +61,7 @@ export const MazeCanvas = ({ maze }: iMazeCanvas) => {
     setGenerateMaze(true);
 
     resetTime();
+    setMoveCount(0);
     setIsFinished(false);
 
     blurOnSubmit();

@@ -7,10 +7,9 @@ import { PlayContainer } from "./PlayContainer";
 
 interface iPlayerBox {
   maze: Maze;
-  onControlPlayer(direction: string, maze: Maze): void;
 }
 
-export const PlayerBox = ({ maze, onControlPlayer }: iPlayerBox) => {
+export const PlayerBox = ({ maze }: iPlayerBox) => {
   const { moveCount, time } = useContext(MazeRunnerContext);
 
   const canvasSize = maze.getCanvasSize();
@@ -22,7 +21,7 @@ export const PlayerBox = ({ maze, onControlPlayer }: iPlayerBox) => {
         <div>{moveCount}</div>
         <span>{time} sec</span>
       </MovementCountBox>
-      <ControlPanel onControlPlayer={onControlPlayer} maze={maze} />
+      <ControlPanel maze={maze} />
     </PlayContainer>
   );
 };

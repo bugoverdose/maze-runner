@@ -1,13 +1,11 @@
 import { useEffect } from "react";
-import { Maze } from "../domains/Maze";
 
 export const useKeydownControls = (
-  onControlPlayer: (direction: string, maze: Maze) => void,
-  maze: Maze
+  onControlPlayer: (direction: string) => void
 ) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      onControlPlayer(event.key, maze); // "ArrowDown", "ArrowLeft", etc
+      onControlPlayer(event.key); // "ArrowDown", "ArrowLeft", etc
     };
 
     window.addEventListener("keydown", handleKeyDown);
