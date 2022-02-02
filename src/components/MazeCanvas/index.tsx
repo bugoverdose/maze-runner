@@ -2,23 +2,25 @@ import { useContext, useEffect, useState } from "react";
 import { INITIAL_MAZE_LEVEL } from "../../constants";
 import { MazeRunnerContext } from "../../context";
 import { Maze } from "../../domains/Maze";
+import { MazeCanvas } from "../../domains/MazeCanvas";
 import { blurOnSubmit } from "../../utils";
-import { Canvas } from "./Canvas";
+import { SCanvas } from "./SCanvas";
 import { MazeContainer } from "./container";
 import { GeneratorForm } from "./GeneratorForm";
 import { SubmitBtn } from "./SubmitBtn";
 import { ValueInput } from "./ValueInput";
 
-// TODO: fix types
-interface iMazeCanvas {
+interface iCanvas {
   maze: Maze;
 }
 
-export const MazeCanvas = ({ maze }: iMazeCanvas) => {
+export const Canvas = ({ maze }: iCanvas) => {
   const { setMoveCount, resetTime, setIsFinished } =
     useContext(MazeRunnerContext);
 
-  const canvasRef: React.RefObject<HTMLCanvasElement> = maze.getCanvasRef();
+  const mazeCanvas: MazeCanvas = maze.getCanvas();
+  const canvasRef: React.RefObject<HTMLCanvasElement> =
+    mazeCanvas.getCanvasRef();
 
   const [initGenerateMaze, setGenerateMaze] = useState(true);
   const [mazeSizeInput, setMazeSizeInput] = useState(INITIAL_MAZE_LEVEL);
@@ -27,7 +29,7 @@ export const MazeCanvas = ({ maze }: iMazeCanvas) => {
     if (!canvasRef.current) return;
     const canvas: HTMLCanvasElement = canvasRef.current;
 
-    const canvasSize = maze.getCanvasSize();
+    const canvasSize = mazeCanvas.getCanvasSize();
 
     canvas.height = canvasSize;
     canvas.width = canvasSize;
@@ -76,7 +78,7 @@ export const MazeCanvas = ({ maze }: iMazeCanvas) => {
 
   return (
     <MazeContainer>
-      <Canvas ref={canvasRef} />
+      <SCanvas ref={canvasRef} />
       <GeneratorForm onSubmit={(e) => onGenerate(e, maze)}>
         <label>
           Size:

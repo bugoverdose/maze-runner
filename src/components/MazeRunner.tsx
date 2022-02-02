@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { Maze } from "../domains/Maze";
 import { Footer } from "./Footer";
 import { Popup } from "./Popup";
-import { MazeCanvas } from "./MazeCanvas";
+import { Canvas } from "./MazeCanvas";
 import { BlackScreen } from "./BlackScreen";
 import { Header } from "./Header";
 import { PlayerBox } from "./PlayerBox";
@@ -54,7 +54,7 @@ const MazeRunner = () => {
       <MazeRunnerWrapper>
         <Header>Maze Runner</Header>
         <MazeRunnerContainer>
-          <MazeCanvas maze={maze} />
+          <Canvas maze={maze} />
           <PlayerBox maze={maze} />
         </MazeRunnerContainer>
       </MazeRunnerWrapper>

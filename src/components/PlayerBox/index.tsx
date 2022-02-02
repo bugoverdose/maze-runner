@@ -12,7 +12,7 @@ interface iPlayerBox {
 export const PlayerBox = ({ maze }: iPlayerBox) => {
   const { moveCount, time } = useContext(MazeRunnerContext);
 
-  const canvasSize = maze.getCanvasSize();
+  const canvasSize: number = maze.getCanvas().getCanvasSize();
 
   return (
     <PlayContainer canvasSize={Math.max(300, canvasSize)}>

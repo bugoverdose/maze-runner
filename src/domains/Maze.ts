@@ -43,8 +43,8 @@ export class Maze {
     return hasMoved;
   }
 
-  public getCanvasRef() {
-    return this.mazeCanvas.getCanvasRef();
+  public getCanvas() {
+    return this.mazeCanvas;
   }
 
   public paintCanvas() {
@@ -53,10 +53,6 @@ export class Maze {
 
   public getLevel() {
     return this.level;
-  }
-
-  public getCanvasSize() {
-    return this.mazeCanvas.getCanvasSize();
   }
 
   public generateMazeStructure() {

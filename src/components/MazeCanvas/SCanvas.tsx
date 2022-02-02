@@ -1,5 +1,5 @@
 import styled from "styled-components";
 
-export const Canvas = styled.canvas`
+export const SCanvas = styled.canvas`
   margin-bottom: 20px;
 `;
