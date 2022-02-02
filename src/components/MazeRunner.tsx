@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { generateMazeStructure, movePlayer, paintMaze } from "../utils";
-import { RESPONSIVE_CELL_SIZE, INITIAL_MAZE_LEVEL } from "../constants";
+import { RESPONSIVE_CELL_SIZE } from "../constants";
 import { Maze } from "../domains/Maze";
 import { Footer } from "./Footer";
 import { Popup } from "./Popup";
@@ -16,12 +16,11 @@ import { useTimerSetup, useKeydownControls, usePopup } from "../hooks";
 const MazeRunner = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const [level, _setLevel] = useState(INITIAL_MAZE_LEVEL);
-  const [maze, setMaze] = useState(
-    generateMazeStructure(new Maze(canvasRef), level)
-  );
+  const [maze, setMaze] = useState(generateMazeStructure(new Maze(canvasRef)));
 
-  const [canvasSize, _setCanvasSize] = useState(level * RESPONSIVE_CELL_SIZE());
+  const [canvasSize, _setCanvasSize] = useState(
+    maze.getLevel() * RESPONSIVE_CELL_SIZE()
+  );
 
   const [time, setTime] = useState(0);
   const [moveCount, _setMoveCount] = useState(0);
@@ -29,7 +28,6 @@ const MazeRunner = () => {
 
   const moveCountRef = useRef(moveCount);
   const isFinishedRef = useRef(isFinished);
-  const mazeSizeRef = useRef<number>(level);
   const canvasSizeRef = useRef(canvasSize);
 
   const setMoveCount = (data: number) => {
@@ -40,17 +38,13 @@ const MazeRunner = () => {
     isFinishedRef.current = data;
     _setIsFinished(data);
   };
-  const setLevel = (data: number) => {
-    mazeSizeRef.current = data;
-    _setLevel(data);
-  };
   const setCanvasSize = (data: number) => {
     canvasSizeRef.current = data;
     _setCanvasSize(data);
   };
   const [isPopupMode, setIsPopupMode] = useState(false);
 
-  const onControlPlayer = (direction: string) => {
+  const onControlPlayer = (direction: string, maze: Maze) => {
     const hasMoved = movePlayer(direction, maze); // 키보드 입력을 위한 이벤트 리스너는 state 직접 접근 불가
 
     if (!hasMoved) return;
@@ -59,12 +53,11 @@ const MazeRunner = () => {
       setMoveCount(moveCountRef.current + 1);
     }
 
-    paintMaze({ maze, mazeSizeRef, canvasSizeRef });
+    const level = maze.level;
 
-    if (
-      maze.player.row === mazeSizeRef.current - 1 &&
-      maze.player.col === mazeSizeRef.current - 1
-    ) {
+    paintMaze({ maze, canvasSizeRef });
+
+    if (maze.player.row === level - 1 && maze.player.col === level - 1) {
       setIsFinished(true);
     }
   };
@@ -77,14 +70,11 @@ const MazeRunner = () => {
 
   usePopup({ isFinished, isPopupMode, setIsPopupMode });
 
-  useKeydownControls(onControlPlayer);
+  useKeydownControls(onControlPlayer, maze);
 
   return (
     <MazeRunnerContext.Provider
       value={{
-        level,
-        setLevel,
-
         canvasSize,
         setCanvasSize,
 
@@ -104,16 +94,16 @@ const MazeRunner = () => {
           <MazeCanvas
             maze={maze}
             setMaze={setMaze}
-            mazeSizeRef={mazeSizeRef}
             canvasSizeRef={canvasSizeRef}
           />
           <PlayerBox
+            maze={maze}
             canvasSize={canvasSize}
             onControlPlayer={onControlPlayer}
           />
         </MazeRunnerContainer>
       </MazeRunnerWrapper>
-      {isPopupMode && <Popup />}
+      {isPopupMode && <Popup maze={maze} />}
       <Footer />
     </MazeRunnerContext.Provider>
   );

@@ -18,5 +18,6 @@
 - 핵심은 화면에 실시간으로 재렌더링되어야 하는 정보와 변하더라도 내부적인 연산에서만 사용되는 정보를 구분하는 것
 
 - listener belongs to the initial render and is not updated on subsequent rerenders.
-  - useRef : 이벤트리스너 내부에서는 useRef에 업데이트된 현재 state값을 저장하여 접근
-  - 데이터를 호출하는 custom getter 함수를 사용하는 경우 구현방식에 따라 lagging 문제 존재.
+  - 원시 타입 vs 객체의 차이를 통해 해결해야 함.
+  - 특정 객체의 속성으로 데이터를 저장하고, 객체에 대한 참조값을 함수에 전달 => 객체의 속성을 읽도록 하면 매번 업데이트된 데이터 사용 가능.
+  - cf) useRef : html element에 대한 reference를 이벤트리스너 내부에 설정하여 구현 가능. 일반적인 데이터에서는 굳이 불필요.

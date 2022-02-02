@@ -6,18 +6,17 @@ import { theme } from "../styles/theme";
 
 interface iPaintMaze {
   maze: Maze;
-  mazeSizeRef: React.MutableRefObject<number>;
   canvasSizeRef: React.MutableRefObject<number>;
 }
 
-export const paintMaze = ({ maze, mazeSizeRef, canvasSizeRef }: iPaintMaze) => {
+export const paintMaze = ({ maze, canvasSizeRef }: iPaintMaze) => {
   const canvasRef: React.RefObject<HTMLCanvasElement> = maze.getCanvasRef();
+  const level = maze.getLevel();
 
   if (!canvasRef.current?.getContext("2d") || !maze.player) {
     return;
   }
 
-  const curMazeSize = mazeSizeRef.current; // 키보드 입력을 위한 이벤트 리스너는 state 직접 접근 불가
   const curCanvasSize = canvasSizeRef.current;
 
   const canvas: HTMLCanvasElement = canvasRef.current;
@@ -30,8 +29,8 @@ export const paintMaze = ({ maze, mazeSizeRef, canvasSizeRef }: iPaintMaze) => {
   // 목적지: 특수한 배경. 벽들에 의해 덮어져야하므로 먼저
   context.fillStyle = theme.finishColor;
   context.fillRect(
-    (curMazeSize - 1) * RESPONSIVE_CELL_SIZE(),
-    (curMazeSize - 1) * RESPONSIVE_CELL_SIZE(),
+    (level - 1) * RESPONSIVE_CELL_SIZE(),
+    (level - 1) * RESPONSIVE_CELL_SIZE(),
     RESPONSIVE_CELL_SIZE(),
     RESPONSIVE_CELL_SIZE()
   );
@@ -40,8 +39,8 @@ export const paintMaze = ({ maze, mazeSizeRef, canvasSizeRef }: iPaintMaze) => {
   context.strokeStyle = theme.wallColor;
   context.strokeRect(0, 0, curCanvasSize, curCanvasSize);
 
-  for (let col = 0; col < curMazeSize; col++) {
-    for (let row = 0; row < curMazeSize; row++) {
+  for (let col = 0; col < level; col++) {
+    for (let row = 0; row < level; row++) {
       const { northWall, westWall, southWall, eastWall }: MazeBlock =
         maze.blocks[col][row];
 

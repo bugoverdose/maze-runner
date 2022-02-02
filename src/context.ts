@@ -1,9 +1,6 @@
 import React from "react";
 
 export const MazeRunnerContext = React.createContext({
-  level: 0,
-  setLevel: (_: number) => {},
-
   canvasSize: 0,
   setCanvasSize: (_: number) => {},
 

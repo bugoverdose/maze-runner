@@ -1,3 +1,4 @@
+import { INITIAL_MAZE_LEVEL } from "../constants";
 import { MazeBlock } from "./MazeBlock";
 import { Player } from "./Player";
 
@@ -5,15 +6,25 @@ export class Maze {
   blocks: MazeBlock[][];
   player: Player;
   canvasRef: React.RefObject<HTMLCanvasElement>;
+  level: number;
 
   constructor(canvasRef: React.RefObject<HTMLCanvasElement>) {
     this.blocks = [];
     this.player = new Player();
     this.canvasRef = canvasRef;
+    this.level = INITIAL_MAZE_LEVEL;
   }
 
   getCanvasRef() {
     return this.canvasRef;
+  }
+
+  getLevel() {
+    return this.level;
+  }
+
+  setLevel(level: number) {
+    this.level = level;
   }
 
   hasUnvisited(mazeBlocks: MazeBlock[][]) {

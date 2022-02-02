@@ -1,16 +1,22 @@
 import { useContext } from "react";
 import { MOVEMENT } from "../../constants";
 import { MazeRunnerContext } from "../../context";
+import { Maze } from "../../domains/Maze";
 import { ControlPanel } from "./ControlPanel";
 import { MovementCountBox } from "./MovementCountBox";
 import { PlayContainer } from "./PlayContainer";
 
 interface iPlayerBox {
+  maze: Maze;
   canvasSize: number;
-  onControlPlayer(direction: string): void;
+  onControlPlayer(direction: string, maze: Maze): void;
 }
 
-export const PlayerBox = ({ canvasSize, onControlPlayer }: iPlayerBox) => {
+export const PlayerBox = ({
+  maze,
+  canvasSize,
+  onControlPlayer,
+}: iPlayerBox) => {
   const { moveCount, time } = useContext(MazeRunnerContext);
 
   return (
@@ -20,7 +26,7 @@ export const PlayerBox = ({ canvasSize, onControlPlayer }: iPlayerBox) => {
         <div>{moveCount}</div>
         <span>{time} sec</span>
       </MovementCountBox>
-      <ControlPanel onControlPlayer={onControlPlayer} />
+      <ControlPanel onControlPlayer={onControlPlayer} maze={maze} />
     </PlayContainer>
   );
 };
