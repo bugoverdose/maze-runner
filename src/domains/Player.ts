@@ -13,11 +13,11 @@ export class Player {
     return [this.col, this.row];
   }
 
-  public move(keyInput: string, cur: MazeBlock): boolean {
-    if (keyInput === "ArrowUp" && !cur.northWallExists) return this.goNorth();
-    if (keyInput === "ArrowRight" && !cur.eastWallExists) return this.goEast();
-    if (keyInput === "ArrowDown" && !cur.southWallExists) return this.goSouth();
-    if (keyInput === "ArrowLeft" && !cur.westWallExists) return this.goWest();
+  public move(input: string, cur: MazeBlock): boolean {
+    if (input === "ArrowUp" && !cur.northWallExists()) return this.goNorth();
+    if (input === "ArrowRight" && !cur.eastWallExists()) return this.goEast();
+    if (input === "ArrowDown" && !cur.southWallExists()) return this.goSouth();
+    if (input === "ArrowLeft" && !cur.westWallExists()) return this.goWest();
     return false;
   }
 
