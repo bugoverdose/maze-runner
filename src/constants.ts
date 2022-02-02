@@ -23,7 +23,7 @@ export const RESPONSIVE_CELL_SIZE = () => {
   return 5;
 };
 
-export const INITIAL_MAZE_LEVEL = 25;
+export const INITIAL_MAZE_LEVEL = 5;
 
 export const GENERATE_NEW_MAZE = "Generate";
 export const MOVEMENT = "Moves";

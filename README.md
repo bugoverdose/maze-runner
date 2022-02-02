@@ -8,10 +8,14 @@
 
 ## TODO
 
-- [ ] reset position 기능 추가 여부 고려 : 미로 전체를 다시 만들지 말고, 사용자 위치, 시간, 이동거리만 리셋
-- [ ] 미로 크기별 최고점수 기록
+- [ ] open graph tags for sharing links
+- [ ] fix responsive design & layout
+- [ ] reset position 기능 : 미로 전체를 다시 만들지 말고, 사용자 위치, 시간, 이동거리만 리셋
+- [ ] 미로 크기별 최고점수 기록 기능
 
 ## 참고사항
+
+- 핵심은 화면에 실시간으로 재렌더링되어야 하는 정보와 변하더라도 내부적인 연산에서만 사용되는 정보를 구분하는 것
 
 - listener belongs to the initial render and is not updated on subsequent rerenders.
   - useRef : 이벤트리스너 내부에서는 useRef에 업데이트된 현재 state값을 저장하여 접근
