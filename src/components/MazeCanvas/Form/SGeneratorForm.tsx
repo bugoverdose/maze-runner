@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const GeneratorForm = styled.form`
+export const SGeneratorForm = styled.form`
   label {
     margin-right: 10px;
     font-size: 20px;
