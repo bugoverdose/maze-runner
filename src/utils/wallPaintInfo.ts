@@ -1,4 +1,4 @@
-// [northWall, westWall, southWall, eastWall]
+// dir = [northWall, westWall, southWall, eastWall]
 
 export const startPosition = (
   dir: number,

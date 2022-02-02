@@ -3,7 +3,7 @@ import { MazeBlock } from "./MazeBlock";
 import { Player } from "./Player";
 
 export class Maze {
-  blocks: MazeBlock[][];
+  private blocks: MazeBlock[][];
   player: Player;
   canvasRef: React.RefObject<HTMLCanvasElement>;
   level: number;
@@ -17,6 +17,10 @@ export class Maze {
     this.canvasSize = this.level * RESPONSIVE_CELL_SIZE();
 
     this.generateMazeStructure();
+  }
+
+  getBlockByColAndRow(col: number, row: number) {
+    return this.blocks[col][row];
   }
 
   getCanvasRef() {
@@ -56,13 +60,13 @@ export class Maze {
 
     // 특정 네모칸을 기준으로 임의로 탐색하며 벽의 일부분 제거 (드릴 뚫기)
     // 핵심: 두 가지 이상의 방식으로 같은 칸에 도달가능하면 안됨
-    while (this.hasUnvisited(this.blocks)) {
+    while (this.hasUnvisited()) {
       if (!stack) {
         break;
       }
       let cur: MazeBlock = stack[stack.length - 1];
-      cur.visited = true;
-      if (!this.hasUnvisitedNeighbor(cur, level)) {
+      cur.setVisited(true);
+      if (!this.hasUnvisitedNeighbor(cur)) {
         stack.pop(); // 상하좌우의 인접한 칸들 전부 이미 탐색된 네모칸은 스택에서 제거
       } else {
         let next: MazeBlock | null = null;
@@ -70,41 +74,43 @@ export class Maze {
         while (!foundNeighbor) {
           // 현재 위치에서 랜덤으로 아직 이동하지 않은 방향으로 이동
           let dir: number = Math.floor(Math.random() * 4);
+          const curCol = cur.getColumn();
+          const curRow = cur.getRow();
           if (
             dir === 0 &&
-            cur.col < level - 1 &&
-            !this.blocks[cur.col + 1][cur.row].visited
+            curCol < level - 1 &&
+            !this.blocks[curCol + 1][curRow].getVisited()
           ) {
-            cur.eastWall = false;
-            next = this.blocks[cur.col + 1][cur.row];
-            next.westWall = false;
+            cur.breakEastWall();
+            next = this.blocks[curCol + 1][curRow];
+            next.breakWestWall();
             foundNeighbor = true;
           } else if (
             dir === 1 &&
-            cur.row > 0 &&
-            !this.blocks[cur.col][cur.row - 1].visited
+            curRow > 0 &&
+            !this.blocks[curCol][curRow - 1].getVisited()
           ) {
-            cur.northWall = false;
-            next = this.blocks[cur.col][cur.row - 1];
-            next.southWall = false;
+            cur.breakNorthWall();
+            next = this.blocks[curCol][curRow - 1];
+            next.breakSouthWall();
             foundNeighbor = true;
           } else if (
             dir === 2 &&
-            cur.row < level - 1 &&
-            !this.blocks[cur.col][cur.row + 1].visited
+            curRow < level - 1 &&
+            !this.blocks[curCol][curRow + 1].getVisited()
           ) {
-            cur.southWall = false;
-            next = this.blocks[cur.col][cur.row + 1];
-            next.northWall = false;
+            cur.breakSouthWall();
+            next = this.blocks[curCol][curRow + 1];
+            next.breakNorthWall();
             foundNeighbor = true;
           } else if (
             dir === 3 &&
-            cur.col > 0 &&
-            !this.blocks[cur.col - 1][cur.row].visited
+            curCol > 0 &&
+            !this.blocks[curCol - 1][curRow].getVisited()
           ) {
-            cur.westWall = false;
-            next = this.blocks[cur.col - 1][cur.row];
-            next.eastWall = false;
+            cur.breakWestWall();
+            next = this.blocks[curCol - 1][curRow];
+            next.breakEastWall();
             foundNeighbor = true;
           }
 
@@ -116,11 +122,11 @@ export class Maze {
     }
   }
 
-  hasUnvisited(mazeBlocks: MazeBlock[][]) {
-    const size = mazeBlocks.length;
-    for (let col = 0; col < size; col++) {
-      for (let row = 0; row < size; row++) {
-        if (!mazeBlocks[col][row].visited) {
+  hasUnvisited() {
+    const level = this.getLevel();
+    for (let col = 0; col < level; col++) {
+      for (let row = 0; row < level; row++) {
+        if (!this.blocks[col][row].getVisited()) {
           return true;
         }
       }
@@ -128,16 +134,15 @@ export class Maze {
     return false;
   }
 
-  hasUnvisitedNeighbor(mazeBlock: MazeBlock, size: number) {
+  hasUnvisitedNeighbor(mazeBlock: MazeBlock) {
+    const level = this.getLevel();
+    const col = mazeBlock.getColumn();
+    const row = mazeBlock.getRow();
     return (
-      (mazeBlock.col !== 0 &&
-        !this.blocks[mazeBlock.col - 1][mazeBlock.row].visited) ||
-      (mazeBlock.col !== size - 1 &&
-        !this.blocks[mazeBlock.col + 1][mazeBlock.row].visited) ||
-      (mazeBlock.row !== 0 &&
-        !this.blocks[mazeBlock.col][mazeBlock.row - 1].visited) ||
-      (mazeBlock.row !== size - 1 &&
-        !this.blocks[mazeBlock.col][mazeBlock.row + 1].visited)
+      (col !== 0 && !this.blocks[col - 1][row].getVisited()) ||
+      (col !== level - 1 && !this.blocks[col + 1][row].getVisited()) ||
+      (row !== 0 && !this.blocks[col][row - 1].getVisited()) ||
+      (row !== level - 1 && !this.blocks[col][row + 1].getVisited())
     );
   }
 }

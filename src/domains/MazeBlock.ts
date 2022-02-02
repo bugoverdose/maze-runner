@@ -1,26 +1,62 @@
 export class MazeBlock {
-  col: number;
-  row: number;
-  eastWall: boolean = true;
-  northWall: boolean = true;
-  southWall: boolean = true;
-  westWall: boolean = true;
-  visited: boolean = false;
+  private col: number;
+  private row: number;
+  private northWall: boolean = true;
+  private eastWall: boolean = true;
+  private southWall: boolean = true;
+  private westWall: boolean = true;
+  private visited: boolean = false;
 
   constructor(col: number, row: number) {
     this.col = col;
     this.row = row;
   }
 
-  hasThreeWalls() {
-    let counter = 0;
-    [this.northWall, this.westWall, this.southWall, this.eastWall].forEach(
-      (wallExists) => {
-        if (wallExists) {
-          counter++;
-        }
-      }
-    );
-    return counter === 3;
+  public getColumn() {
+    return this.col;
+  }
+
+  public getRow() {
+    return this.row;
+  }
+
+  public northWallExists() {
+    return this.northWall;
+  }
+
+  public breakNorthWall() {
+    this.northWall = false;
+  }
+
+  public eastWallExists() {
+    return this.eastWall;
+  }
+
+  public breakEastWall() {
+    this.eastWall = false;
+  }
+
+  public southWallExists() {
+    return this.southWall;
+  }
+
+  public breakSouthWall() {
+    this.southWall = false;
+  }
+
+  public westWallExists() {
+    return this.westWall;
+  }
+
+  public breakWestWall() {
+    this.westWall = false;
+  }
+
+  public getVisited() {
+    return this.visited;
+  }
+
+  public setVisited(visited: boolean) {
+    this.visited = visited;
   }
 }

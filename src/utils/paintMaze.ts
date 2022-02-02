@@ -40,8 +40,12 @@ export const paintMaze = ({ maze }: iPaintMaze) => {
 
   for (let col = 0; col < level; col++) {
     for (let row = 0; row < level; row++) {
-      const { northWall, westWall, southWall, eastWall }: MazeBlock =
-        maze.blocks[col][row];
+      const mazeBlock: MazeBlock = maze.getBlockByColAndRow(col, row);
+
+      const northWall = mazeBlock.northWallExists();
+      const eastWall = mazeBlock.eastWallExists();
+      const southWall = mazeBlock.southWallExists();
+      const westWall = mazeBlock.westWallExists();
 
       [northWall, westWall, southWall, eastWall].forEach((wallExists, idx) => {
         if (wallExists) {
