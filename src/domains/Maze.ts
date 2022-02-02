@@ -47,15 +47,35 @@ export class Maze {
     return this.mazeCanvas;
   }
 
-  public paintCanvas() {
-    this.mazeCanvas.render(this);
-  }
-
   public getLevel() {
     return this.level;
   }
 
-  public generateMazeStructure() {
+  public generateMaze() {
+    const mazeCanvas: MazeCanvas = this.getCanvas();
+    const canvasRef: React.RefObject<HTMLCanvasElement> =
+      mazeCanvas.getCanvasRef();
+
+    if (!canvasRef.current) return;
+    const canvas: HTMLCanvasElement = canvasRef.current;
+
+    const canvasSize = mazeCanvas.getCanvasSize();
+
+    canvas.height = canvasSize;
+    canvas.width = canvasSize;
+    canvas.style.height = canvasSize.toString();
+    canvas.style.width = canvasSize.toString();
+
+    this.generateMazeStructure();
+
+    this.paintCanvas();
+  }
+
+  public paintCanvas() {
+    this.mazeCanvas.render(this);
+  }
+
+  private generateMazeStructure() {
     this.blocks = []; // 일단 현재 미로 제거
     const level = this.getLevel();
 

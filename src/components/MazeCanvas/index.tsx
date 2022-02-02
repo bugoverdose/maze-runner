@@ -25,22 +25,6 @@ export const Canvas = ({ maze }: iCanvas) => {
   const [initGenerateMaze, setGenerateMaze] = useState(true);
   const [mazeSizeInput, setMazeSizeInput] = useState(INITIAL_MAZE_LEVEL);
 
-  const generateMaze = () => {
-    if (!canvasRef.current) return;
-    const canvas: HTMLCanvasElement = canvasRef.current;
-
-    const canvasSize = mazeCanvas.getCanvasSize();
-
-    canvas.height = canvasSize;
-    canvas.width = canvasSize;
-    canvas.style.height = canvasSize.toString();
-    canvas.style.width = canvasSize.toString();
-
-    maze.generateMazeStructure();
-
-    maze.paintCanvas();
-  };
-
   const onSizeChange = (event: React.FormEvent<HTMLInputElement>) => {
     const inputValue = parseInt(event.currentTarget.value, 10);
     if (isNaN(inputValue)) return;
@@ -72,7 +56,7 @@ export const Canvas = ({ maze }: iCanvas) => {
   useEffect(() => {
     if (!initGenerateMaze) return;
 
-    generateMaze();
+    maze.generateMaze();
     setGenerateMaze(false); // eslint-disable-next-line
   }, [initGenerateMaze]);
 
