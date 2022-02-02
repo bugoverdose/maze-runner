@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { INITIAL_MAZE_LEVEL } from "../../constants";
 import { MazeRunnerContext } from "../../context";
 import { Maze } from "../../domains/Maze";
+import { blurOnSubmit } from "../../utils";
 import { Canvas } from "./Canvas";
 import { MazeContainer } from "./container";
 import { GeneratorForm } from "./GeneratorForm";
@@ -20,7 +21,7 @@ export const MazeCanvas = ({ maze, setMaze }: iMazeCanvas) => {
 
   const canvasRef: React.RefObject<HTMLCanvasElement> = maze.getCanvasRef();
 
-  const [renderMaze, setRenderMaze] = useState(true);
+  const [initGenerateMaze, setGenerateMaze] = useState(true);
   const [mazeSizeInput, setMazeSizeInput] = useState(INITIAL_MAZE_LEVEL);
 
   const generateMaze = () => {
@@ -59,18 +60,21 @@ export const MazeCanvas = ({ maze, setMaze }: iMazeCanvas) => {
 
     maze.reset(validMazeSize);
 
-    setRenderMaze(true);
+    setGenerateMaze(true);
 
     setMoveCount(0);
     setTime(0);
     setIsFinished(false);
+
+    blurOnSubmit();
   };
 
   useEffect(() => {
-    if (!renderMaze) return;
+    if (!initGenerateMaze) return;
+
     generateMaze();
-    setRenderMaze(false); // eslint-disable-next-line
-  }, [renderMaze]);
+    setGenerateMaze(false); // eslint-disable-next-line
+  }, [initGenerateMaze]);
 
   return (
     <MazeContainer>
@@ -79,7 +83,11 @@ export const MazeCanvas = ({ maze, setMaze }: iMazeCanvas) => {
         <label>
           Size:
           {"  "}
-          <ValueInput value={mazeSizeInput} onChange={onSizeChange} />
+          <ValueInput
+            id="level-input"
+            value={mazeSizeInput}
+            onChange={onSizeChange}
+          />
         </label>
         <SubmitBtn>Generate</SubmitBtn>
       </GeneratorForm>

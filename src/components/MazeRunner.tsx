@@ -4,12 +4,12 @@ import { Footer } from "./Footer";
 import { Popup } from "./Popup";
 import { MazeCanvas } from "./MazeCanvas";
 import { BlackScreen } from "./BlackScreen";
-import { MazeRunnerWrapper } from "./Wrapper";
 import { Header } from "./Header";
 import { PlayerBox } from "./PlayerBox";
-import { MazeRunnerContainer } from "./Container";
 import { MazeRunnerContext } from "../context";
 import { useTimerSetup, useKeydownControls, usePopup } from "../hooks";
+import { MazeRunnerWrapper } from "./Wrapper";
+import { MazeRunnerContainer } from "./Container";
 
 const MazeRunner = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
