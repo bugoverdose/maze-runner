@@ -3,7 +3,7 @@ import { generateMazeStructure, movePlayer, paintMaze } from "../utils";
 import { Maze } from "../domains/Maze";
 import { Footer } from "./Footer";
 import { Popup } from "./Popup";
-import { MazeCanvas } from "./Maze";
+import { MazeCanvas } from "./MazeCanvas";
 import { BlackScreen } from "./BlackScreen";
 import { MazeRunnerWrapper } from "./Wrapper";
 import { Header } from "./Header";
