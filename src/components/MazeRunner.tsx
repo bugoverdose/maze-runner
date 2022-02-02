@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import { generateMazeStructure, movePlayer, paintMaze } from "../utils";
-import { RESPONSIVE_CELL_SIZE } from "../constants";
 import { Maze } from "../domains/Maze";
 import { Footer } from "./Footer";
 import { Popup } from "./Popup";
@@ -18,17 +17,12 @@ const MazeRunner = () => {
 
   const [maze, setMaze] = useState(generateMazeStructure(new Maze(canvasRef)));
 
-  const [canvasSize, _setCanvasSize] = useState(
-    maze.getLevel() * RESPONSIVE_CELL_SIZE()
-  );
-
   const [time, setTime] = useState(0);
   const [moveCount, _setMoveCount] = useState(0);
   const [isFinished, _setIsFinished] = useState(false);
 
   const moveCountRef = useRef(moveCount);
   const isFinishedRef = useRef(isFinished);
-  const canvasSizeRef = useRef(canvasSize);
 
   const setMoveCount = (data: number) => {
     moveCountRef.current = data; // useRef와 useState를 일치시키기
@@ -38,10 +32,10 @@ const MazeRunner = () => {
     isFinishedRef.current = data;
     _setIsFinished(data);
   };
-  const setCanvasSize = (data: number) => {
-    canvasSizeRef.current = data;
-    _setCanvasSize(data);
-  };
+  // const setCanvasSize = (data: number) => {
+  //   canvasSizeRef.current = data;
+  //   _setCanvasSize(data);
+  // };
   const [isPopupMode, setIsPopupMode] = useState(false);
 
   const onControlPlayer = (direction: string, maze: Maze) => {
@@ -55,7 +49,7 @@ const MazeRunner = () => {
 
     const level = maze.level;
 
-    paintMaze({ maze, canvasSizeRef });
+    paintMaze({ maze });
 
     if (maze.player.row === level - 1 && maze.player.col === level - 1) {
       setIsFinished(true);
@@ -75,9 +69,6 @@ const MazeRunner = () => {
   return (
     <MazeRunnerContext.Provider
       value={{
-        canvasSize,
-        setCanvasSize,
-
         moveCount,
         setMoveCount,
 
@@ -91,16 +82,8 @@ const MazeRunner = () => {
       <MazeRunnerWrapper>
         <Header>Maze Runner</Header>
         <MazeRunnerContainer>
-          <MazeCanvas
-            maze={maze}
-            setMaze={setMaze}
-            canvasSizeRef={canvasSizeRef}
-          />
-          <PlayerBox
-            maze={maze}
-            canvasSize={canvasSize}
-            onControlPlayer={onControlPlayer}
-          />
+          <MazeCanvas maze={maze} setMaze={setMaze} />
+          <PlayerBox maze={maze} onControlPlayer={onControlPlayer} />
         </MazeRunnerContainer>
       </MazeRunnerWrapper>
       {isPopupMode && <Popup maze={maze} />}
