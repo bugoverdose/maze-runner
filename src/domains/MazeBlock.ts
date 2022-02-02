@@ -1,11 +1,13 @@
 export class MazeBlock {
   private col: number;
   private row: number;
+
+  private visited: boolean = false;
+
   private northWall: boolean = true;
   private eastWall: boolean = true;
   private southWall: boolean = true;
   private westWall: boolean = true;
-  private visited: boolean = false;
 
   constructor(col: number, row: number) {
     this.col = col;
@@ -14,6 +16,14 @@ export class MazeBlock {
 
   public getPosition() {
     return [this.col, this.row];
+  }
+
+  public get isVisited() {
+    return this.visited;
+  }
+
+  public setVisited(visited: boolean) {
+    this.visited = visited;
   }
 
   public northWallExists() {
@@ -46,13 +56,5 @@ export class MazeBlock {
 
   public breakWestWall() {
     this.westWall = false;
-  }
-
-  public getVisited() {
-    return this.visited;
-  }
-
-  public setVisited(visited: boolean) {
-    this.visited = visited;
   }
 }
