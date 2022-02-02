@@ -4,10 +4,16 @@ import { Player } from "./Player";
 export class Maze {
   blocks: MazeBlock[][];
   player: Player;
+  canvasRef: React.RefObject<HTMLCanvasElement>;
 
-  constructor() {
+  constructor(canvasRef: React.RefObject<HTMLCanvasElement>) {
     this.blocks = [];
     this.player = new Player();
+    this.canvasRef = canvasRef;
+  }
+
+  getCanvasRef() {
+    return this.canvasRef;
   }
 
   hasUnvisited(mazeBlocks: MazeBlock[][]) {

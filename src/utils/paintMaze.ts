@@ -6,17 +6,13 @@ import { theme } from "../styles/theme";
 
 interface iPaintMaze {
   maze: Maze;
-  canvasRef: React.RefObject<HTMLCanvasElement>;
   mazeSizeRef: React.MutableRefObject<number>;
   canvasSizeRef: React.MutableRefObject<number>;
 }
 
-export const paintMaze = ({
-  maze,
-  canvasRef,
-  mazeSizeRef,
-  canvasSizeRef,
-}: iPaintMaze) => {
+export const paintMaze = ({ maze, mazeSizeRef, canvasSizeRef }: iPaintMaze) => {
+  const canvasRef: React.RefObject<HTMLCanvasElement> = maze.getCanvasRef();
+
   if (!canvasRef.current?.getContext("2d") || !maze.player) {
     return;
   }

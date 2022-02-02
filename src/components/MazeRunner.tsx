@@ -17,12 +17,14 @@ const MazeRunner = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const [mazeSize, _setMazeSize] = useState(INITIAL_MAZE_LEVEL);
+  const [maze, setMaze] = useState(
+    generateMazeStructure(new Maze(canvasRef), mazeSize)
+  );
 
   const [canvasSize, _setCanvasSize] = useState(
     mazeSize * RESPONSIVE_CELL_SIZE()
   );
 
-  const [maze, setMaze] = useState(generateMazeStructure(new Maze(), mazeSize));
   const [time, setTime] = useState(0);
   const [moveCount, _setMoveCount] = useState(0);
   const [isFinished, _setIsFinished] = useState(false);
@@ -59,7 +61,7 @@ const MazeRunner = () => {
       setMoveCount(moveCountRef.current + 1);
     }
 
-    paintMaze({ canvasRef, maze, mazeSizeRef, canvasSizeRef });
+    paintMaze({ maze, mazeSizeRef, canvasSizeRef });
 
     if (
       maze.player.row === mazeSizeRef.current - 1 &&
@@ -82,8 +84,6 @@ const MazeRunner = () => {
   return (
     <MazeRunnerContext.Provider
       value={{
-        maze,
-
         mazeSize,
         setMazeSize,
 
@@ -104,8 +104,8 @@ const MazeRunner = () => {
         <Header>Maze Runner</Header>
         <MazeRunnerContainer>
           <MazeCanvas
+            maze={maze}
             setMaze={setMaze}
-            canvasRef={canvasRef}
             mazeSizeRef={mazeSizeRef}
             canvasSizeRef={canvasSizeRef}
           />

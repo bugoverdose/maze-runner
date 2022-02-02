@@ -5,6 +5,7 @@ import {
   RESPONSIVE_CELL_SIZE,
 } from "../../constants";
 import { MazeRunnerContext } from "../../context";
+import { Maze } from "../../domains/Maze";
 import { paintMaze, generateMazeStructure } from "../../utils";
 import { Canvas } from "./Canvas";
 import { MazeContainer } from "./container";
@@ -14,20 +15,19 @@ import { ValueInput } from "./ValueInput";
 
 // TODO: fix types
 interface iMazeCanvas {
+  maze: Maze;
   setMaze: any;
-  canvasRef: React.RefObject<HTMLCanvasElement>;
   mazeSizeRef: React.MutableRefObject<number>;
   canvasSizeRef: React.MutableRefObject<number>;
 }
 
 export const MazeCanvas = ({
+  maze,
   setMaze,
-  canvasRef,
   mazeSizeRef,
   canvasSizeRef,
 }: iMazeCanvas) => {
   const {
-    maze,
     mazeSize,
     setMazeSize,
     canvasSize,
@@ -37,12 +37,12 @@ export const MazeCanvas = ({
     setIsFinished,
   } = useContext(MazeRunnerContext);
 
+  const canvasRef: React.RefObject<HTMLCanvasElement> = maze.getCanvasRef();
+
   const [mazeSizeInput, setMazeSizeInput] = useState(INITIAL_MAZE_LEVEL);
 
   const generateMaze = () => {
-    if (!canvasRef.current) {
-      return;
-    }
+    if (!canvasRef.current) return;
     const canvas: HTMLCanvasElement = canvasRef.current;
 
     canvas.height = canvasSize;
@@ -52,7 +52,7 @@ export const MazeCanvas = ({
 
     setMaze(generateMazeStructure(maze, mazeSizeRef.current));
 
-    paintMaze({ canvasRef, maze, mazeSizeRef, canvasSizeRef });
+    paintMaze({ maze, mazeSizeRef, canvasSizeRef });
   };
 
   const onSizeChange = (event: React.FormEvent<HTMLInputElement>) => {
