@@ -18,6 +18,6 @@ export const useTimerSetup = ({
         incrementTime(time);
       }, 1000);
       return () => clearTimeout(updateTime);
-    }
-  }, [time, isFinished, incrementTime]);
+    } // eslint-disable-next-line
+  }, [time, isFinished]); // incrementTime(setTime)을 추가하는 경우, 이동할 때마다 재호출되어서 시간이 증가하지 않게 됨.
 };
