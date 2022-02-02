@@ -1,16 +1,11 @@
 import { useContext } from "react";
 import { MazeRunnerContext } from "../../context";
-import { Maze } from "../../domains/Maze";
 import { ControlPanel } from "./ControlPanel";
 import { MovementCountBox } from "./MovementCountBox";
 import { PlayContainer } from "./PlayContainer";
 
-interface iPlayerBox {
-  maze: Maze;
-}
-
-export const PlayerBox = ({ maze }: iPlayerBox) => {
-  const { moveCount, time } = useContext(MazeRunnerContext);
+export const PlayerBox = () => {
+  const { maze, moveCount, time } = useContext(MazeRunnerContext);
 
   const canvasSize: number = maze.getCanvas().getCanvasSize();
 

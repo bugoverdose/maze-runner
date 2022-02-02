@@ -12,7 +12,7 @@ interface iForm {
 }
 
 export const GeneratorForm = ({ maze }: iForm) => {
-  const { setMoveCount, resetTime, setIsFinished } =
+  const { setMoveCount, setTime, setIsFinished } =
     useContext(MazeRunnerContext);
 
   const [initGenerateMaze, setGenerateMaze] = useState(true);
@@ -39,7 +39,7 @@ export const GeneratorForm = ({ maze }: iForm) => {
 
     setGenerateMaze(true);
 
-    resetTime();
+    setTime(0);
     setMoveCount(0);
     setIsFinished(false);
 

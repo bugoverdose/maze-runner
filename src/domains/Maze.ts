@@ -1,3 +1,4 @@
+import { createRef } from "react";
 import { INITIAL_MAZE_LEVEL, RESPONSIVE_CELL_SIZE } from "../constants";
 import { checkOutOfMaze, getTargetPosition } from "../utils";
 import { MazeBlock } from "./MazeBlock";
