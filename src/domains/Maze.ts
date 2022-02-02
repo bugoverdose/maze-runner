@@ -43,23 +43,25 @@ export class Maze {
     return hasMoved;
   }
 
-  public getCanvas() {
-    return this.mazeCanvas;
-  }
-
   public getLevel() {
     return this.level;
   }
 
+  public getCanvasRef() {
+    return this.mazeCanvas.getCanvasRef();
+  }
+
+  public getCanvasSize() {
+    return this.mazeCanvas.getCanvasSize();
+  }
+
   public generateMaze() {
-    const mazeCanvas: MazeCanvas = this.getCanvas();
-    const canvasRef: React.RefObject<HTMLCanvasElement> =
-      mazeCanvas.getCanvasRef();
+    const canvasRef: React.RefObject<HTMLCanvasElement> = this.getCanvasRef();
 
     if (!canvasRef.current) return;
     const canvas: HTMLCanvasElement = canvasRef.current;
 
-    const canvasSize = mazeCanvas.getCanvasSize();
+    const canvasSize = this.getCanvasSize();
 
     canvas.height = canvasSize;
     canvas.width = canvasSize;

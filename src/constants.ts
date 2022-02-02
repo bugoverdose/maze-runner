@@ -3,12 +3,8 @@ export const MIN_LEVEL = 3;
 export const MAX_LEVEL = 25;
 
 export const RESPONSIVE_CELL_SIZE = () => {
-  if (window.screen.width >= BIG_SCREEN) {
-    return 20;
-  }
-  if (window.screen.width >= MOBILE) {
-    return 12;
-  }
+  if (window.screen.width >= BIG_SCREEN) return 20;
+  if (window.screen.width >= MOBILE) return 12;
   return 5;
 };
 

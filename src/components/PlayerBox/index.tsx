@@ -7,7 +7,7 @@ import { PlayContainer } from "./PlayContainer";
 export const PlayerBox = () => {
   const { maze, moveCount, time } = useContext(MazeRunnerContext);
 
-  const canvasSize: number = maze.getCanvas().getCanvasSize();
+  const canvasSize: number = maze.getCanvasSize();
 
   return (
     <PlayContainer canvasSize={Math.max(300, canvasSize)}>
