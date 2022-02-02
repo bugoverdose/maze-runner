@@ -12,12 +12,8 @@ export class MazeBlock {
     this.row = row;
   }
 
-  public getColumn() {
-    return this.col;
-  }
-
-  public getRow() {
-    return this.row;
+  public getPosition() {
+    return [this.col, this.row];
   }
 
   public northWallExists() {

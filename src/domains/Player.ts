@@ -33,7 +33,7 @@ export class Player {
     return this.col === level - 1 && this.row === level - 1;
   }
 
-  reset() {
+  public reset() {
     this.col = 0;
     this.row = 0;
   }

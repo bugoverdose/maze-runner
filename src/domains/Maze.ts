@@ -8,15 +8,13 @@ export class Maze {
   private blocks: MazeBlock[][];
   private player: Player;
   private mazeCanvas: MazeCanvas;
-  level: number;
-  canvasSize: number;
+  private level: number;
 
   constructor(canvasRef: React.RefObject<HTMLCanvasElement>) {
     this.blocks = [];
     this.player = new Player();
-    this.mazeCanvas = new MazeCanvas(canvasRef);
     this.level = INITIAL_MAZE_LEVEL;
-    this.canvasSize = this.level * RESPONSIVE_CELL_SIZE();
+    this.mazeCanvas = new MazeCanvas(canvasRef, this.level);
 
     this.generateMazeStructure();
   }
@@ -24,9 +22,10 @@ export class Maze {
   public reset(level: number) {
     this.level = level;
     this.player.reset();
+    this.mazeCanvas.setCanvasSize(level);
   }
 
-  getBlockByColAndRow(col: number, row: number): MazeBlock {
+  public getBlockByColAndRow(col: number, row: number): MazeBlock {
     return this.blocks[col][row];
   }
 
@@ -41,7 +40,7 @@ export class Maze {
     return hasMoved;
   }
 
-  getCanvasRef() {
+  public getCanvasRef() {
     return this.mazeCanvas.getCanvasRef();
   }
 
@@ -49,19 +48,15 @@ export class Maze {
     this.mazeCanvas.render(this);
   }
 
-  getLevel() {
+  public getLevel() {
     return this.level;
   }
 
-  getCanvasSize() {
-    return this.canvasSize;
+  public getCanvasSize() {
+    return this.mazeCanvas.getCanvasSize();
   }
 
-  setCanvasSize(canvasSize: number) {
-    this.canvasSize = canvasSize;
-  }
-
-  generateMazeStructure() {
+  public generateMazeStructure() {
     this.blocks = []; // 일단 현재 미로 제거
     const level = this.getLevel();
 
@@ -89,12 +84,13 @@ export class Maze {
         continue;
       }
 
-      const [curCol, curRow] = [cur.getColumn(), cur.getRow()];
+      const [curCol, curRow] = cur.getPosition();
 
       while (true) {
-        // 현재 위치에서 랜덤으로 아직 이동하지 않은 방향으로 이동
+        // 현재 위치에서 랜덤으로 아직 이동하지 않은 방향으로 한 칸 이동
         let dir: number = Math.floor(Math.random() * 4);
 
+        // 존재하지 않는 위치
         if (checkOutOfMaze(dir, level, curCol, curRow)) continue;
 
         const [nextCol, nextRow] = getTargetPosition(dir, curCol, curRow);
@@ -128,7 +124,7 @@ export class Maze {
     }
   }
 
-  hasUnvisited() {
+  private hasUnvisited() {
     const level = this.getLevel();
     for (let col = 0; col < level; col++) {
       for (let row = 0; row < level; row++) {
@@ -140,10 +136,9 @@ export class Maze {
     return false;
   }
 
-  hasUnvisitedNeighbor(mazeBlock: MazeBlock) {
+  private hasUnvisitedNeighbor(mazeBlock: MazeBlock) {
     const level = this.getLevel();
-    const col = mazeBlock.getColumn();
-    const row = mazeBlock.getRow();
+    const [col, row] = mazeBlock.getPosition();
     return (
       (col !== 0 && !this.blocks[col - 1][row].getVisited()) ||
       (col !== level - 1 && !this.blocks[col + 1][row].getVisited()) ||

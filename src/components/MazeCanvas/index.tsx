@@ -62,7 +62,6 @@ export const MazeCanvas = ({ maze, setMaze }: iMazeCanvas) => {
     }
 
     maze.reset(validMazeSize);
-    maze.setCanvasSize(validMazeSize * RESPONSIVE_CELL_SIZE());
 
     setRenderMaze(true);
 

@@ -15,7 +15,7 @@ export const PlayerBox = ({ maze, onControlPlayer }: iPlayerBox) => {
   const { moveCount, time } = useContext(MazeRunnerContext);
 
   return (
-    <PlayContainer canvasSize={Math.max(300, maze.canvasSize)}>
+    <PlayContainer canvasSize={Math.max(300, maze.getCanvasSize())}>
       <MovementCountBox>
         <span>{MOVEMENT}</span>
         <div>{moveCount}</div>

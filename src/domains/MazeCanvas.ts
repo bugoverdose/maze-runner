@@ -6,13 +6,23 @@ import { MazeBlock } from "./MazeBlock";
 
 export class MazeCanvas {
   private canvasRef: React.RefObject<HTMLCanvasElement>;
+  private canvasSize: number;
 
-  constructor(canvasRef: React.RefObject<HTMLCanvasElement>) {
+  constructor(canvasRef: React.RefObject<HTMLCanvasElement>, level: number) {
     this.canvasRef = canvasRef;
+    this.canvasSize = level * RESPONSIVE_CELL_SIZE();
   }
 
-  getCanvasRef() {
+  public getCanvasRef() {
     return this.canvasRef;
+  }
+
+  public getCanvasSize() {
+    return this.canvasSize;
+  }
+
+  public setCanvasSize(level: number) {
+    this.canvasSize = level * RESPONSIVE_CELL_SIZE();
   }
 
   public render(maze: Maze) {
@@ -21,44 +31,45 @@ export class MazeCanvas {
     let context = canvas.getContext("2d") as CanvasRenderingContext2D;
 
     const level = maze.getLevel();
-    const canvasSize = maze.getCanvasSize();
     const [colCenter, rowCenter] = maze.getPlayerCanvasPosition();
+    const cellSize = RESPONSIVE_CELL_SIZE();
 
-    this.paintBackground(context, canvasSize);
-    this.paintFinishBlock(context, level);
-    this.paintWalls(context, canvasSize, level, maze);
-    this.paintPlayer(context, colCenter, rowCenter);
+    this.paintBackground(context);
+    this.paintFinishBlock(context, cellSize, level);
+    this.paintWalls(context, level, cellSize, maze);
+    this.paintPlayer(context, cellSize, colCenter, rowCenter);
   }
 
-  private paintBackground(
-    context: CanvasRenderingContext2D,
-    canvasSize: number
-  ) {
+  private paintBackground(context: CanvasRenderingContext2D) {
     // 캔버스 배경: 맨밑에 와야하므로 가장 먼저
     context.fillStyle = theme.backgroundColor;
-    context.fillRect(0, 0, canvasSize, canvasSize);
+    context.fillRect(0, 0, this.canvasSize, this.canvasSize);
   }
 
-  private paintFinishBlock(context: CanvasRenderingContext2D, level: number) {
+  private paintFinishBlock(
+    context: CanvasRenderingContext2D,
+    cellSize: number,
+    level: number
+  ) {
     // 목적지: 특수한 배경. 벽들에 의해 덮어져야하므로 먼저
     context.fillStyle = theme.finishColor;
     context.fillRect(
-      (level - 1) * RESPONSIVE_CELL_SIZE(),
-      (level - 1) * RESPONSIVE_CELL_SIZE(),
-      RESPONSIVE_CELL_SIZE(),
-      RESPONSIVE_CELL_SIZE()
+      (level - 1) * cellSize,
+      (level - 1) * cellSize,
+      cellSize,
+      cellSize
     );
   }
 
   private paintWalls(
     context: CanvasRenderingContext2D,
-    canvasSize: number,
     level: number,
+    cellSize: number,
     maze: Maze
   ) {
-    // 미로 내의 벽들 색칠
+    // 미로 내의 벽들 색칠: 겹치더라도 그냥 두번씩 칠하기
     context.strokeStyle = theme.wallColor;
-    context.strokeRect(0, 0, canvasSize, canvasSize);
+    context.strokeRect(0, 0, this.canvasSize, this.canvasSize);
 
     for (let col = 0; col < level; col++) {
       for (let row = 0; row < level; row++) {
@@ -75,14 +86,8 @@ export class MazeCanvas {
               const [fromCol, fromRow] = startPosition(idx, col, row);
               const [toCol, toRow] = endPosition(idx, col, row);
               context.beginPath();
-              context.moveTo(
-                fromCol * RESPONSIVE_CELL_SIZE(),
-                fromRow * RESPONSIVE_CELL_SIZE()
-              );
-              context.lineTo(
-                toCol * RESPONSIVE_CELL_SIZE(),
-                toRow * RESPONSIVE_CELL_SIZE()
-              );
+              context.moveTo(fromCol * cellSize, fromRow * cellSize);
+              context.lineTo(toCol * cellSize, toRow * cellSize);
               context.stroke();
             }
           }
@@ -93,6 +98,7 @@ export class MazeCanvas {
 
   private paintPlayer(
     context: CanvasRenderingContext2D,
+    cellSize: number,
     colCenter: number,
     rowCenter: number
   ) {
@@ -104,7 +110,7 @@ export class MazeCanvas {
     context.arc(
       colCenter,
       rowCenter,
-      Math.floor(RESPONSIVE_CELL_SIZE() / 2) - 2,
+      Math.floor(cellSize / 2) - 2,
       0,
       2 * Math.PI
     );
