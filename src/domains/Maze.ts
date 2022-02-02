@@ -1,4 +1,4 @@
-import { INITIAL_MAZE_LEVEL, RESPONSIVE_CELL_SIZE } from "../constants";
+import { INITIAL_LEVEL, RESPONSIVE_CELL_SIZE } from "../constants";
 import { breakWalls, checkOutOfMaze, getTargetPosition } from "../utils";
 import { MazeBlock } from "./MazeBlock";
 import { MazeCanvas } from "./MazeCanvas";
@@ -16,7 +16,7 @@ export class Maze {
   constructor() {
     this.blocks = [];
     this.player = new Player();
-    this.level = INITIAL_MAZE_LEVEL;
+    this.level = INITIAL_LEVEL;
     this.mazeCanvas = new MazeCanvas(this.level);
 
     this.generateMazeStructure();

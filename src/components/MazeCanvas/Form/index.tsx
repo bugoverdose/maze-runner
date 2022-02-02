@@ -1,64 +1,63 @@
 import { useContext, useEffect, useState } from "react";
-import { INITIAL_MAZE_LEVEL } from "../../../constants";
+import { INITIAL_LEVEL } from "../../../constants";
 import { MazeRunnerContext } from "../../../context";
-import { Maze } from "../../../domains/Maze";
-import { blurOnSubmit } from "../../../utils";
+import { blurOnSubmit, toValidInput, validateInput } from "../../../utils";
 import { SGeneratorForm } from "./SGeneratorForm";
 import { SubmitBtn } from "./SubmitBtn";
-import { ValueInput } from "./ValueInput";
+import { LevelInput } from "./LevelInput";
 
-interface iForm {
-  maze: Maze;
-}
-
-export const GeneratorForm = ({ maze }: iForm) => {
-  const { setMoveCount, setTime, setIsFinished } =
+export const GeneratorForm = () => {
+  const { maze, setMoveCount, setTime, setIsFinished } =
     useContext(MazeRunnerContext);
 
-  const [initGenerateMaze, setGenerateMaze] = useState(true);
-  const [mazeSizeInput, setMazeSizeInput] = useState(INITIAL_MAZE_LEVEL);
+  const [initGenerateMaze, setInitGenerateMaze] = useState(true);
+  const [levelInput, setLevelInput] = useState(INITIAL_LEVEL);
 
-  const onSizeChange = (event: React.FormEvent<HTMLInputElement>) => {
+  const onInputChange = (event: React.FormEvent<HTMLInputElement>) => {
     const inputValue = parseInt(event.currentTarget.value, 10);
     if (isNaN(inputValue)) return;
 
-    setMazeSizeInput(inputValue);
+    setLevelInput(inputValue);
   };
 
-  const onGenerate = (event: React.FormEvent<HTMLFormElement>, maze: Maze) => {
+  const onGenerate = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    let validLevel = levelInput;
 
-    // 개발자도구로 input 태그의 min, max 값 강제로 변경시, 5~25 범위 밖의 값 입력에 대한 방어로직
-    let validMazeSize = Math.max(mazeSizeInput, 5);
-    validMazeSize = Math.min(validMazeSize, 25);
-    if (validMazeSize !== mazeSizeInput) {
-      setMazeSizeInput(validMazeSize);
+    // 개발자도구로 input 태그의 min, max 속성 강제로 변경한 경우, 5~25 범위 밖의 값 입력에 대한 방어로직
+    if (!validateInput(levelInput)) {
+      validLevel = toValidInput(levelInput);
+      setLevelInput(validLevel);
     }
 
-    maze.reset(validMazeSize);
+    resetGame(validLevel);
 
-    setGenerateMaze(true);
+    blurOnSubmit(); // input에 초점이 있는 상태로 화살표 키를 조작하면 level 값 수정되는 현상 제거
+  };
+
+  const resetGame = (validLevel: number) => {
+    maze.reset(validLevel);
+
+    setInitGenerateMaze(true);
 
     setTime(0);
     setMoveCount(0);
     setIsFinished(false);
-
-    blurOnSubmit();
   };
 
   useEffect(() => {
     if (!initGenerateMaze) return;
 
-    maze.generateMaze();
-    setGenerateMaze(false); // eslint-disable-next-line
+    maze.generateMaze(); // 이벤트리스너 내부에서 직접 호출시 실행 안됨.
+    setInitGenerateMaze(false); // eslint-disable-next-line
   }, [initGenerateMaze]);
 
   return (
-    <SGeneratorForm onSubmit={(e) => onGenerate(e, maze)}>
+    <SGeneratorForm onSubmit={(e) => onGenerate(e)}>
       <label>
         Size:
         {"  "}
-        <ValueInput value={mazeSizeInput} onChange={onSizeChange} />
+        <LevelInput value={levelInput} onChange={onInputChange} />
       </label>
       <SubmitBtn>Generate</SubmitBtn>
     </SGeneratorForm>

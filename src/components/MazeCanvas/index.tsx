@@ -15,7 +15,7 @@ export const Canvas = () => {
   return (
     <MazeContainer>
       <SCanvas ref={canvasRef} />
-      <GeneratorForm maze={maze} />
+      <GeneratorForm />
     </MazeContainer>
   );
 };
