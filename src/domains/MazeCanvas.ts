@@ -1,3 +1,4 @@
+import { createRef } from "react";
 import { RESPONSIVE_CELL_SIZE } from "../constants";
 import { theme } from "../styles/theme";
 import { endPosition, startPosition } from "../utils";
@@ -8,8 +9,8 @@ export class MazeCanvas {
   private canvasRef: React.RefObject<HTMLCanvasElement>;
   private canvasSize: number;
 
-  constructor(canvasRef: React.RefObject<HTMLCanvasElement>, level: number) {
-    this.canvasRef = canvasRef;
+  constructor(level: number) {
+    this.canvasRef = createRef<HTMLCanvasElement>();
     this.canvasSize = level * RESPONSIVE_CELL_SIZE();
   }
 

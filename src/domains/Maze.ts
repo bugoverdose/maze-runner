@@ -1,4 +1,3 @@
-import { createRef } from "react";
 import { INITIAL_MAZE_LEVEL, RESPONSIVE_CELL_SIZE } from "../constants";
 import { checkOutOfMaze, getTargetPosition } from "../utils";
 import { MazeBlock } from "./MazeBlock";
@@ -14,11 +13,11 @@ export class Maze {
   moveCountRef: number = 0;
   isFinishedRef: boolean = false;
 
-  constructor(canvasRef: React.RefObject<HTMLCanvasElement>) {
+  constructor() {
     this.blocks = [];
     this.player = new Player();
     this.level = INITIAL_MAZE_LEVEL;
-    this.mazeCanvas = new MazeCanvas(canvasRef, this.level);
+    this.mazeCanvas = new MazeCanvas(this.level);
 
     this.generateMazeStructure();
   }

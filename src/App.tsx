@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useState } from "react";
 import { GlobalStyle } from "./styles/global";
 import MazeRunner from "./components/MazeRunner";
 import { ResetStyle } from "./styles/reset";
@@ -6,11 +6,8 @@ import { Maze } from "./domains/Maze";
 import { MazeRunnerContext } from "./context";
 
 const App = () => {
-  // user view
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [maze] = useState(new Maze(canvasRef));
+  const [maze] = useState(new Maze());
 
-  // game data : used for logic & show on screen & triggering rerender
   const [time, setTime] = useState(0);
 
   const [moveCount, _setMoveCount] = useState(0);

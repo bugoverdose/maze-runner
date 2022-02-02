@@ -1,8 +1,8 @@
-import React, { createRef } from "react";
+import { createContext } from "react";
 import { Maze } from "./domains/Maze";
 
-export const MazeRunnerContext = React.createContext({
-  maze: new Maze(createRef()),
+export const MazeRunnerContext = createContext({
+  maze: new Maze(),
 
   time: 0,
   setTime: (_: number) => {},
