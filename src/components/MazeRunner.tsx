@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { movePlayer, paintMaze } from "../utils";
+import { paintMaze } from "../utils";
 import { Maze } from "../domains/Maze";
 import { Footer } from "./Footer";
 import { Popup } from "./Popup";
@@ -36,7 +36,7 @@ const MazeRunner = () => {
   const [isPopupMode, setIsPopupMode] = useState(false);
 
   const onControlPlayer = (direction: string, maze: Maze) => {
-    const hasMoved = movePlayer(direction, maze); // 키보드 입력을 위한 이벤트 리스너는 state 직접 접근 불가
+    const hasMoved = maze.movePlayer(direction); // 키보드 입력을 위한 이벤트 리스너는 state 직접 접근 불가
 
     if (!hasMoved) return;
 
@@ -44,11 +44,9 @@ const MazeRunner = () => {
       setMoveCount(moveCountRef.current + 1);
     }
 
-    const level = maze.level;
-
     paintMaze({ maze });
 
-    if (maze.player.row === level - 1 && maze.player.col === level - 1) {
+    if (maze.playerAtFinishBlock()) {
       setIsFinished(true);
     }
   };

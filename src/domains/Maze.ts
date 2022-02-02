@@ -4,7 +4,7 @@ import { Player } from "./Player";
 
 export class Maze {
   private blocks: MazeBlock[][];
-  player: Player;
+  private player: Player;
   canvasRef: React.RefObject<HTMLCanvasElement>;
   level: number;
   canvasSize: number;
@@ -19,8 +19,23 @@ export class Maze {
     this.generateMazeStructure();
   }
 
-  getBlockByColAndRow(col: number, row: number) {
+  public reset(level: number) {
+    this.level = level;
+    this.player.reset();
+  }
+
+  getBlockByColAndRow(col: number, row: number): MazeBlock {
     return this.blocks[col][row];
+  }
+
+  private getPlayerPosition(): MazeBlock {
+    return this.getBlockByColAndRow(this.player.col, this.player.row);
+  }
+
+  public movePlayer(direction: string) {
+    const playerPosition = this.getPlayerPosition();
+    const hasMoved = this.player.move(direction, playerPosition);
+    return hasMoved;
   }
 
   getCanvasRef() {
@@ -29,10 +44,6 @@ export class Maze {
 
   getLevel() {
     return this.level;
-  }
-
-  setLevel(level: number) {
-    this.level = level;
   }
 
   getCanvasSize() {
@@ -144,5 +155,16 @@ export class Maze {
       (row !== 0 && !this.blocks[col][row - 1].getVisited()) ||
       (row !== level - 1 && !this.blocks[col][row + 1].getVisited())
     );
+  }
+
+  public playerAtFinishBlock() {
+    return this.player.isFinished(this.level);
+  }
+
+  public getPlayerCanvasPosition() {
+    return [
+      this.player.col * RESPONSIVE_CELL_SIZE() + RESPONSIVE_CELL_SIZE() / 2,
+      this.player.row * RESPONSIVE_CELL_SIZE() + RESPONSIVE_CELL_SIZE() / 2,
+    ];
   }
 }

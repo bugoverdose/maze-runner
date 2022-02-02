@@ -52,10 +52,7 @@ export const MazeCanvas = ({ maze, setMaze }: iMazeCanvas) => {
     setMazeSizeInput(inputValue);
   };
 
-  const onGenerate = (event: React.FormEvent<HTMLFormElement>) => {
-    if (!maze || !maze.player) {
-      return;
-    }
+  const onGenerate = (event: React.FormEvent<HTMLFormElement>, maze: Maze) => {
     event.preventDefault();
 
     // input 태그의 min, max 값 강제로 수정시, 5~25 범위 밖의 값 입력에 대한 방어로직
@@ -65,10 +62,9 @@ export const MazeCanvas = ({ maze, setMaze }: iMazeCanvas) => {
       setMazeSizeInput(validMazeSize);
     }
 
-    maze.setLevel(validMazeSize);
+    maze.reset(validMazeSize);
     maze.setCanvasSize(validMazeSize * RESPONSIVE_CELL_SIZE());
 
-    maze.player.reset();
     setRenderMaze(true);
 
     setMoveCount(0);
@@ -85,7 +81,7 @@ export const MazeCanvas = ({ maze, setMaze }: iMazeCanvas) => {
   return (
     <MazeContainer>
       <Canvas ref={canvasRef} />
-      <GeneratorForm onSubmit={onGenerate}>
+      <GeneratorForm onSubmit={(e) => onGenerate(e, maze)}>
         <label>
           Size:
           {"  "}

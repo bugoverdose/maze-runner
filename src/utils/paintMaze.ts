@@ -12,7 +12,7 @@ export const paintMaze = ({ maze }: iPaintMaze) => {
   const canvasRef: React.RefObject<HTMLCanvasElement> = maze.getCanvasRef();
   const level = maze.getLevel();
 
-  if (!canvasRef.current?.getContext("2d") || !maze.player) {
+  if (!canvasRef.current?.getContext("2d")) {
     return;
   }
 
@@ -70,9 +70,12 @@ export const paintMaze = ({ maze }: iPaintMaze) => {
   context.fillStyle = theme.playerColor;
   context.strokeStyle = theme.playerColor;
   context.beginPath();
+
+  const [colCenter, rowCenter] = maze.getPlayerCanvasPosition();
+
   context.arc(
-    maze.player.col * RESPONSIVE_CELL_SIZE() + RESPONSIVE_CELL_SIZE() / 2,
-    maze.player.row * RESPONSIVE_CELL_SIZE() + RESPONSIVE_CELL_SIZE() / 2,
+    colCenter,
+    rowCenter,
     Math.floor(RESPONSIVE_CELL_SIZE() / 2) - 2,
     0,
     2 * Math.PI
