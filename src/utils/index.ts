@@ -1,1 +1,2 @@
-export * from "./wallPaintInfo";
+export * from "./generateWall";
+export * from "./paintWall";

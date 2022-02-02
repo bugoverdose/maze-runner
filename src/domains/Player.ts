@@ -1,12 +1,16 @@
 import { MazeBlock } from "./MazeBlock";
 
 export class Player {
-  col: number;
-  row: number;
+  private col: number;
+  private row: number;
 
   constructor() {
     this.col = 0;
     this.row = 0;
+  }
+
+  public get curPosition(): number[] {
+    return [this.col, this.row];
   }
 
   public move(direction: string, curBlock: MazeBlock): boolean {
@@ -25,7 +29,7 @@ export class Player {
     return hasMoved;
   }
 
-  public isFinished(level: number) {
+  public atFinishBlock(level: number) {
     return this.col === level - 1 && this.row === level - 1;
   }
 

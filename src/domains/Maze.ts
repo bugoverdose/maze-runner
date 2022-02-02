@@ -1,4 +1,5 @@
 import { INITIAL_MAZE_LEVEL, RESPONSIVE_CELL_SIZE } from "../constants";
+import { checkOutOfMaze, getTargetPosition } from "../utils";
 import { MazeBlock } from "./MazeBlock";
 import { MazeCanvas } from "./MazeCanvas";
 import { Player } from "./Player";
@@ -30,7 +31,8 @@ export class Maze {
   }
 
   private getPlayerPosition(): MazeBlock {
-    return this.getBlockByColAndRow(this.player.col, this.player.row);
+    const [col, row] = this.player.curPosition;
+    return this.getBlockByColAndRow(col, row);
   }
 
   public movePlayer(direction: string) {
@@ -77,63 +79,51 @@ export class Maze {
     // 특정 네모칸을 기준으로 임의로 탐색하며 벽의 일부분 제거 (드릴 뚫기)
     // 핵심: 두 가지 이상의 방식으로 같은 칸에 도달가능하면 안됨
     while (this.hasUnvisited()) {
-      if (!stack) {
-        break;
-      }
+      if (!stack) break;
+
       let cur: MazeBlock = stack[stack.length - 1];
       cur.setVisited(true);
+
       if (!this.hasUnvisitedNeighbor(cur)) {
         stack.pop(); // 상하좌우의 인접한 칸들 전부 이미 탐색된 네모칸은 스택에서 제거
-      } else {
-        let next: MazeBlock | null = null;
-        let foundNeighbor: boolean = false;
-        while (!foundNeighbor) {
-          // 현재 위치에서 랜덤으로 아직 이동하지 않은 방향으로 이동
-          let dir: number = Math.floor(Math.random() * 4);
-          const curCol = cur.getColumn();
-          const curRow = cur.getRow();
-          if (
-            dir === 0 &&
-            curCol < level - 1 &&
-            !this.blocks[curCol + 1][curRow].getVisited()
-          ) {
-            cur.breakEastWall();
-            next = this.blocks[curCol + 1][curRow];
-            next.breakWestWall();
-            foundNeighbor = true;
-          } else if (
-            dir === 1 &&
-            curRow > 0 &&
-            !this.blocks[curCol][curRow - 1].getVisited()
-          ) {
-            cur.breakNorthWall();
-            next = this.blocks[curCol][curRow - 1];
-            next.breakSouthWall();
-            foundNeighbor = true;
-          } else if (
-            dir === 2 &&
-            curRow < level - 1 &&
-            !this.blocks[curCol][curRow + 1].getVisited()
-          ) {
-            cur.breakSouthWall();
-            next = this.blocks[curCol][curRow + 1];
-            next.breakNorthWall();
-            foundNeighbor = true;
-          } else if (
-            dir === 3 &&
-            curCol > 0 &&
-            !this.blocks[curCol - 1][curRow].getVisited()
-          ) {
-            cur.breakWestWall();
-            next = this.blocks[curCol - 1][curRow];
-            next.breakEastWall();
-            foundNeighbor = true;
-          }
+        continue;
+      }
 
-          if (foundNeighbor && next) {
-            stack.push(next);
-          }
+      const [curCol, curRow] = [cur.getColumn(), cur.getRow()];
+
+      while (true) {
+        // 현재 위치에서 랜덤으로 아직 이동하지 않은 방향으로 이동
+        let dir: number = Math.floor(Math.random() * 4);
+
+        if (checkOutOfMaze(dir, level, curCol, curRow)) continue;
+
+        const [nextCol, nextRow] = getTargetPosition(dir, curCol, curRow);
+        const next: MazeBlock = this.blocks[nextCol][nextRow];
+
+        if (next.getVisited()) continue;
+
+        if (dir === 0) {
+          cur.breakNorthWall(); // 해당 위치에서 북쪽으로 이동 가능
+          next.breakSouthWall(); // 다음 위치에서 남쪽으로 이동 가능
         }
+
+        if (dir === 1) {
+          cur.breakEastWall();
+          next.breakWestWall();
+        }
+
+        if (dir === 2) {
+          cur.breakSouthWall();
+          next.breakNorthWall();
+        }
+
+        if (dir === 3) {
+          cur.breakWestWall();
+          next.breakEastWall();
+        }
+
+        stack.push(next);
+        break;
       }
     }
   }
@@ -163,13 +153,13 @@ export class Maze {
   }
 
   public playerAtFinishBlock() {
-    return this.player.isFinished(this.level);
+    return this.player.atFinishBlock(this.level);
   }
 
   public getPlayerCanvasPosition() {
-    return [
-      this.player.col * RESPONSIVE_CELL_SIZE() + RESPONSIVE_CELL_SIZE() / 2,
-      this.player.row * RESPONSIVE_CELL_SIZE() + RESPONSIVE_CELL_SIZE() / 2,
-    ];
+    const [col, row] = this.player.curPosition;
+    const cellSize = RESPONSIVE_CELL_SIZE();
+
+    return [col * cellSize + cellSize / 2, row * cellSize + cellSize / 2];
   }
 }

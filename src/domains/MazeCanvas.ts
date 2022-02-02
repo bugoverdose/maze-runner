@@ -69,7 +69,7 @@ export class MazeCanvas {
         const southWall = mazeBlock.southWallExists();
         const westWall = mazeBlock.westWallExists();
 
-        [northWall, westWall, southWall, eastWall].forEach(
+        [northWall, eastWall, southWall, westWall].forEach(
           (wallExists, idx) => {
             if (wallExists) {
               const [fromCol, fromRow] = startPosition(idx, col, row);

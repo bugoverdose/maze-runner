@@ -1,4 +1,4 @@
-// dir = [northWall, westWall, southWall, eastWall]
+// dir = [northWall, eastWall, southWall, wastWall]
 
 export const startPosition = (
   dir: number,
@@ -8,11 +8,11 @@ export const startPosition = (
   if (dir === 0) {
     return [col, row];
   } else if (dir === 1) {
-    return [col, row];
+    return [col + 1, row];
   } else if (dir === 2) {
     return [col, row + 1];
   } else {
-    return [col + 1, row];
+    return [col, row];
   }
 };
 
@@ -24,10 +24,10 @@ export const endPosition = (
   if (dir === 0) {
     return [col + 1, row];
   } else if (dir === 1) {
-    return [col, row + 1];
+    return [col + 1, row + 1];
   } else if (dir === 2) {
     return [col + 1, row + 1];
   } else {
-    return [col + 1, row + 1];
+    return [col, row + 1];
   }
 };
