@@ -13,8 +13,8 @@ interface iControlPanel {
 export const ControlPanel = ({ maze }: iControlPanel) => {
   const { setMoveCount, setIsFinished } = useContext(MazeRunnerContext);
 
-  const onControlPlayer = (direction: string) => {
-    const hasMoved = maze.movePlayer(direction); // 키보드 입력을 위한 이벤트 리스너는 state 직접 접근 불가
+  const onControlPlayer = (keyInput: string) => {
+    const hasMoved = maze.movePlayer(keyInput); // 키보드 입력을 위한 이벤트 리스너는 state 직접 접근 불가
 
     if (!hasMoved) return;
 

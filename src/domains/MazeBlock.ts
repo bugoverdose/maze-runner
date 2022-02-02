@@ -34,7 +34,7 @@ export class MazeBlock {
     this.northWall = false;
   }
 
-  public eastWallExists() {
+  public get eastWallExists() {
     return this.eastWall;
   }
 
@@ -42,7 +42,7 @@ export class MazeBlock {
     this.eastWall = false;
   }
 
-  public southWallExists() {
+  public get southWallExists() {
     return this.southWall;
   }
 
@@ -50,7 +50,7 @@ export class MazeBlock {
     this.southWall = false;
   }
 
-  public westWallExists() {
+  public get westWallExists() {
     return this.westWall;
   }
 

@@ -13,20 +13,12 @@ export class Player {
     return [this.col, this.row];
   }
 
-  public move(direction: string, curBlock: MazeBlock): boolean {
-    let hasMoved = true;
-    if (direction === "ArrowUp" && !curBlock.northWallExists()) {
-      this.row -= 1;
-    } else if (direction === "ArrowRight" && !curBlock.eastWallExists()) {
-      this.col += 1;
-    } else if (direction === "ArrowDown" && !curBlock.southWallExists()) {
-      this.row += 1;
-    } else if (direction === "ArrowLeft" && !curBlock.westWallExists()) {
-      this.col -= 1;
-    } else {
-      hasMoved = false;
-    }
-    return hasMoved;
+  public move(keyInput: string, cur: MazeBlock): boolean {
+    if (keyInput === "ArrowUp" && !cur.northWallExists) return this.goNorth();
+    if (keyInput === "ArrowRight" && !cur.eastWallExists) return this.goEast();
+    if (keyInput === "ArrowDown" && !cur.southWallExists) return this.goSouth();
+    if (keyInput === "ArrowLeft" && !cur.westWallExists) return this.goWest();
+    return false;
   }
 
   public atFinishBlock(level: number) {
@@ -36,5 +28,25 @@ export class Player {
   public reset() {
     this.col = 0;
     this.row = 0;
+  }
+
+  private goNorth() {
+    this.row -= 1;
+    return true;
+  }
+
+  private goEast() {
+    this.col += 1;
+    return true;
+  }
+
+  private goSouth() {
+    this.row += 1;
+    return true;
+  }
+
+  private goWest() {
+    this.col -= 1;
+    return true;
   }
 }

@@ -37,9 +37,9 @@ export class Maze {
     return this.getBlockByColAndRow(col, row);
   }
 
-  public movePlayer(direction: string) {
+  public movePlayer(keyInput: string) {
     const playerPosition = this.getPlayerPosition();
-    const hasMoved = this.player.move(direction, playerPosition);
+    const hasMoved = this.player.move(keyInput, playerPosition);
     return hasMoved;
   }
 

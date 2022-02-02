@@ -76,10 +76,10 @@ export class MazeCanvas {
       for (let row = 0; row < level; row++) {
         const mazeBlock: MazeBlock = maze.getBlockByColAndRow(col, row);
 
-        const northWall = mazeBlock.northWallExists();
-        const eastWall = mazeBlock.eastWallExists();
-        const southWall = mazeBlock.southWallExists();
-        const westWall = mazeBlock.westWallExists();
+        const northWall = mazeBlock.northWallExists;
+        const eastWall = mazeBlock.eastWallExists;
+        const southWall = mazeBlock.southWallExists;
+        const westWall = mazeBlock.westWallExists;
 
         [northWall, eastWall, southWall, westWall].forEach(
           (wallExists, idx) => {
