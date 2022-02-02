@@ -10,6 +10,9 @@ export class Maze {
   private mazeCanvas: MazeCanvas;
   private level: number;
 
+  moveCountRef: number = 0;
+  isFinishedRef: boolean = false;
+
   constructor(canvasRef: React.RefObject<HTMLCanvasElement>) {
     this.blocks = [];
     this.player = new Player();

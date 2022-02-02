@@ -12,12 +12,10 @@ import { ValueInput } from "./ValueInput";
 // TODO: fix types
 interface iMazeCanvas {
   maze: Maze;
-  setMaze: any;
 }
 
-export const MazeCanvas = ({ maze, setMaze }: iMazeCanvas) => {
-  const { setMoveCount, setTime, setIsFinished } =
-    useContext(MazeRunnerContext);
+export const MazeCanvas = ({ maze }: iMazeCanvas) => {
+  const { resetTime, setIsFinished } = useContext(MazeRunnerContext);
 
   const canvasRef: React.RefObject<HTMLCanvasElement> = maze.getCanvasRef();
 
@@ -36,7 +34,6 @@ export const MazeCanvas = ({ maze, setMaze }: iMazeCanvas) => {
     canvas.style.width = canvasSize.toString();
 
     maze.generateMazeStructure();
-    setMaze(maze);
 
     maze.paintCanvas();
   };
@@ -62,8 +59,7 @@ export const MazeCanvas = ({ maze, setMaze }: iMazeCanvas) => {
 
     setGenerateMaze(true);
 
-    setMoveCount(0);
-    setTime(0);
+    resetTime();
     setIsFinished(false);
 
     blurOnSubmit();
@@ -83,11 +79,7 @@ export const MazeCanvas = ({ maze, setMaze }: iMazeCanvas) => {
         <label>
           Size:
           {"  "}
-          <ValueInput
-            id="level-input"
-            value={mazeSizeInput}
-            onChange={onSizeChange}
-          />
+          <ValueInput value={mazeSizeInput} onChange={onSizeChange} />
         </label>
         <SubmitBtn>Generate</SubmitBtn>
       </GeneratorForm>

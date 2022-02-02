@@ -5,7 +5,8 @@ export const MazeRunnerContext = React.createContext({
   setMoveCount: (_: number) => {},
 
   time: 0,
-  setTime: (_: number) => {},
+  resetTime: () => {},
 
+  isFinished: false,
   setIsFinished: (_: boolean) => {},
 });

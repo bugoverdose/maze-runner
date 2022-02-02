@@ -7,76 +7,70 @@ import { BlackScreen } from "./BlackScreen";
 import { Header } from "./Header";
 import { PlayerBox } from "./PlayerBox";
 import { MazeRunnerContext } from "../context";
-import { useTimerSetup, useKeydownControls, usePopup } from "../hooks";
-import { MazeRunnerWrapper } from "./Wrapper";
-import { MazeRunnerContainer } from "./Container";
+import { useTimerSetup, usePopup, useKeydownControls } from "../hooks";
+import { MazeRunnerWrapper } from "./wrapper";
+import { MazeRunnerContainer } from "./container";
 
 const MazeRunner = () => {
+  // user view
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [maze] = useState(new Maze(canvasRef));
+  const [isPopupMode, setIsPopupMode] = useState(false);
 
-  const [maze, setMaze] = useState(new Maze(canvasRef));
-
+  // game data : used for logic & show on screen & triggering rerender
   const [time, setTime] = useState(0);
+  const incrementTime = (num: number) => setTime(num + 1);
+  const resetTime = () => setTime(0);
+
   const [moveCount, _setMoveCount] = useState(0);
-  const [isFinished, _setIsFinished] = useState(false);
-
-  const moveCountRef = useRef(moveCount);
-  const isFinishedRef = useRef(isFinished);
-
   const setMoveCount = (data: number) => {
-    moveCountRef.current = data; // useRef와 useState를 일치시키기
+    maze.moveCountRef = data; // ref와 useState를 일치시키기
     _setMoveCount(data); // 실제 state 값 수정
   };
+
+  const [isFinished, _setIsFinished] = useState(false);
   const setIsFinished = (data: boolean) => {
-    isFinishedRef.current = data;
+    maze.isFinishedRef = data;
     _setIsFinished(data);
   };
-
-  const [isPopupMode, setIsPopupMode] = useState(false);
 
   const onControlPlayer = (direction: string, maze: Maze) => {
     const hasMoved = maze.movePlayer(direction); // 키보드 입력을 위한 이벤트 리스너는 state 직접 접근 불가
 
     if (!hasMoved) return;
 
-    if (!isFinishedRef.current) {
-      setMoveCount(moveCountRef.current + 1);
-    }
+    const { isFinishedRef, moveCountRef } = maze;
+
+    if (!isFinishedRef) setMoveCount(moveCountRef + 1);
 
     maze.paintCanvas();
 
-    if (maze.playerAtFinishBlock()) {
-      setIsFinished(true);
-    }
+    if (maze.playerAtFinishBlock()) setIsFinished(true);
   };
 
-  useTimerSetup({
-    isFinished,
-    incrementTime: (num: number) => setTime(num + 1),
-    time,
-  });
+  // hooks
+  useTimerSetup({ isFinished, incrementTime, time });
 
   usePopup({ isFinished, isPopupMode, setIsPopupMode });
 
   useKeydownControls(onControlPlayer, maze);
 
+  const contextData = {
+    moveCount,
+    setMoveCount,
+    time,
+    resetTime,
+    isFinished,
+    setIsFinished,
+  };
+
   return (
-    <MazeRunnerContext.Provider
-      value={{
-        moveCount,
-        setMoveCount,
-
-        time,
-        setTime: (num: number) => setTime(num),
-
-        setIsFinished,
-      }}
-    >
+    <MazeRunnerContext.Provider value={contextData}>
       <BlackScreen />
       <MazeRunnerWrapper>
         <Header>Maze Runner</Header>
         <MazeRunnerContainer>
-          <MazeCanvas maze={maze} setMaze={setMaze} />
+          <MazeCanvas maze={maze} />
           <PlayerBox maze={maze} onControlPlayer={onControlPlayer} />
         </MazeRunnerContainer>
       </MazeRunnerWrapper>
