@@ -6,7 +6,7 @@ import {
 } from "../../constants";
 import { MazeRunnerContext } from "../../context";
 import { Maze } from "../../domains/Maze";
-import { paintMaze, generateMazeStructure } from "../../utils";
+import { paintMaze } from "../../utils";
 import { Canvas } from "./Canvas";
 import { MazeContainer } from "./container";
 import { GeneratorForm } from "./GeneratorForm";
@@ -39,7 +39,8 @@ export const MazeCanvas = ({ maze, setMaze }: iMazeCanvas) => {
     canvas.style.height = canvasSize.toString();
     canvas.style.width = canvasSize.toString();
 
-    setMaze(generateMazeStructure(maze));
+    maze.generateMazeStructure();
+    setMaze(maze);
 
     paintMaze({ maze });
   };

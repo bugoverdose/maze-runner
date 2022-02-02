@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { generateMazeStructure, movePlayer, paintMaze } from "../utils";
+import { movePlayer, paintMaze } from "../utils";
 import { Maze } from "../domains/Maze";
 import { Footer } from "./Footer";
 import { Popup } from "./Popup";
@@ -15,7 +15,7 @@ import { useTimerSetup, useKeydownControls, usePopup } from "../hooks";
 const MazeRunner = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const [maze, setMaze] = useState(generateMazeStructure(new Maze(canvasRef)));
+  const [maze, setMaze] = useState(new Maze(canvasRef));
 
   const [time, setTime] = useState(0);
   const [moveCount, _setMoveCount] = useState(0);
@@ -32,10 +32,7 @@ const MazeRunner = () => {
     isFinishedRef.current = data;
     _setIsFinished(data);
   };
-  // const setCanvasSize = (data: number) => {
-  //   canvasSizeRef.current = data;
-  //   _setCanvasSize(data);
-  // };
+
   const [isPopupMode, setIsPopupMode] = useState(false);
 
   const onControlPlayer = (direction: string, maze: Maze) => {
