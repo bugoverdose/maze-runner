@@ -1,17 +1,12 @@
 import { useContext } from "react";
 import { MazeRunnerContext } from "../../../context";
-import { Maze } from "../../../domains/Maze";
 import { useKeydownControls } from "../../../hooks";
 import { ControlBtn } from "./ControlBtn";
 import { HelpBtn } from "./HelpBtn";
 import { ControlPanelWrapper } from "./wrapper";
 
-interface iControlPanel {
-  maze: Maze;
-}
-
-export const ControlPanel = ({ maze }: iControlPanel) => {
-  const { setMoveCount, setIsFinished } = useContext(MazeRunnerContext);
+export const ControlPanel = () => {
+  const { maze, setMoveCount, setIsFinished } = useContext(MazeRunnerContext);
 
   const onControlPlayer = (keyInput: string) => {
     const hasMoved = maze.movePlayer(keyInput); // 키보드 입력을 위한 이벤트 리스너는 state 직접 접근 불가

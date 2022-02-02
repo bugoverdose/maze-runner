@@ -16,7 +16,7 @@ export const PlayerBox = () => {
         <div>{moveCount}</div>
         <span>{time} sec</span>
       </MovementCountBox>
-      <ControlPanel maze={maze} />
+      <ControlPanel />
     </PlayContainer>
   );
 };
