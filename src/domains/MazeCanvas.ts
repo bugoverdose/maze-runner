@@ -1,6 +1,6 @@
 import { createRef } from "react";
 import { RESPONSIVE_CELL_SIZE } from "../constants";
-import { theme } from "../styles/theme";
+import { theme } from "../styles";
 import { endPosition, startPosition } from "../utils";
 import { Maze } from "./Maze";
 import { MazeBlock } from "./MazeBlock";

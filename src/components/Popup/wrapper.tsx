@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { PreventSelect } from "../../styles";
 
 export const PopupWrapper = styled.div`
   /* 대안: position: absolute; // align itself according to the closest relative father (=body) */
@@ -11,7 +12,9 @@ export const PopupWrapper = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 99;
-  // pseudo selector 재활 훈련
+
+  ${PreventSelect}
+
   & > div {
     border-radius: 30px;
     border: 3px black solid;
