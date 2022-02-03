@@ -14,8 +14,14 @@ export const GlobalStyle = createGlobalStyle`
     &:hover {
       background-color: ${(props) => props.theme.darkPurple};
     }
+    
+    &:active{
+      background-color: ${(props) => props.theme.lightPurple};
+      border-color: ${(props) => props.theme.lightPurple};
+    }
 
-    &:active {
+    &:focus {
+      outline: none;
       background-color: ${(props) => props.theme.lightPurple};
       border-color: ${(props) => props.theme.lightPurple};
     }
