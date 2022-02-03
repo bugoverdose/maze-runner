@@ -4,20 +4,14 @@ export const MAX_LEVEL = 25;
 
 export const RESPONSIVE_CELL_SIZE = () => {
   if (window.screen.width >= BIG_SCREEN) return 20;
-  if (window.screen.width >= MOBILE) return 12;
+  if (window.screen.width >= MINIMUM) return 12;
   return 5;
 };
 
-const MOBILE = 320;
-const MOBILE_HEIGHT = 400;
+const MINIMUM = 245;
 const BIG_SCREEN = 768;
 
 export const width = {
-  showNone: `0px`,
-  mobile: `${MOBILE}px`,
+  minimum: `${MINIMUM}px`,
   bigScreen: `${BIG_SCREEN}px`,
-};
-
-export const height = {
-  mobile: `${MOBILE_HEIGHT}px`,
 };

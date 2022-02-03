@@ -1,5 +1,5 @@
 import { DefaultTheme } from "styled-components";
-import { height, width } from "../constants";
+import { width } from "../constants";
 
 export const theme: DefaultTheme = {
   backgroundColor: "#000000",
@@ -8,10 +8,11 @@ export const theme: DefaultTheme = {
   finishColor: "#00eaff",
   textColor: "rgba(0, 0, 0, 0.8)",
 
+  darkPurple: "#552b85",
+  lightPurple: "#8768aa",
+
   device: {
-    showNone: `(min-width: ${width.showNone})`,
-    mobile: `(min-width: ${width.mobile})`,
-    mobileHeight: `(min-height: ${height.mobile})`,
+    minimum: `(min-width: ${width.minimum})`,
     bigScreen: `(min-width: ${width.bigScreen})`,
   },
 };

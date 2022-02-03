@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { PreventSelect } from "../../../styles";
 
-export const PlayContainer = styled.div<{ canvasSize: number }>`
+export const PlayBoxContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -10,7 +10,5 @@ export const PlayContainer = styled.div<{ canvasSize: number }>`
 
   ${PreventSelect}
 
-  @media ${(props) => props.theme.device.bigScreen} {
-    height: ${(props) => props.canvasSize + "px"};
-  }
+  height: 100%;
 `;

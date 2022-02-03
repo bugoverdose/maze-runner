@@ -7,7 +7,7 @@ export const MazeRunnerContainer = styled.div`
 
   padding: 50px 0;
 
-  @media ${(props) => props.theme.device.mobile} {
+  @media ${(props) => props.theme.device.minimum} {
     flex-direction: column;
   }
 

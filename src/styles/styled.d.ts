@@ -8,10 +8,11 @@ declare module "styled-components" {
     finishColor: string;
     textColor: string;
 
+    darkPurple: string;
+    lightPurple: string;
+
     device: {
-      showNone: string;
-      mobile: string;
-      mobileHeight: string;
+      minimum: string;
       bigScreen: string;
     };
   }

@@ -51,17 +51,13 @@ export class Maze {
     return this.mazeCanvas.getCanvasRef();
   }
 
-  public getCanvasSize() {
-    return this.mazeCanvas.getCanvasSize();
-  }
-
   public generateMaze() {
     const canvasRef: React.RefObject<HTMLCanvasElement> = this.getCanvasRef();
 
     if (!canvasRef.current) return;
     const canvas: HTMLCanvasElement = canvasRef.current;
 
-    const canvasSize = this.getCanvasSize();
+    const canvasSize = this.mazeCanvas.getCanvasSize();
 
     canvas.height = canvasSize;
     canvas.width = canvasSize;

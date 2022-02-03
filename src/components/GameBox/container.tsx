@@ -4,12 +4,10 @@ export const GameBoxContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: auto;
-  height: auto;
 
-  @media ${(props) => props.theme.device.mobile} {
-    flex-direction: column;
-  }
+  padding: 20px;
+
+  flex-direction: column;
 
   @media ${(props) => props.theme.device.bigScreen} {
     flex-direction: row;

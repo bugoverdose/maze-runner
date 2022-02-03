@@ -1,22 +1,21 @@
 import { useContext } from "react";
 import { MazeRunnerContext } from "../../../context";
 import { ControlPanel } from "./ControlPanel";
+import { GameInfoBox } from "./GameInfoBox";
 import { MovementCountBox } from "./MovementCountBox";
-import { PlayContainer } from "./PlayContainer";
+import { PlayBoxContainer } from "./PlayBoxContainer";
 
 export const PlayerBox = () => {
-  const { maze, moveCount, time } = useContext(MazeRunnerContext);
-
-  const canvasSize: number = maze.getCanvasSize();
+  const { moveCount, time } = useContext(MazeRunnerContext);
 
   return (
-    <PlayContainer canvasSize={Math.max(300, canvasSize)}>
-      <MovementCountBox>
+    <PlayBoxContainer>
+      <GameInfoBox>
         <span>Moves</span>
-        <div>{moveCount}</div>
+        <MovementCountBox>{moveCount}</MovementCountBox>
         <span>{time} sec</span>
-      </MovementCountBox>
+      </GameInfoBox>
       <ControlPanel />
-    </PlayContainer>
+    </PlayBoxContainer>
   );
 };
