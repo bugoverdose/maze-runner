@@ -1,4 +1,4 @@
-import { INITIAL_LEVEL, RESPONSIVE_CELL_SIZE } from "../constants";
+import { INITIAL_LEVEL } from "../constants";
 import { breakWalls, checkOutOfMaze, getTargetPosition } from "../utils";
 import { MazeBlock } from "./MazeBlock";
 import { MazeCanvas } from "./MazeCanvas";
@@ -25,20 +25,25 @@ export class Maze {
   public reset(level: number) {
     this.level = level;
     this.player.reset();
-    this.mazeCanvas.setCanvasSize(level);
+    this.mazeCanvas.setLevel(level);
   }
 
   public getBlockByColAndRow(col: number, row: number): MazeBlock {
     return this.blocks[col][row];
   }
 
-  private getPlayerPosition(): MazeBlock {
+  public getPlayerPosition(): number[] {
     const [col, row] = this.player.curPosition;
+    return [col, row];
+  }
+
+  private getPlayerPositionBlock(): MazeBlock {
+    const [col, row] = this.getPlayerPosition();
     return this.getBlockByColAndRow(col, row);
   }
 
   public movePlayer(keyInput: string) {
-    const playerPosition = this.getPlayerPosition();
+    const playerPosition = this.getPlayerPositionBlock();
     const hasMoved = this.player.move(keyInput, playerPosition);
     return hasMoved;
   }
@@ -51,21 +56,12 @@ export class Maze {
     return this.mazeCanvas.getCanvasRef();
   }
 
+  public playerAtFinishBlock() {
+    return this.player.atFinishBlock(this.level);
+  }
+
   public generateMaze() {
-    const canvasRef: React.RefObject<HTMLCanvasElement> = this.getCanvasRef();
-
-    if (!canvasRef.current) return;
-    const canvas: HTMLCanvasElement = canvasRef.current;
-
-    const canvasSize = this.mazeCanvas.getCanvasSize();
-
-    canvas.height = canvasSize;
-    canvas.width = canvasSize;
-    canvas.style.height = canvasSize.toString();
-    canvas.style.width = canvasSize.toString();
-
     this.generateMazeStructure();
-
     this.paintCanvas();
   }
 
@@ -148,16 +144,5 @@ export class Maze {
       (row !== 0 && !this.blocks[col][row - 1].isVisited) ||
       (row !== level - 1 && !this.blocks[col][row + 1].isVisited)
     );
-  }
-
-  public playerAtFinishBlock() {
-    return this.player.atFinishBlock(this.level);
-  }
-
-  public getPlayerCanvasPosition() {
-    const [col, row] = this.player.curPosition;
-    const cellSize = RESPONSIVE_CELL_SIZE();
-
-    return [col * cellSize + cellSize / 2, row * cellSize + cellSize / 2];
   }
 }
