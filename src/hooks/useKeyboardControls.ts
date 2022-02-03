@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export const useKeydownControls = (
+export const useKeyboardControls = (
   onControlPlayer: (direction: string) => void
 ) => {
   useEffect(() => {

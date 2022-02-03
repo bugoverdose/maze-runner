@@ -1,3 +1,4 @@
+import { ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP } from "../constants";
 import { MazeBlock } from "./MazeBlock";
 
 export class Player {
@@ -14,10 +15,10 @@ export class Player {
   }
 
   public move(input: string, cur: MazeBlock): boolean {
-    if (input === "ArrowUp" && !cur.northWallExists()) return this.goNorth();
-    if (input === "ArrowRight" && !cur.eastWallExists()) return this.goEast();
-    if (input === "ArrowDown" && !cur.southWallExists()) return this.goSouth();
-    if (input === "ArrowLeft" && !cur.westWallExists()) return this.goWest();
+    if (input === ARROW_UP && !cur.northWallExists()) return this.goNorth();
+    if (input === ARROW_RIGHT && !cur.eastWallExists()) return this.goEast();
+    if (input === ARROW_DOWN && !cur.southWallExists()) return this.goSouth();
+    if (input === ARROW_LEFT && !cur.westWallExists()) return this.goWest();
     return false;
   }
 
