@@ -93,6 +93,7 @@ export class Maze {
 
       const [curCol, curRow] = cur.getPosition();
 
+      // 상하좌우 중 적어도 한쪽 방향으로 unvisited block이 존재한다는 점이 validate됨
       while (true) {
         // 현재 위치에서 랜덤으로 아직 이동하지 않은 방향으로 한 칸 이동
         let dir: number = Math.floor(Math.random() * 4);

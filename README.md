@@ -1,21 +1,75 @@
 # Maze Runner
 
-- canvas에 그려지는 미로의 패턴은 BFS 알고리즘을 통해 임의로 결정
-- 5x5 ~ 25x25 크기의 정사각형 미로 생성
-- 화면의 버튼 혹은 키보드 조작을 통해 빨간원을 상하좌우로 조작
-- 빨간원이 우측 하단의 파란칸에 도달할 때까지의 경과시간 및 이동한 횟수를 기록
+- A game site where you escape from a maze that is randomly generated.
 
-## TODO
+## Features
 
-- [ ] open graph tags for sharing links
-- [ ] reset position 기능 : 미로 전체를 다시 만들지 말고, 사용자 위치, 시간, 이동거리만 리셋
-- [ ] 미로 크기별 최고점수 기록 기능
+### Game
 
-## 참고사항
+- Using the form under the maze canvas to generate a 3x3 to 25x25 size maze and start a new game.
 
-- 핵심은 화면에 실시간으로 재렌더링되어야 하는 정보와 변하더라도 내부적인 연산에서만 사용되는 정보를 구분하는 것
+  - Default maze size is 5x5, but player can choose the size and generate a new maze any time.
 
-- listener belongs to the initial render and is not updated on subsequent rerenders.
-  - 원시 타입 vs 객체의 차이를 통해 해결해야 함.
-  - 특정 객체의 속성으로 데이터를 저장하고, 객체에 대한 참조값을 함수에 전달 => 객체의 속성을 읽도록 하면 매번 업데이트된 데이터 사용 가능.
-  - cf) useRef : html element에 대한 reference를 이벤트리스너 내부에 설정하여 구현 가능. 일반적인 데이터에서는 굳이 불필요.
+  - The BFS algorithm will always start from the finish block to make the most of the maze and increase difficulty.
+
+  - Only square shaped maze are allowed to simplify layout.
+
+- Move the player, the red dot, to the finish block (blue block) at the bottom right.
+
+  - On starting a new maze, the move count and the time couner will both be set to 0. And the player will be placed at the top left block.
+
+  - On moving the player, the move count will increment and will be shown on the screen (big screen only).
+
+  - The passing time will be shown on the screen by seconds (big screen only).
+
+- On reaching the finish block, a pop up will become visible to show how many moves and seconds have passed.
+
+  - The player can move around after the game ended, but the move count and the time counter will not change until regenerating a new maze.
+
+### Controls
+
+- _Clicking_ the arrow key buttons on the screen will move the player.
+
+  - If there is a wall on the direction player is trying to go to, there will be no move count increase and nothing will happen.
+
+- _Pressing_ arrow keys **on the keyboard** will also move the player.
+
+  - The corresponding buttons on the screen will be focused and blurred on pressing the arrow keys (because it looks cool).
+
+  - The scrolling functionality will be prevented on pressing the arrow keys.
+
+  - If there is a wall on the direction player is trying to go to _and if the screen can be scrolled to the direction_, the scroll event will happen.
+
+    - The point is to prevent multiple events from happening at the same. So all the default key press events will happen if it doesn't trigger the player to move.
+
+### Responsive Design
+
+- Overall layout is responsive based on width.
+
+  - If the screen is wide enough, the move count, time, and control buttons will be placed on the right of the maze canvas.
+
+  - Otherwise, the control buttons will go under the maze and the move count and time information will be not be shown.
+
+  - If the screen is too narrow, a dark screen will be shown to inform you. You can still move the player around and finish one game. But you won't be able to click anything on the screen and even the pop up will be placed behind the dark screen.
+
+- Canvas has a maximum size but it is also responsive to the width, so it can decrease if the screen width decreases.
+
+  - Increasing the _size_ of the maze has no effect on the canvas size. Therefore, the size of each maze block will decrease if maze size (or should we say _level_) increases.
+
+- Basic instructions will become visible on hovering over the question mark icon next to the arrow key buttons.
+
+  - The position and size of the instruction text will change on screen width size.
+
+- The popup at the end of the game will also change on screen width size. The size of the text will also change if the screen is narrow enough.
+
+- No element is responsive to height change because that would mess up everything. If the screen height is not enough, the user will have to scroll down.
+
+## Enhancements
+
+- Open graph meta tags for sharing links.
+
+  - It's basic stuff, but I'll need to prepare some images.
+
+- Reset position button for reseting current game without generating the entire maze.
+
+  - It's really easy to implement, but where should we put the button?
