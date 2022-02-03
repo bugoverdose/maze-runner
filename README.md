@@ -6,15 +6,15 @@
 
 ### Game
 
-- Using the form under the maze canvas to generate a 3x3 to 25x25 size maze and start a new game.
+- Use the form under the maze canvas to generate a maze and start a new game.
 
-  - Default maze size is 5x5, but player can choose the size and generate a new maze any time.
+  - Default maze size is 5x5, but player can choose a size between 3x3 to 25x25.
 
   - The BFS algorithm will always start from the finish block to make the most of the maze and increase difficulty.
 
   - Only square shaped maze are allowed to simplify layout.
 
-- Move the player, the red dot, to the finish block (blue block) at the bottom right.
+- Move the player (red dot) to the finish block (blue block) at the bottom right.
 
   - On starting a new maze, the move count and the time couner will both be set to 0. And the player will be placed at the top left block.
 
@@ -65,6 +65,13 @@
 - No element is responsive to height change because that would mess up everything. If the screen height is not enough, the user will have to scroll down.
 
 ## Enhancements
+
+- Give eyes to the red dot.
+
+  - Match the eye direction to the previous move direction.
+  - Default eye direction to a no-wall direction.
+
+- Blob sound on moving the player.
 
 - Open graph meta tags for sharing links.
 
