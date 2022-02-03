@@ -1,11 +1,13 @@
 import { useEffect } from "react";
 
 export const useKeyboardControls = (
-  onControlPlayer: (direction: string) => void
+  onControlPlayer: (direction: string) => boolean
 ) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      onControlPlayer(event.key); // "ArrowDown", "ArrowLeft", etc
+      const hasMoved = onControlPlayer(event.key); // "ArrowDown", "ArrowLeft", etc
+
+      if (hasMoved) event.preventDefault();
     };
 
     window.addEventListener("keydown", handleKeyDown);
