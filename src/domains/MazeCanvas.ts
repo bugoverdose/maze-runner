@@ -31,12 +31,12 @@ export class MazeCanvas {
 
     let context = canvas.getContext("2d") as CanvasRenderingContext2D;
 
-    const cellSize = canvasSize / this.level;
+    const blockSize = canvasSize / this.level;
 
     this.paintBackground(context, canvasSize);
-    this.paintFinishBlock(context, cellSize);
-    this.paintAllWalls(context, canvasSize, cellSize, maze);
-    this.paintPlayer(context, cellSize, maze);
+    this.paintFinishBlock(context, blockSize);
+    this.paintAllWalls(context, canvasSize, blockSize, maze);
+    this.paintPlayer(context, blockSize, maze);
   }
 
   private paintBackground(
@@ -50,22 +50,22 @@ export class MazeCanvas {
 
   private paintFinishBlock(
     context: CanvasRenderingContext2D,
-    cellSize: number
+    blockSize: number
   ) {
     // 목적지: 특수한 배경. 벽들에 의해 덮어져야하므로 먼저
     context.fillStyle = theme.finishColor;
     context.fillRect(
-      (this.level - 1) * cellSize,
-      (this.level - 1) * cellSize,
-      cellSize,
-      cellSize
+      (this.level - 1) * blockSize,
+      (this.level - 1) * blockSize,
+      blockSize,
+      blockSize
     );
   }
 
   private paintAllWalls(
     context: CanvasRenderingContext2D,
     canvasSize: number,
-    cellSize: number,
+    blockSize: number,
     maze: Maze
   ) {
     // 미로 내의 벽들 색칠: 겹치더라도 그냥 두번씩 칠하기
@@ -74,7 +74,7 @@ export class MazeCanvas {
 
     for (let col = 0; col < this.level; col++) {
       for (let row = 0; row < this.level; row++) {
-        this.paintWalls(context, col, row, cellSize, maze);
+        this.paintWalls(context, col, row, blockSize, maze);
       }
     }
   }
@@ -83,7 +83,7 @@ export class MazeCanvas {
     context: CanvasRenderingContext2D,
     col: number,
     row: number,
-    cellSize: number,
+    blockSize: number,
     maze: Maze
   ) {
     const mazeBlock: MazeBlock = maze.getBlockByColAndRow(col, row);
@@ -98,8 +98,8 @@ export class MazeCanvas {
         const [fromCol, fromRow] = startPosition(idx, col, row);
         const [toCol, toRow] = endPosition(idx, col, row);
         context.beginPath();
-        context.moveTo(fromCol * cellSize, fromRow * cellSize);
-        context.lineTo(toCol * cellSize, toRow * cellSize);
+        context.moveTo(fromCol * blockSize, fromRow * blockSize);
+        context.lineTo(toCol * blockSize, toRow * blockSize);
         context.stroke();
       }
     });
@@ -107,15 +107,15 @@ export class MazeCanvas {
 
   private paintPlayer(
     context: CanvasRenderingContext2D,
-    cellSize: number,
+    blockSize: number,
     maze: Maze
   ) {
     const [col, row] = maze.getPlayerPosition();
 
-    const colCenter = col * cellSize + cellSize / 2;
-    const rowCenter = row * cellSize + cellSize / 2;
+    const colCenter = col * blockSize + blockSize / 2;
+    const rowCenter = row * blockSize + blockSize / 2;
 
-    const radius = Math.floor(cellSize / 2) - 2;
+    const radius = Math.floor(blockSize / 2) - 2;
 
     // 플레이어 색칠: 원형. 목적지 위에 덮어져야 하므로 마지막에 색칠.
     context.fillStyle = theme.playerColor;
