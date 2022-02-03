@@ -5,11 +5,6 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
 
-  body {
-    width: 100vw;
-    height: 100vh;
-  }
-
   button, input[type="button"] {
     color: #ffffff;
     background-color: ${(props) => props.theme.backgroundColor};

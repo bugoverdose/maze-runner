@@ -9,7 +9,7 @@ export const GameBoxContainer = styled.div`
 
   flex-direction: column;
 
-  @media ${(props) => props.theme.device.bigScreen} {
+  @media ${(props) => props.theme.device.modeChange} {
     flex-direction: row;
   }
 `;

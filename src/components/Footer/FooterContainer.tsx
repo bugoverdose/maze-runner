@@ -2,26 +2,19 @@ import styled from "styled-components";
 import { PreventSelect } from "../../styles";
 
 export const FooterContainer = styled.footer`
-  // absolute은 화면이 줄어들어서 스크롤다운이 가능해졌을 때 element에 남아있음. 스크롤해도 따라오지 않음.
-  position: fixed; // fixed는 화면 기준. absolute은 element 기준
-  bottom: 0;
-  right: 0;
   display: flex;
   flex-direction: row;
+  justify-content: end;
+
   font-weight: 600;
   background-color: white;
 
-  padding: 4px;
-  font-size: 16px;
-  border-top: 1px black solid;
-  border-left: 1px black solid;
+  font-size: 20px;
+  padding: 10px 0px;
 
   ${PreventSelect}
 
-  @media ${(props) => props.theme.device.bigScreen} {
-    padding: 10px;
-    font-size: 20px;
-    border-top: 2px black solid;
-    border-left: 2px black solid;
+  @media ${(props) => props.theme.device.minimum} {
+    padding: 10px 20px 10px 0px;
   }
 `;

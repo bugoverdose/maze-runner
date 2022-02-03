@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const GameInfoBox = styled.div`
   display: none;
 
-  @media ${(props) => props.theme.device.bigScreen} {
+  @media ${(props) => props.theme.device.modeChange} {
     display: flex;
     flex-direction: column;
     align-items: center;

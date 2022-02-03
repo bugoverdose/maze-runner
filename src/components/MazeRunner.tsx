@@ -7,7 +7,6 @@ import { MazeRunnerWrapper } from "./wrapper";
 import { useTimerSetup, usePopup } from "../hooks";
 import { MazeRunnerContext } from "../context";
 import GameBox from "./GameBox";
-import { MazeRunnerContainer } from "./container";
 
 const MazeRunner = () => {
   const { time, setTime, isFinished } = useContext(MazeRunnerContext);
@@ -21,15 +20,13 @@ const MazeRunner = () => {
 
   return (
     <>
-      <BlackScreen />
       <MazeRunnerWrapper>
-        <MazeRunnerContainer>
-          <Header>Maze Runner</Header>
-          <GameBox />
-        </MazeRunnerContainer>
+        <Header>Maze Runner</Header>
+        <GameBox />
+        <Footer />
       </MazeRunnerWrapper>
+      <BlackScreen />
       {isPopupMode && <Popup />}
-      <Footer />
     </>
   );
 };

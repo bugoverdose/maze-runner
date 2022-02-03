@@ -13,7 +13,7 @@ declare module "styled-components" {
 
     device: {
       minimum: string;
-      bigScreen: string;
+      modeChange: string;
     };
   }
 }

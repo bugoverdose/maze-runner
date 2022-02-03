@@ -15,7 +15,7 @@ export const HelpText = styled.span`
   top: -120px;
   left: -150px;
 
-  @media ${(props) => props.theme.device.bigScreen} {
+  @media ${(props) => props.theme.device.modeChange} {
     width: auto;
 
     top: -100px;

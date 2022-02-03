@@ -13,9 +13,6 @@ export const theme: DefaultTheme = {
 
   device: {
     minimum: `(min-width: ${width.minimum})`,
-    bigScreen: `(min-width: ${width.bigScreen})`,
+    modeChange: `(min-width: ${width.modeChange})`,
   },
 };
-
-// ${(props) => props.theme.textColor}
-// ${(props) => props.theme.device.bigScreen}

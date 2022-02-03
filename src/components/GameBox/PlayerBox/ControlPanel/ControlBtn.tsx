@@ -7,8 +7,4 @@ export const ControlBtn = styled.input.attrs({ type: "button" })`
   font-size: 25px;
 
   border-color: ${(props) => props.theme.wallColor};
-
-  @media ${(props) => props.theme.device.bigScreen} {
-    font-size: 30px;
-  }
 `;

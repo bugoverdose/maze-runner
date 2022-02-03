@@ -7,7 +7,7 @@ export const ControlPanelWrapper = styled.div`
   grid-template-rows: repeat(2, 40px);
   margin-top: 20px;
 
-  @media ${(props) => props.theme.device.bigScreen} {
+  @media ${(props) => props.theme.device.modeChange} {
     grid-template-columns: repeat(3, 50px);
     grid-template-rows: repeat(2, 50px);
   }
