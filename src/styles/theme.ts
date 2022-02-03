@@ -6,7 +6,7 @@ export const theme: DefaultTheme = {
   wallColor: "#c8d6e5",
   playerColor: "#ff0000",
   finishColor: "#00eaff",
-  textColor: "rgba(0, 0, 0, 0.8)",
+  blackOutBackgroundColor: "rgba(0, 0, 0, 0.8)",
 
   darkPurple: "#552b85",
   lightPurple: "#8768aa",

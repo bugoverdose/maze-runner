@@ -7,6 +7,4 @@ export const Header = styled.header`
   white-space: nowrap;
 
   ${PreventSelect}
-
-  color: ${(props) => props.theme.textColor};
 `;

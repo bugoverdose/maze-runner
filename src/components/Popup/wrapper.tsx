@@ -19,6 +19,8 @@ export const PopupWrapper = styled.div`
 
   ${PreventSelect}
 
+  background-color: ${(props) => props.theme.blackOutBackgroundColor};
+
   @media ${(props) => props.theme.device.modeChange} {
     padding: 30px;
   }

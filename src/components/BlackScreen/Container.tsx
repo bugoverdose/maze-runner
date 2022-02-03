@@ -17,7 +17,7 @@ export const Container = styled.div`
   height: 100%;
   width: 100%;
 
-  background-color: ${(props) => props.theme.textColor};
+  background-color: ${(props) => props.theme.blackOutBackgroundColor};
 
   @media ${(props) => props.theme.device.minimum} {
     display: none;

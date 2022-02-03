@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { GlobalStyle } from "./styles/global";
-import MazeRunner from "./components/MazeRunner";
-import { ResetStyle } from "./styles/reset";
-import { Maze } from "./domains/Maze";
-import { MazeRunnerContext } from "./context";
+import { GlobalStyle } from "../styles/global";
+import MazeRunner from "./MazeRunner";
+import { ResetStyle } from "../styles/reset";
+import { Maze } from "../domains/Maze";
+import { MazeRunnerContext } from "../context";
 
 const App = () => {
   const [maze] = useState(new Maze());

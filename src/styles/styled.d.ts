@@ -6,7 +6,7 @@ declare module "styled-components" {
     wallColor: string;
     playerColor: string;
     finishColor: string;
-    textColor: string;
+    blackOutBackgroundColor: string;
 
     darkPurple: string;
     lightPurple: string;

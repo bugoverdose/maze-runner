@@ -15,4 +15,8 @@ export const PopupContainer = styled.div`
   padding: 20px 25px;
 
   max-width: 550px;
+
+  @media ${(props) => props.theme.device.modeChange} {
+    padding: 35px 40px;
+  }
 `;
