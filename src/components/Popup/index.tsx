@@ -1,6 +1,10 @@
 import { useContext } from "react";
 import { MazeRunnerContext } from "../../context";
 import { PopupWrapper } from "./wrapper";
+import { PopupContainer } from "./container";
+import { CongratsText } from "./CongratsText";
+import { LevelText } from "./LevelText";
+import { ScoreText } from "./ScoreText";
 
 export const Popup = () => {
   const { maze, moveCount, time } = useContext(MazeRunnerContext);
@@ -9,19 +13,15 @@ export const Popup = () => {
   // 팝업이 떠있는 동안에는 게임 종료 시점 데이터를 그대로 보여주도록, 재렌더링되지 않도록 getter를 실행, 혹은 setState가 호출될 수 없도록 설정.
 
   const level = maze.getLevel();
-  // const moveCount = maze.getPlayerMoveCount();
 
   return (
     <PopupWrapper>
-      <div>
-        <div>Congratulations! </div>
-        <div>
-          Maze Size: {level} x {level}
-        </div>
-        <div>
-          You have finished in {moveCount} moves and {time} seconds!
-        </div>
-      </div>
+      <PopupContainer>
+        <CongratsText>Congratulations!</CongratsText>
+        <LevelText>{`Maze Size: ${level} x ${level}`}</LevelText>
+        <ScoreText>You have finished in</ScoreText>
+        <ScoreText>{`${moveCount} moves & ${time} seconds`}</ScoreText>
+      </PopupContainer>
     </PopupWrapper>
   );
 };
