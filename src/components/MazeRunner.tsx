@@ -1,14 +1,13 @@
 import React, { useContext, useState } from "react";
 import { Footer } from "./Footer";
 import { Popup } from "./Popup";
-import { Canvas } from "./MazeCanvas";
 import { BlackScreen } from "./BlackScreen";
 import { Header } from "./Header";
-import { PlayerBox } from "./PlayerBox";
 import { MazeRunnerWrapper } from "./wrapper";
-import { MazeRunnerContainer } from "./container";
 import { useTimerSetup, usePopup } from "../hooks";
 import { MazeRunnerContext } from "../context";
+import GameBox from "./GameBox";
+import { MazeRunnerContainer } from "./container";
 
 const MazeRunner = () => {
   const { time, setTime, isFinished } = useContext(MazeRunnerContext);
@@ -24,10 +23,9 @@ const MazeRunner = () => {
     <>
       <BlackScreen />
       <MazeRunnerWrapper>
-        <Header>Maze Runner</Header>
         <MazeRunnerContainer>
-          <Canvas />
-          <PlayerBox />
+          <Header>Maze Runner</Header>
+          <GameBox />
         </MazeRunnerContainer>
       </MazeRunnerWrapper>
       {isPopupMode && <Popup />}

@@ -9,7 +9,7 @@ export const RESPONSIVE_CELL_SIZE = () => {
 };
 
 const MOBILE = 320;
-const MOBILE_HEIGHT = 520;
+const MOBILE_HEIGHT = 400;
 const BIG_SCREEN = 768;
 
 export const width = {

@@ -8,8 +8,8 @@
 
 ## TODO
 
+- [ ] fix responsive design & layout
 - [ ] open graph tags for sharing links
-- [ ] fix responsive design & layout : https://stackoverflow.com/questions/34772957/how-to-make-canvas-responsive
 - [ ] reset position 기능 : 미로 전체를 다시 만들지 말고, 사용자 위치, 시간, 이동거리만 리셋
 - [ ] 미로 크기별 최고점수 기록 기능
 

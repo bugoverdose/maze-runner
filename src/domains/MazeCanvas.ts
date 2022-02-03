@@ -34,6 +34,7 @@ export class MazeCanvas {
     const canvas: HTMLCanvasElement = this.canvasRef.current;
     let context = canvas.getContext("2d") as CanvasRenderingContext2D;
 
+    console.log(this.canvasRef.current);
     const cellSize = RESPONSIVE_CELL_SIZE();
 
     this.paintBackground(context);

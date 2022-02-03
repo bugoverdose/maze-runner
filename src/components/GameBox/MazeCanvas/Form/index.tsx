@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { INITIAL_LEVEL } from "../../../constants";
-import { MazeRunnerContext } from "../../../context";
-import { blurOnSubmit, toValidInput, validateInput } from "../../../utils";
+import { INITIAL_LEVEL } from "../../../../constants";
+import { MazeRunnerContext } from "../../../../context";
+import { blurOnSubmit, toValidInput, validateInput } from "../../../../utils";
 import { SGeneratorForm } from "./SGeneratorForm";
 import { SubmitBtn } from "./SubmitBtn";
 import { LevelInput } from "./LevelInput";

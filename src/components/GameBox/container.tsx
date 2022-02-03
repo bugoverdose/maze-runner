@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
-export const MazeRunnerContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 50px 1fr;
-
-  padding: 50px 0;
+export const GameBoxContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: auto;
 
   @media ${(props) => props.theme.device.mobile} {
     flex-direction: column;

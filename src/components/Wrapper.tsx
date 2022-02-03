@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
 export const MazeRunnerWrapper = styled.div`
-  text-align: center;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  width: 100vw;
-  color: ${(props) => props.theme.textColor};
+
+  /* height: 100vh; */
+  /* width: 100vw; */
+
+  text-align: center;
 `;
