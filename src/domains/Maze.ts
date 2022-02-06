@@ -7,8 +7,8 @@ import { Player } from "./Player";
 export class Maze {
   private blocks: MazeBlock[][];
   private player: Player;
-  private mazeCanvas: MazeCanvas;
   private level: number;
+  private mazeCanvas: MazeCanvas;
 
   public moveCountRef: number = 0;
   public isFinishedRef: boolean = false;
@@ -33,8 +33,8 @@ export class Maze {
   }
 
   public getPlayerPosition(): number[] {
-    const [col, row] = this.player.curPosition;
-    return [col, row];
+    const [col, row, faceDirection] = this.player.curPosition;
+    return [col, row, faceDirection];
   }
 
   private getPlayerPositionBlock(): MazeBlock {
@@ -42,9 +42,9 @@ export class Maze {
     return this.getBlockByColAndRow(col, row);
   }
 
-  public movePlayer(keyInput: string) {
+  public movePlayer(directionIdx: number) {
     const playerPosition = this.getPlayerPositionBlock();
-    const hasMoved = this.player.move(keyInput, playerPosition);
+    const hasMoved = this.player.move(directionIdx, playerPosition);
     return hasMoved;
   }
 
@@ -66,6 +66,7 @@ export class Maze {
   }
 
   public paintCanvas() {
+    // get player direction from current position
     this.mazeCanvas.render(this);
   }
 

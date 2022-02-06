@@ -1,24 +1,27 @@
-import { ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP } from "../constants";
 import { MazeBlock } from "./MazeBlock";
 
 export class Player {
   private col: number;
   private row: number;
+  private faceDirection: number;
 
   constructor() {
     this.col = 0;
     this.row = 0;
+    this.faceDirection = -1; // [0, 1, 2, 3] == [north, east, south, west]
   }
 
   public get curPosition(): number[] {
-    return [this.col, this.row];
+    return [this.col, this.row, this.faceDirection];
   }
 
-  public move(input: string, cur: MazeBlock): boolean {
-    if (input === ARROW_UP && !cur.northWallExists()) return this.goNorth();
-    if (input === ARROW_RIGHT && !cur.eastWallExists()) return this.goEast();
-    if (input === ARROW_DOWN && !cur.southWallExists()) return this.goSouth();
-    if (input === ARROW_LEFT && !cur.westWallExists()) return this.goWest();
+  public move(directionIdx: number, cur: MazeBlock): boolean {
+    this.faceDirection = directionIdx;
+
+    if (directionIdx === 0 && !cur.northWallExists()) return this.goNorth();
+    if (directionIdx === 1 && !cur.eastWallExists()) return this.goEast();
+    if (directionIdx === 2 && !cur.southWallExists()) return this.goSouth();
+    if (directionIdx === 3 && !cur.westWallExists()) return this.goWest();
     return false;
   }
 

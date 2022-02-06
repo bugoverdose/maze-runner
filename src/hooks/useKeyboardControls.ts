@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { blurOnSubmit, getDirectionIndex } from "../utils";
 
 export const useKeyboardControls = (
-  onControlPlayer: (direction: string) => boolean,
+  onControlPlayer: (directionIdx: number) => boolean,
   refs: React.RefObject<HTMLInputElement>[] // [upKey, rightKey, downKey, leftKey]
 ) => {
   useEffect(() => {
@@ -15,7 +15,7 @@ export const useKeyboardControls = (
 
       targetArrowKey?.focus();
 
-      const hasMoved = onControlPlayer(event.key); // "ArrowDown", "ArrowLeft", etc
+      const hasMoved = onControlPlayer(directionIdx); // 0, 1, 2, 3
 
       if (hasMoved) event.preventDefault(); // prevent scroll event only if player has moved
     };
