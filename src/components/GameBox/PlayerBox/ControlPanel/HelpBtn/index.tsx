@@ -7,8 +7,8 @@ export const HelpBtn = () => {
     <HelpBtnContainer>
       <QuestionMarkLogo />
       <HelpText>
-        Click the buttons or use your keyboard to move the red dot and reach the
-        blue area!
+        Click the buttons or use your keyboard to move the red blob and reach
+        the blue area!
       </HelpText>
     </HelpBtnContainer>
   );
