@@ -60,11 +60,21 @@ export class Maze {
 
   public generateMaze() {
     this.generateMazeStructure();
+    this.setRandomFacingDirection();
     this.paintCanvas();
   }
 
   public paintCanvas() {
     this.mazeCanvas.render(this);
+  }
+
+  private setRandomFacingDirection() {
+    const [playerCol, playerRow] = this.player.curPosition;
+    const noWallDirections =
+      this.blocks[playerCol][playerRow].getNoWallDirections();
+    const randomIdx = Math.floor(Math.random() * noWallDirections.length);
+
+    this.player.setFaceDirection(noWallDirections[randomIdx]);
   }
 
   private generateMazeStructure() {

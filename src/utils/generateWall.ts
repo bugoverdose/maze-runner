@@ -21,15 +21,9 @@ export const checkOutOfMaze = (
   curCol: number,
   curRow: number
 ) => {
-  if (dir === 0) {
-    return curRow <= 0;
-  }
-  if (dir === 1) {
-    return curCol >= level - 1;
-  }
-  if (dir === 2) {
-    return curRow >= level - 1;
-  }
+  if (dir === 0) return curRow <= 0;
+  if (dir === 1) return curCol >= level - 1;
+  if (dir === 2) return curRow >= level - 1;
   return curCol <= 0;
 };
 

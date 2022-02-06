@@ -26,6 +26,23 @@ export class MazeBlock {
     this.visited = visited;
   }
 
+  public getNoWallDirections() {
+    const noWallDirections = [];
+
+    const walls = [
+      this.northWall,
+      this.eastWall,
+      this.southWall,
+      this.westWall,
+    ];
+
+    for (let idx = 0; idx < 4; idx++) {
+      if (!walls[idx]) noWallDirections.push(idx);
+    }
+
+    return noWallDirections;
+  }
+
   public northWallExists() {
     return this.northWall;
   }

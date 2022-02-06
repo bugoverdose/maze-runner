@@ -15,6 +15,10 @@ export class Player {
     return [this.col, this.row, this.faceDirection];
   }
 
+  public setFaceDirection(directionIdx: number) {
+    this.faceDirection = directionIdx;
+  }
+
   public move(directionIdx: number, cur: MazeBlock): boolean {
     this.faceDirection = directionIdx;
 

@@ -111,7 +111,7 @@ export class MazeCanvas {
     maze: Maze
   ) {
     const [col, row, faceDirection] = maze.getPlayerPosition();
-
+    console.log(faceDirection);
     const colCenter = col * blockSize + blockSize / 2;
     const rowCenter = row * blockSize + blockSize / 2;
 
