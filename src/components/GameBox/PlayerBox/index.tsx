@@ -3,7 +3,7 @@ import { MazeRunnerContext } from "../../../context";
 import { ControlPanel } from "./ControlPanel";
 import { GameInfoBox } from "./GameInfoBox";
 import { MovementCountBox } from "./MovementCountBox";
-import { PlayBoxContainer } from "./PlayBoxContainer";
+import { PlayBoxContainer } from "./container";
 
 export const PlayerBox = () => {
   const { moveCount, time } = useContext(MazeRunnerContext);

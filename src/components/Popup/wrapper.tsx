@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { PreventSelect } from "../../styles";
 
 export const PopupWrapper = styled.div`
   position: fixed; // 스크롤 내리더라도 브라우저 화면 자체를 기준으로 최초로 렌더링된 위치에 고정
@@ -17,7 +16,7 @@ export const PopupWrapper = styled.div`
 
   z-index: 80;
 
-  ${PreventSelect}
+  ${(props) => props.theme.preventSelect};
 
   background-color: ${(props) => props.theme.blackOutBackgroundColor};
 

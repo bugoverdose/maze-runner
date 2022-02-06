@@ -1,5 +1,5 @@
 import { createRef } from "react";
-import { theme } from "../styles";
+import { theme } from "../styles/theme";
 import { endPosition, startPosition } from "../utils";
 import { Maze } from "./Maze";
 import { MazeBlock } from "./MazeBlock";

@@ -1,4 +1,5 @@
 import { DefaultTheme } from "styled-components";
+import { PreventSelect } from "./preventSelect";
 import { width } from "../constants";
 
 export const theme: DefaultTheme = {
@@ -15,4 +16,6 @@ export const theme: DefaultTheme = {
     minimum: `(min-width: ${width.minimum})`,
     modeChange: `(min-width: ${width.modeChange})`,
   },
+
+  preventSelect: PreventSelect,
 };

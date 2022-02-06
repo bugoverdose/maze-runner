@@ -2,12 +2,12 @@ export class MazeBlock {
   private col: number;
   private row: number;
 
-  private visited: boolean = false;
-
   private northWall: boolean = true;
   private eastWall: boolean = true;
   private southWall: boolean = true;
   private westWall: boolean = true;
+
+  private visited: boolean = false; // for BFS logic on maze generation only
 
   constructor(col: number, row: number) {
     this.col = col;

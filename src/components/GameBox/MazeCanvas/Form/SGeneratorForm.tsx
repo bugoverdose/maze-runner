@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import { PreventSelect } from "../../../../styles";
 
 export const SGeneratorForm = styled.form`
-  ${PreventSelect}
+  ${(props) => props.theme.preventSelect};
 
   white-space: nowrap;
 

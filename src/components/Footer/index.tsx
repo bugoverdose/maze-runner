@@ -1,5 +1,5 @@
 import { CreatedByText } from "./CreatedByText";
-import { FooterContainer } from "./FooterContainer";
+import { FooterContainer } from "./container";
 import { GithubLink } from "./GithubLink";
 
 export const Footer = () => (

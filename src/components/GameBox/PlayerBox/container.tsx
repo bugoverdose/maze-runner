@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { PreventSelect } from "../../../styles";
 
 export const PlayBoxContainer = styled.div`
   display: flex;
@@ -8,7 +7,7 @@ export const PlayBoxContainer = styled.div`
   align-items: center;
   font-size: 20px;
 
-  ${PreventSelect}
+  ${(props) => props.theme.preventSelect};
 
   height: 100%;
 `;

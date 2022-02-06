@@ -15,5 +15,7 @@ declare module "styled-components" {
       minimum: string;
       modeChange: string;
     };
+
+    preventSelect: FlattenSimpleInterpolation;
   }
 }
