@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/maze-runner/static/js/main.b3cf5a40.js",
+    "index.html": "/maze-runner/index.html",
+    "main.b3cf5a40.js.map": "/maze-runner/static/js/main.b3cf5a40.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.b3cf5a40.js"
+  ]
+}
