@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { INITIAL_LEVEL } from "../../../../constants";
 import { MazeRunnerContext } from "../../../../context";
 import { blurOnSubmit, toValidInput, validateInput } from "../../../../utils";
@@ -10,7 +10,6 @@ export const GeneratorForm = () => {
   const { maze, setMoveCount, setTime, setIsFinished } =
     useContext(MazeRunnerContext);
 
-  const [initGenerateMaze, setInitGenerateMaze] = useState(true);
   const [levelInput, setLevelInput] = useState(INITIAL_LEVEL);
 
   const onInputChange = (event: React.FormEvent<HTMLInputElement>) => {
@@ -38,19 +37,12 @@ export const GeneratorForm = () => {
   const resetGame = (validLevel: number) => {
     maze.reset(validLevel);
 
-    setInitGenerateMaze(true);
+    maze.generateMaze();
 
     setTime(0);
     setMoveCount(0);
     setIsFinished(false);
   };
-
-  useEffect(() => {
-    if (!initGenerateMaze) return;
-
-    maze.generateMaze(); // 이벤트리스너 내부에서 직접 호출시 실행 안됨.
-    setInitGenerateMaze(false); // eslint-disable-next-line
-  }, [initGenerateMaze]);
 
   return (
     <SGeneratorForm onSubmit={(e) => onGenerate(e)}>

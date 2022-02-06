@@ -18,8 +18,6 @@ export class Maze {
     this.player = new Player();
     this.level = INITIAL_LEVEL;
     this.mazeCanvas = new MazeCanvas(this.level);
-
-    this.generateMazeStructure();
   }
 
   public reset(level: number) {
@@ -66,7 +64,6 @@ export class Maze {
   }
 
   public paintCanvas() {
-    // get player direction from current position
     this.mazeCanvas.render(this);
   }
 

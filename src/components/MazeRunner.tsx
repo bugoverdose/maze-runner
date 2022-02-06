@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Footer } from "./Footer";
 import { Popup } from "./Popup";
 import { BlackScreen } from "./BlackScreen";
@@ -9,7 +9,7 @@ import { MazeRunnerContext } from "../context";
 import GameBox from "./GameBox";
 
 const MazeRunner = () => {
-  const { time, setTime, isFinished } = useContext(MazeRunnerContext);
+  const { maze, time, setTime, isFinished } = useContext(MazeRunnerContext);
 
   const incrementTime = (num: number) => setTime(num + 1);
   const [isPopupMode, setIsPopupMode] = useState(false);
@@ -17,6 +17,11 @@ const MazeRunner = () => {
   useTimerSetup({ isFinished, incrementTime, time });
 
   usePopup({ isFinished, isPopupMode, setIsPopupMode });
+
+  useEffect(() => {
+    // initialize maze structure & paint it on canvas on page load
+    maze.generateMaze(); // eslint-disable-next-line
+  }, []);
 
   return (
     <>
