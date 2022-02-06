@@ -3,7 +3,7 @@ import { Footer } from "./Footer";
 import { Popup } from "./Popup";
 import { BlackScreen } from "./BlackScreen";
 import { Header } from "./Header";
-import { MazeRunnerWrapper } from "./wrapper";
+import { MazeRunnerWrapper } from "./MazeRunnerWrapper";
 import { useTimerSetup, usePopup } from "../hooks";
 import { MazeRunnerContext } from "../context";
 import GameBox from "./GameBox";

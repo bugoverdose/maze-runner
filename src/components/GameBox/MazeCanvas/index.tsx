@@ -1,5 +1,5 @@
 import { SCanvas } from "./SCanvas";
-import { MazeContainer } from "./container";
+import { MazeContainer } from "./MazeContainer";
 import { GeneratorForm } from "./Form";
 import { useContext } from "react";
 import { MazeRunnerContext } from "../../../context";

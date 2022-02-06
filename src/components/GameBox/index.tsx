@@ -1,4 +1,4 @@
-import { GameBoxContainer } from "./container";
+import { GameBoxContainer } from "./GameBoxContainer";
 import { Canvas } from "./MazeCanvas";
 import { PlayerBox } from "./PlayerBox";
 

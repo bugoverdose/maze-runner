@@ -1,11 +1,11 @@
-import { Container } from "./container";
-import { TextWrapper } from "./TextWrapper";
+import { BlackScreenContainer } from "./BlackScreenContainer";
+import { WarningText } from "./WarningText";
 
 export const BlackScreen = () => {
   return (
-    <Container>
-      <TextWrapper>Your Screen</TextWrapper>
-      <TextWrapper>Is Too Small!</TextWrapper>
-    </Container>
+    <BlackScreenContainer>
+      <WarningText>Your Screen</WarningText>
+      <WarningText>Is Too Small!</WarningText>
+    </BlackScreenContainer>
   );
 };

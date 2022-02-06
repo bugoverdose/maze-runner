@@ -3,7 +3,7 @@ import { MazeRunnerContext } from "../../../../context";
 import { useKeyboardControls } from "../../../../hooks";
 import { ControlBtn } from "./ControlBtn";
 import { HelpBtn } from "./HelpBtn";
-import { ControlPanelWrapper } from "./wrapper";
+import { ControlPanelWrapper } from "./ControlPanelWrapper";
 
 export const ControlPanel = () => {
   const { maze, setMoveCount, setIsFinished } = useContext(MazeRunnerContext);

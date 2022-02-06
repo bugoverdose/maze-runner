@@ -1,4 +1,4 @@
-import { HelpBtnContainer } from "./container";
+import { HelpBtnContainer } from "./HelpBtnContainer";
 import { QuestionMarkLogo } from "./QuestionMarkLogo";
 import { HelpText } from "./HelpText";
 

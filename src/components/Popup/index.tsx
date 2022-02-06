@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { MazeRunnerContext } from "../../context";
-import { PopupWrapper } from "./wrapper";
-import { PopupContainer } from "./container";
+import { PopupWrapper } from "./PopupWrapper";
+import { PopupContainer } from "./PopupContainer";
 import { CongratsText } from "./CongratsText";
 import { LevelText } from "./LevelText";
 import { ScoreText } from "./ScoreText";
