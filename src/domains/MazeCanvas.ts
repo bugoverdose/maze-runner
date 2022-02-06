@@ -111,19 +111,79 @@ export class MazeCanvas {
     maze: Maze
   ) {
     const [col, row, faceDirection] = maze.getPlayerPosition();
-    console.log(faceDirection);
-    const colCenter = col * blockSize + blockSize / 2;
-    const rowCenter = row * blockSize + blockSize / 2;
+    const blockColPosition = col * blockSize;
+    const blockRowPosition = row * blockSize;
+    const centerPos = blockSize / 2;
 
-    const radius = Math.floor(blockSize / 2) - 2;
+    const colCenter = blockColPosition + centerPos;
+    const rowCenter = blockRowPosition + centerPos;
+    const bodyRadius = Math.floor(centerPos) - 2;
 
     // 플레이어 색칠: 원형. 목적지 위에 덮어져야 하므로 마지막에 색칠.
     context.fillStyle = theme.playerColor;
     context.strokeStyle = theme.playerColor;
     context.beginPath();
 
-    context.arc(colCenter, rowCenter, radius, 0, 2 * Math.PI);
+    context.arc(colCenter, rowCenter, bodyRadius, 0, 2 * Math.PI);
     context.stroke();
     context.fill();
+
+    // 눈 색칠
+    context.fillStyle = theme.backgroundColor;
+    context.strokeStyle = theme.backgroundColor;
+
+    const eyeRadiusX = bodyRadius / 24;
+    const eyeRadiusY = eyeRadiusX * 3;
+    const { leftEye, rightEye, rotation } = this.calculateEyePositions(
+      blockSize,
+      faceDirection
+    );
+
+    [leftEye, rightEye].forEach((eyePositioning) => {
+      context.beginPath();
+      context.ellipse(
+        blockColPosition + eyePositioning[0],
+        blockRowPosition + eyePositioning[1],
+        eyeRadiusX,
+        eyeRadiusY,
+        rotation,
+        0,
+        2 * Math.PI
+      );
+      context.stroke();
+      context.fill();
+    });
+  }
+
+  private calculateEyePositions(blockSize: number, directionIdx: number) {
+    const cheekSize = (blockSize * 4) / 10;
+    const noseSize = 1 + blockSize / 6;
+
+    // North
+    let leftEye = [cheekSize, noseSize];
+    let rightEye = [blockSize - cheekSize, noseSize];
+    let rotation = 0;
+
+    // East
+    if (directionIdx === 1) {
+      leftEye = [blockSize - noseSize, cheekSize];
+      rightEye = [blockSize - noseSize, blockSize - cheekSize];
+      rotation = Math.PI / 2;
+    }
+
+    // South
+    if (directionIdx === 2) {
+      leftEye = [blockSize - cheekSize, blockSize - noseSize];
+      rightEye = [cheekSize, blockSize - noseSize];
+    }
+
+    // West
+    if (directionIdx === 3) {
+      leftEye = [noseSize, blockSize - cheekSize];
+      rightEye = [noseSize, cheekSize];
+      rotation = Math.PI / 2;
+    }
+
+    return { leftEye, rightEye, rotation };
   }
 }

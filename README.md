@@ -14,9 +14,11 @@
 
   - Only square shaped maze are allowed to simplify layout.
 
-- Move the player (red dot) to the finish block (blue block) at the bottom right.
+- Move the player (red blob) to the finish block (blue block) at the bottom right.
 
   - On starting a new maze, the move count and the time couner will both be set to 0. And the player will be placed at the top left block.
+
+  - The initial facing direction of the player will be one of the directions with no walls.
 
   - On moving the player, the move count will increment and will be shown on the screen (big screen only).
 
@@ -24,13 +26,15 @@
 
 - On reaching the finish block, a pop up will become visible to show how many moves and seconds have passed.
 
-  - The player can move around after the game ended, but the move count and the time counter will not change until regenerating a new maze.
+  - The player can move around after the game ended, but the move count and the time counter will not change until generating a new maze.
 
 ### Controls
 
 - _Clicking_ the arrow key buttons on the screen will move the player.
 
   - If there is a wall on the direction player is trying to go to, there will be no move count increase and nothing will happen.
+
+  - The facing direction of the player will change even if the position didn't change.
 
 - _Pressing_ arrow keys **on the keyboard** will also move the player.
 
@@ -65,11 +69,6 @@
 - No element is responsive to height change because that would mess up everything. If the screen height is not enough, the user will have to scroll down.
 
 ## Enhancements
-
-- Give eyes to the red dot.
-
-  - Match the eye direction to the previous move direction.
-  - Default eye direction to a no-wall direction.
 
 - Blob sound on moving the player.
 
