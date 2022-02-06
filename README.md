@@ -2,6 +2,8 @@
 
 - A game site where you escape from a maze that is randomly generated.
 
+- [Click to play](https://bugoverdose.github.io/maze-runner/)
+
 ## Features
 
 ### Game
@@ -68,14 +70,10 @@
 
 - No element is responsive to height change because that would mess up everything. If the screen height is not enough, the user will have to scroll down.
 
-## Enhancements
+## TODO
 
-- Blob sound on moving the player.
+- Add blob sound on player movement.
 
-- Open graph meta tags for sharing links.
+- Reset button to reset current game without generating a new maze.
 
-  - It's basic stuff, but I'll need to prepare some images.
-
-- Reset position button for reseting current game without generating the entire maze.
-
-  - It's really easy to implement, but where should we put the button?
+- Show _Go to Next level button_ after finishing a game.
