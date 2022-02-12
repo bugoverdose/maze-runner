@@ -25,11 +25,10 @@ export class MazeCanvas {
     if (!this.canvasRef.current?.getContext("2d")) return;
 
     const canvas: HTMLCanvasElement = this.canvasRef.current;
+    let context = canvas.getContext("2d") as CanvasRenderingContext2D;
 
     const canvasSize = canvas.width;
     canvas.height = canvasSize;
-
-    let context = canvas.getContext("2d") as CanvasRenderingContext2D;
 
     const blockSize = canvasSize / this.level;
 
@@ -114,12 +113,46 @@ export class MazeCanvas {
     const blockColPosition = col * blockSize;
     const blockRowPosition = row * blockSize;
     const centerPos = blockSize / 2;
-
-    const colCenter = blockColPosition + centerPos;
-    const rowCenter = blockRowPosition + centerPos;
     const bodyRadius = Math.floor(centerPos) - 2;
 
     // 플레이어 색칠: 원형. 목적지 위에 덮어져야 하므로 마지막에 색칠.
+    this.paintPlayerBody(
+      context,
+      blockColPosition,
+      blockRowPosition,
+      centerPos,
+      bodyRadius
+    );
+
+    // 눈 색칠
+    const { leftEye, rightEye } = this.calculateEyePositions(
+      blockSize,
+      faceDirection
+    );
+    const rotation = this.calculateRotation(faceDirection);
+
+    [leftEye, rightEye].forEach((eyePositioning) => {
+      this.paintPlayerEye(
+        context,
+        blockColPosition + eyePositioning[0],
+        blockRowPosition + eyePositioning[1],
+        bodyRadius / 24,
+        bodyRadius / 8,
+        rotation
+      );
+    });
+  }
+
+  private paintPlayerBody(
+    context: CanvasRenderingContext2D,
+    blockColPosition: number,
+    blockRowPosition: number,
+    centerPos: number,
+    bodyRadius: number
+  ) {
+    const colCenter = blockColPosition + centerPos;
+    const rowCenter = blockRowPosition + centerPos;
+
     context.fillStyle = theme.playerColor;
     context.strokeStyle = theme.playerColor;
     context.beginPath();
@@ -127,63 +160,83 @@ export class MazeCanvas {
     context.arc(colCenter, rowCenter, bodyRadius, 0, 2 * Math.PI);
     context.stroke();
     context.fill();
+  }
 
-    // 눈 색칠
+  private paintPlayerEye(
+    context: CanvasRenderingContext2D,
+    colPosition: number,
+    rowPosition: number,
+    eyeRadiusX: number,
+    eyeRadiusY: number,
+    rotation: number
+  ) {
     context.fillStyle = theme.backgroundColor;
     context.strokeStyle = theme.backgroundColor;
+    context.beginPath();
 
-    const eyeRadiusX = bodyRadius / 24;
-    const eyeRadiusY = eyeRadiusX * 3;
-    const { leftEye, rightEye, rotation } = this.calculateEyePositions(
-      blockSize,
-      faceDirection
+    context.ellipse(
+      colPosition,
+      rowPosition,
+      eyeRadiusX,
+      eyeRadiusY,
+      rotation,
+      0,
+      2 * Math.PI
     );
-
-    [leftEye, rightEye].forEach((eyePositioning) => {
-      context.beginPath();
-      context.ellipse(
-        blockColPosition + eyePositioning[0],
-        blockRowPosition + eyePositioning[1],
-        eyeRadiusX,
-        eyeRadiusY,
-        rotation,
-        0,
-        2 * Math.PI
-      );
-      context.stroke();
-      context.fill();
-    });
+    context.stroke();
+    context.fill();
   }
 
   private calculateEyePositions(blockSize: number, directionIdx: number) {
     const cheekSize = (blockSize * 4) / 10;
     const noseSize = 1 + blockSize / 6;
 
-    // North
-    let leftEye = [cheekSize, noseSize];
-    let rightEye = [blockSize - cheekSize, noseSize];
-    let rotation = 0;
+    const leftEye = this.calculateLeftEyePosition(
+      blockSize,
+      cheekSize,
+      noseSize,
+      directionIdx
+    );
+    const rightEye = this.calculateRightEyePosition(
+      blockSize,
+      cheekSize,
+      noseSize,
+      directionIdx
+    );
 
-    // East
-    if (directionIdx === 1) {
-      leftEye = [blockSize - noseSize, cheekSize];
-      rightEye = [blockSize - noseSize, blockSize - cheekSize];
-      rotation = Math.PI / 2;
+    return { leftEye, rightEye };
+  }
+
+  private calculateLeftEyePosition(
+    blockSize: number,
+    cheekSize: number,
+    noseSize: number,
+    directionIdx: number
+  ) {
+    if (directionIdx === 0) return [cheekSize, noseSize]; // North
+    if (directionIdx === 1) return [blockSize - noseSize, cheekSize]; // East
+    if (directionIdx === 2)
+      return [blockSize - cheekSize, blockSize - noseSize]; // South
+    return [noseSize, blockSize - cheekSize]; // West
+  }
+
+  private calculateRightEyePosition(
+    blockSize: number,
+    cheekSize: number,
+    noseSize: number,
+    directionIdx: number
+  ) {
+    if (directionIdx === 0) return [blockSize - cheekSize, noseSize]; // North
+    if (directionIdx === 1)
+      return [blockSize - noseSize, blockSize - cheekSize]; // East
+    if (directionIdx === 2) return [cheekSize, blockSize - noseSize]; // South
+    return [noseSize, cheekSize]; // West
+  }
+
+  private calculateRotation(directionIdx: number) {
+    if (directionIdx % 2 === 0) {
+      return 0; // North OR South
     }
-
-    // South
-    if (directionIdx === 2) {
-      leftEye = [blockSize - cheekSize, blockSize - noseSize];
-      rightEye = [cheekSize, blockSize - noseSize];
-    }
-
-    // West
-    if (directionIdx === 3) {
-      leftEye = [noseSize, blockSize - cheekSize];
-      rightEye = [noseSize, cheekSize];
-      rotation = Math.PI / 2;
-    }
-
-    return { leftEye, rightEye, rotation };
+    return Math.PI / 2; // East OR West
   }
 }
