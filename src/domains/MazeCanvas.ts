@@ -81,32 +81,40 @@ export class MazeCanvas {
 
     for (let col = 0; col < this.level; col++) {
       for (let row = 0; row < this.level; row++) {
-        this.paintWalls(context, col, row, blockSize, maze);
+        const mazeBlock: MazeBlock = maze.getBlockByColAndRow(col, row);
+        this.paintWallsByBlock(context, col, row, blockSize, mazeBlock);
       }
     }
   }
 
-  private paintWalls(
+  private paintWallsByBlock(
     context: CanvasRenderingContext2D,
     col: number,
     row: number,
     blockSize: number,
-    maze: Maze
+    mazeBlock: MazeBlock
   ) {
-    const mazeBlock: MazeBlock = maze.getBlockByColAndRow(col, row);
-
     mazeBlock.getEachWallExistance().forEach((wallExists, idx) => {
-      if (!wallExists) {
-        return;
+      if (wallExists) {
+        this.paintWall(context, idx, col, row, blockSize);
       }
-      const [fromCol, fromRow] = startPosition(idx, col, row);
-      const [toCol, toRow] = endPosition(idx, col, row);
-
-      context.beginPath();
-      context.moveTo(fromCol * blockSize, fromRow * blockSize);
-      context.lineTo(toCol * blockSize, toRow * blockSize);
-      context.stroke();
     });
+  }
+
+  private paintWall(
+    context: CanvasRenderingContext2D,
+    directionIdx: number,
+    col: number,
+    row: number,
+    blockSize: number
+  ) {
+    const [fromCol, fromRow] = startPosition(directionIdx, col, row);
+    const [toCol, toRow] = endPosition(directionIdx, col, row);
+
+    context.beginPath();
+    context.moveTo(fromCol * blockSize, fromRow * blockSize);
+    context.lineTo(toCol * blockSize, toRow * blockSize);
+    context.stroke();
   }
 
   private paintPlayer(
@@ -129,7 +137,6 @@ export class MazeCanvas {
       bodyRadius
     );
 
-    // 눈 색칠
     const rotation = this.calculateRotation(faceDirection);
     this.calculateEyePositions(blockSize, faceDirection).forEach(
       (eyePosition) => {
