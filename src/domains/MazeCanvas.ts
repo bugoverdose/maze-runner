@@ -1,4 +1,11 @@
-import { EAST_IDX, NORTH_IDX, SOUTH_IDX } from "constants/logic";
+import {
+  EAST_IDX,
+  NORTH_IDX,
+  PLAYER_BODY_RATIO,
+  PLAYER_EYE_HEIGHT_RATIO,
+  PLAYER_EYE_WIDTH_RATIO,
+  SOUTH_IDX,
+} from "constants/logic";
 import { createRef } from "react";
 import { theme } from "styles/theme";
 import { endPosition, startPosition } from "utils";
@@ -88,20 +95,17 @@ export class MazeCanvas {
   ) {
     const mazeBlock: MazeBlock = maze.getBlockByColAndRow(col, row);
 
-    const northWall = mazeBlock.northWallExists();
-    const eastWall = mazeBlock.eastWallExists();
-    const southWall = mazeBlock.southWallExists();
-    const westWall = mazeBlock.westWallExists();
-
-    [northWall, eastWall, southWall, westWall].forEach((wallExists, idx) => {
-      if (wallExists) {
-        const [fromCol, fromRow] = startPosition(idx, col, row);
-        const [toCol, toRow] = endPosition(idx, col, row);
-        context.beginPath();
-        context.moveTo(fromCol * blockSize, fromRow * blockSize);
-        context.lineTo(toCol * blockSize, toRow * blockSize);
-        context.stroke();
+    mazeBlock.getEachWallExistance().forEach((wallExists, idx) => {
+      if (!wallExists) {
+        return;
       }
+      const [fromCol, fromRow] = startPosition(idx, col, row);
+      const [toCol, toRow] = endPosition(idx, col, row);
+
+      context.beginPath();
+      context.moveTo(fromCol * blockSize, fromRow * blockSize);
+      context.lineTo(toCol * blockSize, toRow * blockSize);
+      context.stroke();
     });
   }
 
@@ -113,7 +117,7 @@ export class MazeCanvas {
     const [col, row, faceDirection] = maze.getPlayerPosition();
     const blockColPosition = col * blockSize;
     const blockRowPosition = row * blockSize;
-    const centerPos = blockSize / 2;
+    const centerPos = blockSize / PLAYER_BODY_RATIO;
     const bodyRadius = Math.floor(centerPos) - 2;
 
     // 플레이어 색칠: 원형. 목적지 위에 덮어져야 하므로 마지막에 색칠.
@@ -126,22 +130,18 @@ export class MazeCanvas {
     );
 
     // 눈 색칠
-    const { leftEye, rightEye } = this.calculateEyePositions(
-      blockSize,
-      faceDirection
-    );
     const rotation = this.calculateRotation(faceDirection);
-
-    [leftEye, rightEye].forEach((eyePositioning) => {
-      this.paintPlayerEye(
-        context,
-        blockColPosition + eyePositioning[0],
-        blockRowPosition + eyePositioning[1],
-        bodyRadius / 24,
-        bodyRadius / 8,
-        rotation
-      );
-    });
+    this.calculateEyePositions(blockSize, faceDirection).forEach(
+      (eyePosition) => {
+        this.paintPlayerEye(
+          context,
+          blockColPosition + eyePosition[0],
+          blockRowPosition + eyePosition[1],
+          bodyRadius,
+          rotation
+        );
+      }
+    );
   }
 
   private paintPlayerBody(
@@ -167,10 +167,12 @@ export class MazeCanvas {
     context: CanvasRenderingContext2D,
     colPosition: number,
     rowPosition: number,
-    eyeRadiusX: number,
-    eyeRadiusY: number,
+    bodyRadius: number,
     rotation: number
   ) {
+    const radiusX = bodyRadius / PLAYER_EYE_WIDTH_RATIO;
+    const radiusY = bodyRadius / PLAYER_EYE_HEIGHT_RATIO;
+
     context.fillStyle = theme.backgroundColor;
     context.strokeStyle = theme.backgroundColor;
     context.beginPath();
@@ -178,8 +180,8 @@ export class MazeCanvas {
     context.ellipse(
       colPosition,
       rowPosition,
-      eyeRadiusX,
-      eyeRadiusY,
+      radiusX,
+      radiusY,
       rotation,
       0,
       2 * Math.PI
@@ -189,7 +191,7 @@ export class MazeCanvas {
   }
 
   private calculateEyePositions(blockSize: number, directionIdx: number) {
-    const cheekSize = (blockSize * 4) / 10;
+    const cheekSize = (blockSize * 2) / 5;
     const noseSize = 1 + blockSize / 6;
 
     const leftEye = this.calculateLeftEyePosition(
@@ -205,7 +207,7 @@ export class MazeCanvas {
       directionIdx
     );
 
-    return { leftEye, rightEye };
+    return [leftEye, rightEye];
   }
 
   private calculateLeftEyePosition(

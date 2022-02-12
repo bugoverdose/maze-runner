@@ -29,18 +29,17 @@ export class MazeBlock {
   public getNoWallDirections() {
     const noWallDirections = [];
 
-    const walls = [
-      this.northWall,
-      this.eastWall,
-      this.southWall,
-      this.westWall,
-    ];
+    const walls = this.getEachWallExistance();
 
     for (let idx = 0; idx < 4; idx++) {
       if (!walls[idx]) noWallDirections.push(idx);
     }
 
     return noWallDirections;
+  }
+
+  public getEachWallExistance() {
+    return [this.northWall, this.eastWall, this.southWall, this.westWall];
   }
 
   public northWallExists() {

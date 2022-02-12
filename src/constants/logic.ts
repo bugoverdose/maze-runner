@@ -11,3 +11,7 @@ export const NORTH_IDX = 0;
 export const EAST_IDX = 1;
 export const SOUTH_IDX = 2;
 export const WEST_IDX = 3;
+
+export const PLAYER_BODY_RATIO = 2;
+export const PLAYER_EYE_WIDTH_RATIO = 24;
+export const PLAYER_EYE_HEIGHT_RATIO = 8;
