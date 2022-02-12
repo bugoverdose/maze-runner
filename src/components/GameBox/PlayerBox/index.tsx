@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { MazeRunnerContext } from "../../../context";
+import { MazeRunnerContext } from "context";
 import { ControlPanel } from "./ControlPanel";
 import { GameInfoBox } from "./GameInfoBox";
 import { MovementCountBox } from "./MovementCountBox";

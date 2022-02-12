@@ -4,8 +4,8 @@ import { Popup } from "./Popup";
 import { BlackScreen } from "./BlackScreen";
 import { Header } from "./Header";
 import { MazeRunnerWrapper } from "./MazeRunnerWrapper";
-import { useTimerSetup, usePopup } from "../hooks";
-import { MazeRunnerContext } from "../context";
+import { useTimerSetup, usePopup } from "hooks";
+import { MazeRunnerContext } from "context";
 import GameBox from "./GameBox";
 
 const MazeRunner = () => {

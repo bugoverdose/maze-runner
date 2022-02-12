@@ -1,5 +1,5 @@
-import { INITIAL_LEVEL } from "../constants";
-import { breakWalls, checkOutOfMaze, getTargetPosition } from "../utils";
+import { INITIAL_LEVEL } from "constants/logic";
+import { breakWalls, checkOutOfMaze, getTargetPosition } from "utils";
 import { MazeBlock } from "./MazeBlock";
 import { MazeCanvas } from "./MazeCanvas";
 import { Player } from "./Player";

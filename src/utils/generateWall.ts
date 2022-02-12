@@ -1,4 +1,4 @@
-import { MazeBlock } from "../domains/MazeBlock";
+import { MazeBlock } from "domains/MazeBlock";
 
 const col = [0, 1, 0, -1];
 const row = [-1, 0, 1, 0];

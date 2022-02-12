@@ -5,7 +5,7 @@ import {
   ARROW_UP,
   MAX_LEVEL,
   MIN_LEVEL,
-} from "../constants";
+} from "constants/logic";
 
 export const blurOnSubmit = () => {
   const activeElement = document.activeElement as HTMLElement | null;

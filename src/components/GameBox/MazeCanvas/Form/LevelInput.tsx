@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { MAX_LEVEL, MIN_LEVEL } from "../../../../constants";
+import { MAX_LEVEL, MIN_LEVEL } from "constants/logic";
 
 export const LevelInput = styled.input.attrs({
   required: true,

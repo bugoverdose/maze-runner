@@ -1,6 +1,6 @@
 import { DefaultTheme } from "styled-components";
 import { PreventSelect } from "./preventSelect";
-import { width } from "../constants";
+import { width } from "constants/layout";
 
 export const theme: DefaultTheme = {
   backgroundColor: "#000000",

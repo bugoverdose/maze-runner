@@ -1,6 +1,6 @@
 import { useContext, useRef } from "react";
-import { MazeRunnerContext } from "../../../../context";
-import { useKeyboardControls } from "../../../../hooks";
+import { MazeRunnerContext } from "context";
+import { useKeyboardControls } from "hooks";
 import { ControlBtn } from "./ControlBtn";
 import { HelpBtn } from "./HelpBtn";
 import { ControlPanelWrapper } from "./ControlPanelWrapper";

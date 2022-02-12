@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { blurOnSubmit, getDirectionIndex } from "../utils";
+import { blurOnSubmit, getDirectionIndex } from "utils";
 
 export const useKeyboardControls = (
   onControlPlayer: (directionIdx: number) => boolean,

@@ -23,7 +23,7 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Push to gh-pages branch
+      - name: Push to gh-pages branch if build changed
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
