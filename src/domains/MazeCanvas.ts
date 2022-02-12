@@ -1,3 +1,4 @@
+import { EAST_IDX, NORTH_IDX, SOUTH_IDX } from "constants/logic";
 import { createRef } from "react";
 import { theme } from "styles/theme";
 import { endPosition, startPosition } from "utils";
@@ -213,11 +214,16 @@ export class MazeCanvas {
     noseSize: number,
     directionIdx: number
   ) {
-    if (directionIdx === 0) return [cheekSize, noseSize]; // North
-    if (directionIdx === 1) return [blockSize - noseSize, cheekSize]; // East
-    if (directionIdx === 2)
-      return [blockSize - cheekSize, blockSize - noseSize]; // South
-    return [noseSize, blockSize - cheekSize]; // West
+    if (directionIdx === NORTH_IDX) {
+      return [cheekSize, noseSize];
+    }
+    if (directionIdx === EAST_IDX) {
+      return [blockSize - noseSize, cheekSize];
+    }
+    if (directionIdx === SOUTH_IDX) {
+      return [blockSize - cheekSize, blockSize - noseSize];
+    }
+    return [noseSize, blockSize - cheekSize];
   }
 
   private calculateRightEyePosition(
@@ -226,17 +232,22 @@ export class MazeCanvas {
     noseSize: number,
     directionIdx: number
   ) {
-    if (directionIdx === 0) return [blockSize - cheekSize, noseSize]; // North
-    if (directionIdx === 1)
-      return [blockSize - noseSize, blockSize - cheekSize]; // East
-    if (directionIdx === 2) return [cheekSize, blockSize - noseSize]; // South
-    return [noseSize, cheekSize]; // West
+    if (directionIdx === NORTH_IDX) {
+      return [blockSize - cheekSize, noseSize];
+    }
+    if (directionIdx === EAST_IDX) {
+      return [blockSize - noseSize, blockSize - cheekSize];
+    }
+    if (directionIdx === SOUTH_IDX) {
+      return [cheekSize, blockSize - noseSize];
+    }
+    return [noseSize, cheekSize];
   }
 
   private calculateRotation(directionIdx: number) {
-    if (directionIdx % 2 === 0) {
-      return 0; // North OR South
+    if (directionIdx === NORTH_IDX || directionIdx === SOUTH_IDX) {
+      return 0;
     }
-    return Math.PI / 2; // East OR West
+    return Math.PI / 2;
   }
 }

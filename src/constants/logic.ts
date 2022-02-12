@@ -6,3 +6,8 @@ export const ARROW_UP = "ArrowUp";
 export const ARROW_LEFT = "ArrowLeft";
 export const ARROW_DOWN = "ArrowDown";
 export const ARROW_RIGHT = "ArrowRight";
+
+export const NORTH_IDX = 0;
+export const EAST_IDX = 1;
+export const SOUTH_IDX = 2;
+export const WEST_IDX = 3;

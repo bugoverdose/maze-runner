@@ -1,3 +1,4 @@
+import { EAST_IDX, NORTH_IDX, SOUTH_IDX, WEST_IDX } from "constants/logic";
 import { MazeBlock } from "./MazeBlock";
 
 export class Player {
@@ -22,10 +23,18 @@ export class Player {
   public move(directionIdx: number, cur: MazeBlock): boolean {
     this.faceDirection = directionIdx;
 
-    if (directionIdx === 0 && !cur.northWallExists()) return this.goNorth();
-    if (directionIdx === 1 && !cur.eastWallExists()) return this.goEast();
-    if (directionIdx === 2 && !cur.southWallExists()) return this.goSouth();
-    if (directionIdx === 3 && !cur.westWallExists()) return this.goWest();
+    if (directionIdx === NORTH_IDX && !cur.northWallExists()) {
+      return this.goNorth();
+    }
+    if (directionIdx === EAST_IDX && !cur.eastWallExists()) {
+      return this.goEast();
+    }
+    if (directionIdx === SOUTH_IDX && !cur.southWallExists()) {
+      return this.goSouth();
+    }
+    if (directionIdx === WEST_IDX && !cur.westWallExists()) {
+      return this.goWest();
+    }
     return false;
   }
 
