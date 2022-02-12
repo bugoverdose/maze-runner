@@ -12,13 +12,13 @@ const App = () => {
 
   const [moveCount, _setMoveCount] = useState(0);
   const setMoveCount = (data: number) => {
-    maze.moveCountRef = data; // ref와 useState를 일치시키기
+    maze.setMoveCountRef(data); // ref와 useState를 일치시키기
     _setMoveCount(data); // 실제 state 값 수정
   };
 
   const [isFinished, _setIsFinished] = useState(false);
   const setIsFinished = (data: boolean) => {
-    maze.isFinishedRef = data;
+    maze.setIsFinishedRef(data);
     _setIsFinished(data);
   };
 

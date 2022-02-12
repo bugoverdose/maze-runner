@@ -10,8 +10,8 @@ export class Maze {
   private level: number;
   private mazeCanvas: MazeCanvas;
 
-  public moveCountRef: number = 0;
-  public isFinishedRef: boolean = false;
+  private moveCountRef: number = 0;
+  private isFinishedRef: boolean = false;
 
   constructor() {
     this.blocks = [];
@@ -59,7 +59,7 @@ export class Maze {
   }
 
   public generateMaze() {
-    this.generateMazeStructure();
+    this.initMazeStructure();
     this.setRandomFacingDirection();
     this.paintCanvas();
   }
@@ -77,49 +77,9 @@ export class Maze {
     this.player.setFaceDirection(noWallDirections[randomIdx]);
   }
 
-  private generateMazeStructure() {
-    const level = this.getLevel();
-
+  private initMazeStructure() {
     this.initMazeBlocks();
-
-    // 도착지점의 3칸이 벽이 되도록 도착지점부터 순회 시작
-    const finishBlock = this.blocks[level - 1][level - 1];
-    let stack: MazeBlock[] = [finishBlock];
-
-    // 특정 네모칸을 기준으로 임의로 탐색하며 벽의 일부분 제거 (드릴 뚫기)
-    // 핵심: 오직 한 방향으로부터만 각 칸에 visit
-    while (this.hasUnvisited()) {
-      if (!stack) break;
-
-      let cur: MazeBlock = stack[stack.length - 1];
-      cur.setVisited(true);
-
-      if (!this.hasUnvisitedNeighbor(cur)) {
-        stack.pop(); // 상하좌우의 인접한 칸들 전부 이미 탐색된 블록만 스택에서 제거
-        continue;
-      }
-
-      const [curCol, curRow] = cur.getPosition();
-
-      // 상하좌우 중 적어도 한쪽 방향으로 unvisited block이 존재한다는 점이 validate됨
-      while (true) {
-        // 현재 위치에서 랜덤으로 아직 이동하지 않은 방향으로 한 칸 이동
-        let dir: number = Math.floor(Math.random() * 4);
-
-        // 존재하지 않는 위치
-        if (checkOutOfMaze(dir, level, curCol, curRow)) continue;
-
-        const [nextCol, nextRow] = getTargetPosition(dir, curCol, curRow);
-        const next: MazeBlock = this.blocks[nextCol][nextRow];
-
-        if (next.isVisited) continue;
-
-        breakWalls(dir, cur, next);
-
-        stack.push(next);
-        break;
-      }
-    }
+    this.generateMazeStructure();
   }
 
   private initMazeBlocks() {
@@ -129,8 +89,30 @@ export class Maze {
     for (let col = 0; col < this.level; col++) {
       this.blocks[col] = [];
       for (let row = 0; row < this.level; row++) {
-        this.blocks[col][row] = new MazeBlock(col, row);
+        this.blocks[col].push(new MazeBlock(col, row));
       } // 디폴트로 상하좌우 벽이 있는 네모칸들 생성
+    }
+  }
+
+  private generateMazeStructure() {
+    const level = this.getLevel();
+
+    const finishBlock = this.blocks[level - 1][level - 1]; // 도착지점의 3칸이 벽이 되도록 도착지점부터 순회 시작
+    let stack: MazeBlock[] = [finishBlock];
+
+    // 특정 네모칸을 기준으로 임의로 탐색하며 벽의 일부분 제거 (드릴 뚫기) - 각 블록에 대해 벽을 뚫으면서 visit하는 것은 최대 1번
+    while (this.hasUnvisited()) {
+      if (!stack) return;
+
+      let cur: MazeBlock = stack[stack.length - 1];
+      cur.setVisited(true);
+
+      if (!this.hasUnvisitedNeighbor(cur)) {
+        stack.pop(); // 상하좌우의 인접한 칸들 전부 이미 탐색된 블록만 스택에서 제거
+        continue;
+      }
+
+      this.breakRamdomWall(cur, stack);
     }
   }
 
@@ -153,5 +135,42 @@ export class Maze {
       (row !== 0 && !this.blocks[col][row - 1].isVisited) ||
       (row !== level - 1 && !this.blocks[col][row + 1].isVisited)
     );
+  }
+
+  private breakRamdomWall(cur: MazeBlock, stack: MazeBlock[]) {
+    const [curCol, curRow] = cur.getPosition();
+    const level = this.getLevel();
+
+    // 상하좌우 중 적어도 한쪽 방향으로 unvisited block이 존재한다는 점은 이미 validate됨
+    while (true) {
+      let dir: number = Math.floor(Math.random() * 4); // 현재 위치에서 랜덤으로 아직 이동하지 않은 방향으로 한 칸 이동
+
+      if (checkOutOfMaze(dir, level, curCol, curRow)) continue; // 해당 방향에 블록 존재 여부 확인
+
+      const [nextCol, nextRow] = getTargetPosition(dir, curCol, curRow);
+      const next: MazeBlock = this.blocks[nextCol][nextRow];
+
+      if (next.isVisited) continue;
+
+      breakWalls(dir, cur, next);
+
+      return stack.push(next);
+    }
+  }
+
+  public getMoveCountRef() {
+    return this.moveCountRef;
+  }
+
+  public setMoveCountRef(moveCountRef: number) {
+    this.moveCountRef = moveCountRef;
+  }
+
+  public getIsFinishedRef() {
+    return this.isFinishedRef;
+  }
+
+  public setIsFinishedRef(isFinishedRef: boolean) {
+    this.isFinishedRef = isFinishedRef;
   }
 }

@@ -21,11 +21,13 @@ export const ControlPanel = () => {
 
     if (!hasMoved) return hasMoved;
 
-    if (!maze.isFinishedRef) setMoveCount(maze.moveCountRef + 1);
+    if (!maze.getIsFinishedRef()) {
+      setMoveCount(maze.getMoveCountRef() + 1);
+    }
 
-    // maze.paintCanvas();
-
-    if (maze.playerAtFinishBlock()) setIsFinished(true);
+    if (maze.playerAtFinishBlock()) {
+      setIsFinished(true);
+    }
 
     return hasMoved;
   };
