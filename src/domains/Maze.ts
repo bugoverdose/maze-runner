@@ -112,7 +112,7 @@ export class Maze {
         continue;
       }
 
-      this.breakRamdomWall(cur, stack);
+      this.breakRandomWall(cur, stack);
     }
   }
 
@@ -137,7 +137,7 @@ export class Maze {
     );
   }
 
-  private breakRamdomWall(cur: MazeBlock, stack: MazeBlock[]) {
+  private breakRandomWall(cur: MazeBlock, stack: MazeBlock[]) {
     const [curCol, curRow] = cur.getPosition();
     const level = this.getLevel();
 
