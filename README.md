@@ -4,6 +4,10 @@
 
 - [Click to play](https://bugoverdose.github.io/maze-runner/)
 
+## Demonstration
+
+![demo](./maze-runner-demo.gif)
+
 ## Features
 
 ### Game
